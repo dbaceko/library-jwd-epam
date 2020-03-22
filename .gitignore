@@ -11,3 +11,5 @@ target
 *.war
 
 *.log
+
+Main.java
