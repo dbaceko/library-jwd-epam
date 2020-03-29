@@ -1,15 +1,14 @@
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang=${lang}>
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}css/reset.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}css/style.css">
-    <link rel="icon" type="image/ico" href="${pageContext.request.contextPath}img/lib-icon.ico">
-    <title>Library Error</title>
+    <jsp:include page="include/meta.jsp"/>
 </head>
 <body>
-
+<jsp:include page="include/header.jsp"/>
+<main class="content">
+    <h1>ERROR</h1>
+</main>
+<jsp:include page="include/footer.jsp"/>
 </body>
 </html>
