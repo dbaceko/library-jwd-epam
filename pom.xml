@@ -9,10 +9,6 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>library-jwd-epam Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -21,9 +17,15 @@
     <log4j.version>2.13.0</log4j.version>
     <jstl.version>1.2</jstl.version>
     <servlet.version>4.0.1</servlet.version>
+    <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql-connector-java.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
