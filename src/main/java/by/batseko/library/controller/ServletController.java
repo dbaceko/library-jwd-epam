@@ -20,13 +20,13 @@ import java.io.IOException;
 public class ServletController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(ServletController.class);
 
-    private static final String dbConnectionPool = "ConnectionPool.properties";
+    private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            ConnectionPool.getInstance().init(dbConnectionPool);
+            ConnectionPool.getInstance().init(DB_CONNECTION_POOL_PROPERTIES);
         } catch (ConnectionPoolException e) {
             LOGGER.fatal(e);
         }
@@ -46,15 +46,15 @@ public class ServletController extends HttpServlet {
 
     @Override
     public void destroy() {
-        super.destroy();
         ConnectionPool.getInstance().destroy();
+        super.destroy();
     }
-
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response, String commandName) throws ServletException, IOException {
         Command command = CommandStorage.getCommandByName(commandName);
+
         String page = command.execute(request, response);
-        LOGGER.info(page + "<- page");
+        LOGGER.info(String.format("%s <- page", page));
         request.getRequestDispatcher(page).forward(request,response);
     }
 }
