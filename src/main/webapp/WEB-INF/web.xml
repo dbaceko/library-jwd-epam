@@ -14,4 +14,8 @@
     <session-timeout>15</session-timeout>
   </session-config>
 
+  <listener>
+    <listener-class>by.batseko.library.listener.SessionListener</listener-class>
+  </listener>
+
 </web-app>
