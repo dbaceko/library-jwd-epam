@@ -19,7 +19,7 @@ public class JSPAttributeStorage {
     public static final String USER_PHONE = "phone";
     public static final String USER_ADDRESS = "address";
     public static final String USER_ROLE = "userRole";
-
+    public static final String USER_ID = "userID";
 
     private JSPAttributeStorage(){}
 }

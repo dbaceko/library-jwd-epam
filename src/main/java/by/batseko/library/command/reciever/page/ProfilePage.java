@@ -23,6 +23,7 @@ public class ProfilePage implements Command {
             request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.PROFILE_USER);
             return PageStorage.PROFILE_USER;
         } catch (LibraryServiceException e) {
+            setErrorMessage(request, e.getMessage());
             request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.HOME);
             return PageStorage.HOME;
         }

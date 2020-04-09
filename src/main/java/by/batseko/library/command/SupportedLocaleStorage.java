@@ -20,7 +20,7 @@ public enum SupportedLocaleStorage {
                 return currentLocale;
             }
         }
-        throw new EnumCastException();
+        throw new EnumCastException(String.format("locale %s is not found", inputLanguage));
     }
 
     public String getLanguage() {

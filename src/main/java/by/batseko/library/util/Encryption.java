@@ -1,6 +1,5 @@
 package by.batseko.library.util;
 
-
 import by.batseko.library.exception.EncryptionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,14 +37,14 @@ public class Encryption {
         try {
             secretKeyFactory = SecretKeyFactory.getInstance(ENCRYPTION_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.fatal("no such algorithm: " + ENCRYPTION_ALGORITHM, e);
+            LOGGER.fatal(String.format("No such algorithm: %s", ENCRYPTION_ALGORITHM), e);
         }
     }
 
-    public String generateByteArrayHash(String password) throws EncryptionException {
+    public String generateHash(String password) throws EncryptionException {
         byte[] dynamicSalt = getSalt();
-        byte[] hash = generateByteArrayHash(password, CONSTANT_INNER_SALT);
-        hash = generateByteArrayHash(getStringFromHash(hash), dynamicSalt);
+        byte[] hash = generateTransitionalHash(password, CONSTANT_INNER_SALT);
+        hash = generateTransitionalHash(getStringFromHash(hash), dynamicSalt);
         return encoder.encodeToString(dynamicSalt) + DIVIDER + encoder.encodeToString(hash);
     }
 
@@ -53,16 +52,17 @@ public class Encryption {
         String[] parts = storedPassword.split(DIVIDER);
         byte[] dynamicSalt = decoder.decode(parts[SALT_INDEX]);
         byte[] storedHash = decoder.decode(parts[HASH_INDEX]);
-        byte[] hash = generateByteArrayHash(inputPassword, CONSTANT_INNER_SALT);
-        hash = generateByteArrayHash(getStringFromHash(hash), dynamicSalt);
+        byte[] hash = generateTransitionalHash(inputPassword, CONSTANT_INNER_SALT);
+        hash = generateTransitionalHash(getStringFromHash(hash), dynamicSalt);
         return Arrays.equals(storedHash, hash);
     }
 
-    private byte[] generateByteArrayHash(String password, byte[] salt) throws EncryptionException {
+    private byte[] generateTransitionalHash(String password, byte[] salt) throws EncryptionException {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray(), salt, ENCRYPTION_ITERATIONS, KEY_LENGTH);
         try {
             return secretKeyFactory.generateSecret(pbeKeySpec).getEncoded();
         } catch (InvalidKeySpecException e) {
+            LOGGER.error("Encryption KeySpec exception: ", e);
             throw new EncryptionException(e);
         }
     }
@@ -76,6 +76,4 @@ public class Encryption {
     private String getStringFromHash(byte[] hash) {
         return new BigInteger(1, hash).toString(16);
     }
-
-
 }

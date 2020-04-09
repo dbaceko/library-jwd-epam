@@ -4,11 +4,8 @@ import by.batseko.library.entity.Role;
 import by.batseko.library.entity.User;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class UserBuilder {
-    private static final Role DEFAULT_ROLE = Role.USER;
-
     private int id;
     private Role role;
     private String login;
@@ -21,11 +18,6 @@ public class UserBuilder {
     private String phoneNumber;
     private Timestamp registrationDate;
     private String address;
-
-    public UserBuilder(){
-        role = DEFAULT_ROLE;
-        registrationDate = new Timestamp(new Date().getTime());
-    }
 
     public int getId() {
         return id;

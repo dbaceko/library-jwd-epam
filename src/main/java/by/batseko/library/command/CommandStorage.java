@@ -1,9 +1,10 @@
 package by.batseko.library.command;
 
 import by.batseko.library.command.reciever.page.*;
-import by.batseko.library.command.reciever.user.LogIn;
-import by.batseko.library.command.reciever.user.LogOut;
-import by.batseko.library.command.reciever.user.RegisterUser;
+import by.batseko.library.command.reciever.user.LogInCommand;
+import by.batseko.library.command.reciever.user.LogOutCommand;
+import by.batseko.library.command.reciever.user.RegisterUserCommand;
+import by.batseko.library.command.reciever.user.UpdateUserInfoCommand;
 
 
 public enum CommandStorage {
@@ -14,9 +15,10 @@ public enum CommandStorage {
     SWITCH_LANG(new SwitchLanguage(), "switch-lang"),
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
 
-    REGISTER_USER(new RegisterUser(), "registerUser"),
-    LOG_IN(new LogIn(), "logIn"),
-    LOG_OUT(new LogOut(), "logOut"),
+    REGISTER_USER(new RegisterUserCommand(), "registerUser"),
+    UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
+    LOG_IN(new LogInCommand(), "logIn"),
+    LOG_OUT(new LogOutCommand(), "logOut"),
 
     ;
 

@@ -54,8 +54,26 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
     }
 
     @Override
-    public void updateUser(User user) {
-
+    public void updateUser(User user) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER)) {
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getAddress());
+            preparedStatement.setString(4, user.getPhoneNumber());
+            preparedStatement.setInt(5, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.debug(e);
+            if(e.getMessage().contains(UNIQUE_LOGIN_MESSAGE)) {
+                throw new LibraryDAOException("query.registration.emailAlreadyExist");
+            } else if (e.getMessage().contains(UNIQUE_EMAIL_MESSAGE)) {
+                throw new LibraryDAOException("query.registration.loginAlreadyExist");
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(e);
+            throw new LibraryDAOException("query.registration.commonError");
+        }
     }
 
     @Override
@@ -68,10 +86,9 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
             resultSet = preparedStatement.executeQuery();
             User user = constructUserByResultSet(resultSet);
             if (user == null) {
-                LOGGER.debug("userNotFound");
+                LOGGER.debug(String.format("User not found by login %s", userLogin));
                 throw new LibraryDAOException("query.getUser.userNotFound");
             }
-            resultSet.close();
             return user;
         } catch (SQLException | EnumCastException | ConnectionPoolException e) {
             LOGGER.warn(e);
@@ -82,8 +99,37 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
     }
 
     @Override
-    public User getUserByID(String userID) {
-        return null;
+    public User getUserByID(int userID) throws LibraryDAOException{
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.GET_USER_BY_ID))
+        {
+            preparedStatement.setInt(1, userID);
+            resultSet = preparedStatement.executeQuery();
+            User user = constructUserByResultSet(resultSet);
+            if (user == null) {
+                LOGGER.debug(String.format("User not found by id %d", userID));
+                throw new LibraryDAOException("query.getUser.userNotFound");
+            }
+            return user;
+        } catch (SQLException | EnumCastException | ConnectionPoolException e) {
+            LOGGER.warn(e);
+            throw new LibraryDAOException("query.getUser.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public void deleteUserByID(int userID) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.DELETE_USER)) {
+            preparedStatement.setInt(1, userID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(e);
+            throw new LibraryDAOException("query.deleteUser.commonError");
+        }
     }
 
     private User constructUserByResultSet(ResultSet resultSet) throws SQLException, EnumCastException {

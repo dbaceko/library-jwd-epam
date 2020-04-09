@@ -6,7 +6,7 @@ import by.batseko.library.exception.ValidatorException;
 public class UserValidator {
     private static final String LOGIN_REGEX = "^[a-zA-Z0-9_-]{3,25}$";
     private static final String PASSWORD_REGEX = "^[a-zA-Z0-9_-]{8,16}$";
-    private static final String EMAIL_REGEX = "^(([a-z0-9_\\.-]+)@([a-z0-9_\\.-]+)\\.([a-z\\.]{2,6}))$";
+    private static final String EMAIL_REGEX = "^(([a-z0-9_-]+)@([a-z0-9_-]+)\\.([a-z]{2,6}))$";
     private static final String PHONE_REGEX = "^[+]?[0-9]{7,15}$";
     private static final String PASSPORT_SN_REGEX = "^[A-Z]{2}[0-9]{7}$";
     private static final int MAX_EMAIL_FIELD_LENGTH = 45;
@@ -19,6 +19,13 @@ public class UserValidator {
         validatePhone(user.getPhoneNumber());
         validatePassportSN(user.getPassportSerialNumber());
         validateFieldLength(user.getFirstName(), user.getLastName(), user.getAddress());
+    }
+
+    public void validateUpdatedUser(User user) throws ValidatorException {
+        validatePassword(user.getPassword());
+        validateEmail(user.getEmail());
+        validatePhone(user.getPhoneNumber());
+        validateFieldLength(user.getAddress());
     }
 
     private void validateLogin(String login) throws ValidatorException {

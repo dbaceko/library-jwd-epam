@@ -21,17 +21,17 @@ public class LocaleFilter implements Filter {
     private static final String DEFAULT_CHARSET_ENCODING = "UTF-8";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        setLocale(request, response);
+        request.setCharacterEncoding(DEFAULT_CHARSET_ENCODING);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private void setLocale(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            LOGGER.debug("cookies: is empty");
             setLocaleToSession(request, response);
         } else {
             String cookieLang = null;
@@ -51,13 +51,6 @@ public class LocaleFilter implements Filter {
                 request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, cookieLang);
             }
         }
-        request.setCharacterEncoding(DEFAULT_CHARSET_ENCODING);
-        filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    @Override
-    public void destroy() {
-
     }
 
     private void setLocaleToSession(HttpServletRequest request, HttpServletResponse response) {
@@ -66,7 +59,6 @@ public class LocaleFilter implements Filter {
         Cookie langCookie = new Cookie(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
         response.addCookie(langCookie);
         request.getSession(true).setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
-
     }
 
     private Locale getLocale(String lang) {
@@ -89,6 +81,5 @@ public class LocaleFilter implements Filter {
             LOGGER.warn("Locale is not found", e);
             return SupportedLocaleStorage.ENG.getLocale();
         }
-
     }
 }

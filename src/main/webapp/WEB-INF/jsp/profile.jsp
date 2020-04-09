@@ -25,12 +25,8 @@
                 <fmt:message  bundle="${locale}" key="profile.legend"/>
             </legend>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.firstname"/></span>
-                <input class="input"  type="text" name="firstname" value=${user_registration_data.firstName}>
-            </label>
-            <label>
-                <span><fmt:message  bundle="${locale}" key="registration.lastname"/></span>
-                <input type="text" name="lastname" class="input" value=${user_registration_data.lastName}>
+                <span><fmt:message  bundle="${locale}" key="registration.password"/></span>
+                <input type="password"  name="password" class="input">
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="registration.email"/></span>
@@ -49,9 +45,6 @@
             </label>
         </fieldset>
     </form>
-    <div class="books_in_usage">
-        lib content
-    </div>
 </main>
 <jsp:include page="include/footer.jsp"/>
 </body>
