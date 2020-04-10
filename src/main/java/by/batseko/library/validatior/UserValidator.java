@@ -4,11 +4,11 @@ import by.batseko.library.entity.User;
 import by.batseko.library.exception.ValidatorException;
 
 public class UserValidator {
-    private static final String LOGIN_REGEX = "^[a-zA-Z0-9_-]{3,25}$";
-    private static final String PASSWORD_REGEX = "^[a-zA-Z0-9_-]{8,16}$";
-    private static final String EMAIL_REGEX = "^(([a-z0-9_-]+)@([a-z0-9_-]+)\\.([a-z]{2,6}))$";
-    private static final String PHONE_REGEX = "^[+]?[0-9]{7,15}$";
-    private static final String PASSPORT_SN_REGEX = "^[A-Z]{2}[0-9]{7}$";
+    private static final String LOGIN_REGEX = "^[\\w-]{3,25}$";
+    private static final String PASSWORD_REGEX = "^[\\w-]{8,16}$";
+    private static final String EMAIL_REGEX = "^(([\\w-]+)@([\\w]+)\\.([\\p{Lower}]{2,6}))$";
+    private static final String PHONE_REGEX = "^[+]?[\\d]{7,15}$";
+    private static final String PASSPORT_SN_REGEX = "^[\\p{Upper}]{2}[\\d]{7}$";
     private static final int MAX_EMAIL_FIELD_LENGTH = 45;
     private static final int MAX_FIELD_LENGTH = 25;
 
