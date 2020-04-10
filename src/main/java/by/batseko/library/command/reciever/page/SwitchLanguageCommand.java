@@ -9,10 +9,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SwitchLanguage implements Command {
+public class SwitchLanguageCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String resultLang = null;
+        String resultLang;
         try {
             String chosenLang  = request.getParameter(JSPAttributeStorage.LANGUAGE_SWITCH_PARAMETER);
             resultLang = SupportedLocaleStorage.getLocaleType(chosenLang).getLanguage();

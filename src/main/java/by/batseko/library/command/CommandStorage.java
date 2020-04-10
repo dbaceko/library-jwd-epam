@@ -12,9 +12,10 @@ public enum CommandStorage {
     HOME_PAGE(new HomePage(), "indexPage"),
     REGISTER_PAGE(new RegisterPage(), "registerPage"),
     LOG_IN_PAGE(new LogInPage(), "logInPage"),
-    SWITCH_LANG(new SwitchLanguage(), "switch-lang"),
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
+    ADMIN_PAGE(new AdminPage(), "adminPage"),
 
+    SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
