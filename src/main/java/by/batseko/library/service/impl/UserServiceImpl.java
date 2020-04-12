@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User logIn(String login, String password) throws LibraryServiceException {
         try {
-            User user = userDAO.getUserByLogin(login);
+            User user = userDAO.findUserByLogin(login);
             if (encryption.validatePassword(password, user.getPassword())) {
                 activeUserCache.put(user.getLogin(), user);
                 return user;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) throws LibraryServiceException {
+    public User findUserByLogin(String login) throws LibraryServiceException {
         User user = null;
         try {
             user = activeUserCache.get(login);
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             LOGGER.warn("User is not in cache");
             try {
-                user = userDAO.getUserByLogin(login);
+                user = userDAO.findUserByLogin(login);
             } catch (LibraryDAOException e) {
                 throw new LibraryServiceException(e.getMessage());
             }
@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByID(int id) throws LibraryServiceException {
+    public User findUserById(int id) throws LibraryServiceException {
         try {
-            return userDAO.getUserByID(id);
+            return userDAO.findUserByID(id);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage());
         }
@@ -117,9 +117,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserByID(int userID) throws LibraryServiceException {
+    public void deleteUserById(int userID) throws LibraryServiceException {
         try {
-            userDAO.getUserByID(userID);
+            userDAO.findUserByID(userID);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage());
         }

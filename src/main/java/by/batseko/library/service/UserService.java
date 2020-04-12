@@ -9,12 +9,12 @@ public interface UserService {
 
     User logIn(String login, String password) throws LibraryServiceException;
     void logOut(String login);
-    User getUserByLogin(String login) throws LibraryServiceException;
-    User getUserByID(int id) throws LibraryServiceException;
+    User findUserByLogin(String login) throws LibraryServiceException;
+    User findUserById(int id) throws LibraryServiceException;
 
     void registerUser(User user) throws LibraryServiceException;
     void updateUser(User user) throws LibraryServiceException;
-    void deleteUserByID(int userID) throws LibraryServiceException;
+    void deleteUserById(int userID) throws LibraryServiceException;
 
     ActiveUsersCache getActiveUsersCache();
 }

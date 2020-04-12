@@ -22,7 +22,7 @@ public class UpdateUserInfoCommand implements Command {
 
         try {
             userService.updateUser(updatedUser);
-            updatedUser = userService.getUserByID(updatedUser.getId());
+            updatedUser = userService.findUserById(updatedUser.getId());
             userService.getActiveUsersCache().put(updatedUser.getLogin(), updatedUser);
         } catch (LibraryServiceException e) {
             setUserInfoToRequest(request, updatedUser);

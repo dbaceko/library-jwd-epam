@@ -77,7 +77,7 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
     }
 
     @Override
-    public User getUserByLogin(String userLogin) throws LibraryDAOException {
+    public User findUserByLogin(String userLogin) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.GET_USER_BY_LOGIN))
@@ -99,7 +99,7 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
     }
 
     @Override
-    public User getUserByID(int userID) throws LibraryDAOException{
+    public User findUserByID(int userID) throws LibraryDAOException{
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.GET_USER_BY_ID))
