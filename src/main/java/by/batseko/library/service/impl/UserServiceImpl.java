@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(encryption.generateHash(user.getPassword()));
             userDAO.updateUser(user);
         } catch (EncryptionException | LibraryDAOException e) {
-            throw new LibraryServiceException(e);
+            throw new LibraryServiceException(e.getMessage());
         }
     }
 

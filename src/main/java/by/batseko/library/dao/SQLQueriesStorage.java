@@ -8,7 +8,7 @@ public class SQLQueriesStorage {
     public static final String GET_USER_BY_LOGIN = "SELECT * FROM user WHERE login = (?)";
     public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = (?)";
     public static final String UPDATE_USER = "UPDATE user SET email = (?), password = (?), address = (?)," +
-            "  phone_number = (?) WHERE id = (?)";
+            "  phone = (?) WHERE id = (?)";
 
     public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
 
