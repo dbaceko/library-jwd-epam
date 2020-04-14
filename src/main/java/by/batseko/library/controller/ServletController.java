@@ -3,6 +3,7 @@ package by.batseko.library.controller;
 import by.batseko.library.command.Command;
 import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
+import by.batseko.library.command.Router;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(name = "controller", urlPatterns = "/controller")
+@WebServlet(name = "controller", urlPatterns = {"/controller", "/jsp/controller"})
 public class ServletController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(ServletController.class);
 
@@ -52,9 +53,12 @@ public class ServletController extends HttpServlet {
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response, String commandName) throws ServletException, IOException {
         Command command = CommandStorage.getCommandByName(commandName);
-
-        String page = command.execute(request, response);
-        LOGGER.info(String.format("%s <- page", page));
-        request.getRequestDispatcher(page).forward(request,response);
+        Router router = command.execute(request, response);
+        LOGGER.info(String.format("%s <- page", router.getPagePath()));
+        if (router.getRouteType().equals(Router.RouteType.FORWARD)) {
+            request.getRequestDispatcher(router.getPagePath()).forward(request,response);
+        } else {
+            response.sendRedirect(request.getContextPath() + router.getPagePath());
+        }
     }
 }

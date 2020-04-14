@@ -3,12 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html lang=${lang}>
+<html lang=${cookie.lang.value}>
 <head>
     <jsp:include page="include/meta.jsp"/>
 </head>
 <body>
-
     <jsp:include page="include/header.jsp"/>
     <main class="content">
 

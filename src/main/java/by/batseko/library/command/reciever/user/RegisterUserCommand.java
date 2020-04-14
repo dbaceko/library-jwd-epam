@@ -3,7 +3,8 @@ package by.batseko.library.command.reciever.user;
 import by.batseko.library.builder.user.UserBuilder;
 import by.batseko.library.command.Command;
 import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.reciever.page.RegisterPage;
+import by.batseko.library.command.PageStorage;
+import by.batseko.library.command.Router;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
@@ -16,17 +17,20 @@ public class RegisterUserCommand implements Command {
     private final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         User newUser = constructUser(request);
-
+        Router currentRouter = new Router();
         try {
             userService.registerUser(newUser);
+            currentRouter.setPagePath(PageStorage.LOG_IN);
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
             setUserInfoToRequest(request, newUser);
-            return new RegisterPage().execute(request, response);
+            currentRouter.setPagePath(PageStorage.REGISTER_USER);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
         }
-        return new LogInCommand().execute(request, response);
+        return currentRouter;
     }
 
     private User constructUser(HttpServletRequest request) {

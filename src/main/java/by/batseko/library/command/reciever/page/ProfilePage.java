@@ -3,6 +3,7 @@ package by.batseko.library.command.reciever.page;
 import by.batseko.library.command.Command;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.PageStorage;
+import by.batseko.library.command.Router;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
@@ -15,17 +16,20 @@ public class ProfilePage implements Command {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         String login = (String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
+        Router currentRouter = new Router();
         try {
-            User user = userService.getUserByLogin(login);
+            User user = userService.findUserByLogin(login);
             request.setAttribute(JSPAttributeStorage.USER_REGISTRATION_DATA, user);
-            request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.PROFILE_USER);
-            return PageStorage.PROFILE_USER;
+            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
+            return currentRouter;
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
-            request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.HOME);
-            return PageStorage.HOME;
+            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
+            return currentRouter;
         }
     }
 }

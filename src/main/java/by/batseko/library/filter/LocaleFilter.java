@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-@WebFilter(urlPatterns = "/controller")
+@WebFilter(urlPatterns = {"/controller"})
 public class LocaleFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(LocaleFilter.class);
 
@@ -22,6 +22,7 @@ public class LocaleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         setLocale(request, response);
@@ -41,14 +42,7 @@ public class LocaleFilter implements Filter {
                 }
             }
             if (cookieLang == null) {
-                String attributeLang = (String) request.getSession().getAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE);
-                if (attributeLang == null) {
-                    setLocaleToSession(request, response);
-                } else {
-                    request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, attributeLang);
-                }
-            } else {
-                request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, cookieLang);
+                setLocaleToSession(request, response);
             }
         }
     }
@@ -58,7 +52,6 @@ public class LocaleFilter implements Filter {
         Locale resultLocale = getLocale(currentLang);
         Cookie langCookie = new Cookie(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
         response.addCookie(langCookie);
-        request.getSession(true).setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
     }
 
     private Locale getLocale(String lang) {
