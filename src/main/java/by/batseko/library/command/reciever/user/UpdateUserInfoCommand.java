@@ -1,10 +1,7 @@
 package by.batseko.library.command.reciever.user;
 
 import by.batseko.library.builder.user.UserBuilder;
-import by.batseko.library.command.Command;
-import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.PageStorage;
-import by.batseko.library.command.Router;
+import by.batseko.library.command.*;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
@@ -24,7 +21,7 @@ public class UpdateUserInfoCommand implements Command {
             userService.updateUser(updatedUser);
             updatedUser = userService.findUserById(updatedUser.getId());
             userService.getActiveUsersCache().put(updatedUser.getLogin(), updatedUser);
-            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setPagePath(CommandStorage.PROFILE_PAGE.getCommandName());
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             setUserInfoToRequest(request, updatedUser);

@@ -1,10 +1,7 @@
 package by.batseko.library.command.reciever.user;
 
 import by.batseko.library.builder.user.UserBuilder;
-import by.batseko.library.command.Command;
-import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.PageStorage;
-import by.batseko.library.command.Router;
+import by.batseko.library.command.*;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
@@ -22,8 +19,6 @@ public class RegisterUserCommand implements Command {
         Router currentRouter = new Router();
         try {
             userService.registerUser(newUser);
-            currentRouter.setPagePath(PageStorage.HOME);
-            currentRouter.setRouteType(Router.RouteType.REDIRECT);
             return new LogInCommand().execute(request, response);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());

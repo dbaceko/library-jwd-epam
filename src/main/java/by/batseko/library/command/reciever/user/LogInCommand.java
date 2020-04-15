@@ -1,9 +1,6 @@
 package by.batseko.library.command.reciever.user;
 
-import by.batseko.library.command.Command;
-import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.PageStorage;
-import by.batseko.library.command.Router;
+import by.batseko.library.command.*;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
@@ -26,7 +23,7 @@ public class LogInCommand implements Command {
             request.getSession().setAttribute(JSPAttributeStorage.USER_LOGIN, login);
             request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getRole().toString());
             request.getSession().setAttribute(JSPAttributeStorage.USER_ID, user.getId());
-            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());

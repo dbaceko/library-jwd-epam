@@ -26,6 +26,7 @@ public class ServletController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+
         super.init();
         try {
             ConnectionPool.getInstance().init();
@@ -60,7 +61,8 @@ public class ServletController extends HttpServlet {
         if (router.getRouteType().equals(Router.RouteType.FORWARD)) {
             request.getRequestDispatcher(router.getPagePath()).forward(request,response);
         } else {
-            response.sendRedirect(request.getContextPath() + router.getPagePath());
+            String page = router.getPagePath();
+            response.sendRedirect(request.getContextPath() + "/" + getServletName() +"?" + JSPAttributeStorage.GET_METHOD + "=" + page);
         }
     }
 }

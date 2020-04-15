@@ -15,7 +15,7 @@ public class SwitchLanguageCommand implements Command {
         resultLang = SupportedLocaleStorage.getLocaleFromLanguage(chosenLang).getLanguage();
         response.addCookie(new Cookie(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLang));
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
-        currentRouter.setPagePath(PageStorage.HOME);
+        currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
         return currentRouter;
     }
 }
