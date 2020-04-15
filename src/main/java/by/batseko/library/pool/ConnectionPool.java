@@ -26,6 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
+    private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
     private static final String URL_PROPERTY_NAME = "url";
     private static final String POOL_SIZE_PROPERTY_NAME = "poolSize";
     private static final String CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME = "connectionAwaitingTimeout";
@@ -63,20 +64,21 @@ public class ConnectionPool {
         return ConnectionPoolSingletonHolder.INSTANCE;
     }
 
-    public void init(String propertiesFileName) throws ConnectionPoolException {
+    public void init() throws ConnectionPoolException {
         initLock.lock();
-        if (!isInitialized.get() && propertiesFileName != null) {
+        if (!isInitialized.get()) {
             try {
                 Driver jdbcMySQLDriver = new Driver();
                 DriverManager.registerDriver(jdbcMySQLDriver);
+                initProperties(DB_CONNECTION_POOL_PROPERTIES);
+                createConnections(poolSize);
+                isInitialized.set(true);
             } catch (SQLException e) {
-                LOGGER.fatal(e);
+                throw new ConnectionPoolException("Connection pool is not initialized ", e);
+            } finally {
+                initLock.unlock();
             }
-            initProperties(propertiesFileName);
-            createConnections(poolSize);
-            isInitialized.set(true);
         }
-        initLock.unlock();
     }
 
     public Connection getConnection() throws ConnectionPoolException {
@@ -92,9 +94,8 @@ public class ConnectionPool {
                 usedConnections.add(connection);
             }
             return connection;
-        } else {
-            throw new ConnectionPoolException("Connections are closing now");
         }
+        throw new ConnectionPoolException("Connections are closing now");
     }
 
     public void destroy() {
@@ -170,8 +171,6 @@ public class ConnectionPool {
     }
 
     private void initSizeAndTimeoutPoolSettings(Properties properties) {
-
-
         try {
             poolSize = Integer.parseInt(properties.getProperty(POOL_SIZE_PROPERTY_NAME));
             connectionAwaitingTimeout = Integer.parseInt(properties.getProperty(CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME));
@@ -189,5 +188,4 @@ public class ConnectionPool {
             LOGGER.warn("Unparseable property field", e);
         }
     }
-
 }

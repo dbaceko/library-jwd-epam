@@ -5,6 +5,7 @@ import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.exception.ConnectionPoolException;
+import by.batseko.library.exception.ControllerRuntimeException;
 import by.batseko.library.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,15 +22,16 @@ import java.io.IOException;
 public class ServletController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(ServletController.class);
 
-    private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
+
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            ConnectionPool.getInstance().init(DB_CONNECTION_POOL_PROPERTIES);
+            ConnectionPool.getInstance().init();
         } catch (ConnectionPoolException e) {
             LOGGER.fatal(e);
+            throw new ControllerRuntimeException(e);
         }
     }
 
