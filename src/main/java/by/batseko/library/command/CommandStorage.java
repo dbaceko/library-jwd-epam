@@ -5,6 +5,8 @@ import by.batseko.library.command.reciever.user.LogInCommand;
 import by.batseko.library.command.reciever.user.LogOutCommand;
 import by.batseko.library.command.reciever.user.RegisterUserCommand;
 import by.batseko.library.command.reciever.user.UpdateUserInfoCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public enum CommandStorage {
@@ -22,6 +24,7 @@ public enum CommandStorage {
     LOG_OUT(new LogOutCommand(), "logOut"),
 
     ;
+    private static final Logger LOGGER = LogManager.getLogger(CommandStorage.class);
 
     private final Command command;
     private final String commandName;
@@ -45,6 +48,7 @@ public enum CommandStorage {
                 return type.command;
             }
         }
+        LOGGER.warn(String.format("Command %s is not found, forward to HomePage", commandName));
         return new HomePage();
     }
 }

@@ -7,7 +7,6 @@ import by.batseko.library.dao.UserDAO;
 import by.batseko.library.entity.Role;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.ConnectionPoolException;
-import by.batseko.library.exception.EnumCastException;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -90,7 +89,7 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
                 throw new LibraryDAOException("query.getUser.userNotFound");
             }
             return user;
-        } catch (SQLException | EnumCastException | ConnectionPoolException e) {
+        } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("query.getUser.commonError", e);
         } finally {
@@ -112,7 +111,7 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
                 throw new LibraryDAOException("query.getUser.userNotFound");
             }
             return user;
-        } catch (SQLException | EnumCastException | ConnectionPoolException e) {
+        } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("query.getUser.commonError", e);
         } finally {
@@ -132,7 +131,7 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
         }
     }
 
-    private User constructUserByResultSet(ResultSet resultSet) throws SQLException, EnumCastException {
+    private User constructUserByResultSet(ResultSet resultSet) throws SQLException {
         User user = null;
         if (resultSet.next()) {
             user = new UserBuilder().setId(resultSet.getInt(1))

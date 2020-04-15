@@ -2,7 +2,6 @@ package by.batseko.library.filter;
 
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.SupportedLocaleStorage;
-import by.batseko.library.exception.EnumCastException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +21,6 @@ public class LocaleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         setLocale(request, response);
@@ -33,46 +31,27 @@ public class LocaleFilter implements Filter {
     private void setLocale(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            setLocaleToSession(request, response);
+            LOGGER.info("cookies are empty");
+            setLocaleToCookie(request, response);
         } else {
             String cookieLang = null;
-            for (Cookie c : cookies) {
-                if (c.getName().equals(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE)) {
-                    cookieLang = c.getValue();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE)) {
+                    LOGGER.info(String.format("cookies are contains language %s", cookie.getValue()));
+                    cookieLang = cookie.getValue();
                 }
             }
             if (cookieLang == null) {
-                setLocaleToSession(request, response);
+                LOGGER.info("cookies are not contains language cookie");
+                setLocaleToCookie(request, response);
             }
         }
     }
 
-    private void setLocaleToSession(HttpServletRequest request, HttpServletResponse response) {
+    private void setLocaleToCookie(HttpServletRequest request, HttpServletResponse response) {
         String currentLang = request.getLocale().getLanguage();
-        Locale resultLocale = getLocale(currentLang);
+        Locale resultLocale = SupportedLocaleStorage.getLocaleFromLanguage(currentLang).getLocale();
         Cookie langCookie = new Cookie(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
         response.addCookie(langCookie);
-    }
-
-    private Locale getLocale(String lang) {
-        try {
-            SupportedLocaleStorage currentLocale = SupportedLocaleStorage.getLocaleType(lang);
-            Locale resultLocale;
-            switch (currentLocale) {
-                case ENG:
-                    resultLocale = SupportedLocaleStorage.ENG.getLocale();
-                    break;
-                case RUS:
-                    resultLocale = SupportedLocaleStorage.RUS.getLocale();
-                    break;
-                default:
-                    LOGGER.warn("Locale is not seted");
-                    resultLocale = SupportedLocaleStorage.ENG.getLocale();
-            }
-            return resultLocale;
-        } catch (EnumCastException e) {
-            LOGGER.warn("Locale is not found", e);
-            return SupportedLocaleStorage.ENG.getLocale();
-        }
     }
 }
