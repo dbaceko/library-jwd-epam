@@ -1,12 +1,12 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<fmt:setLocale value="${cookie.lang.value}" />
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="localization" var="locale"/>
 <fmt:setBundle basename="exceptionMessages" var="exc_msg"/>
 
 <!DOCTYPE html>
-<html lang=${cookie.lang.value}>
+<html lang=${lang}>
 <jsp:include page="include/meta.jsp"/>
 <body>
 <jsp:include page="include/header.jsp"/>
@@ -21,24 +21,24 @@
     </c:if>
     <form class="form-wrapper" method="post" action="controller" id="user-info-form">
         <fieldset class="fieldset">
-            <input type="hidden" name="post" value="updateUserInfo">
+            <input type="hidden" name="action" value="updateUserInfo">
             <legend class="title">
                 <fmt:message  bundle="${locale}" key="profile.legend"/>
             </legend>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.password"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.password"/></span>
                 <input type="password"  name="password" class="input">
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.email"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.email"/></span>
                 <input type="text" name="email" class="input" value=${user_registration_data.email}>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.phone"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.phone"/></span>
                 <input type="text" name="phone" class="input" value=${user_registration_data.phoneNumber}>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.address"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.address"/></span>
                 <input type="text" name="address" class="input" value=${user_registration_data.address}>
             </label>
             <label class="inputfield">

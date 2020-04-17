@@ -12,7 +12,7 @@ public class RegisterPage implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
         currentRouter.setPagePath(PageStorage.REGISTER_USER);
-        currentRouter.setRouteType(Router.RouteType.FORWARD);
+        currentRouter.setRouteType(Router.RouteType.REDIRECT);
         return currentRouter;
     }
 }

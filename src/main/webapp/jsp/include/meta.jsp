@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<fmt:setLocale value="${cookie.lang.value}" />
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="localization" />
 
 <head>

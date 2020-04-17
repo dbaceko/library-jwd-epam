@@ -1,12 +1,12 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<fmt:setLocale value="${cookie.lang.value}" />
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="localization" />
 <fmt:setBundle basename="exceptionMessages" var="exc_msg"/>
 
 <!DOCTYPE html>
-<html lang=${cookie.lang.value}>
+<html lang=${lang}>
 <head>
     <jsp:include page="include/meta.jsp"/>
 </head>
@@ -22,12 +22,12 @@
 <main class="content">
     <form class="form-wrapper" method="post" action="controller" id="login-form">
         <fieldset class="fieldset">
-            <input type="hidden" name="post" value="logIn">
+            <input type="hidden" name="action" value="logIn">
             <legend class="title">
                 <fmt:message key="login.legend"/>
             </legend>
             <label>
-                <span><fmt:message key="registration.login"/></span>
+                <span><fmt:message key="user.login"/></span>
                 <input type="text" name="login" class="input">
             </label>
             <label>

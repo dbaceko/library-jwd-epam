@@ -1,6 +1,5 @@
 package by.batseko.library.command.reciever.user;
 
-import by.batseko.library.builder.user.UserBuilder;
 import by.batseko.library.command.*;
 import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
@@ -11,16 +10,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UpdateUserInfoCommand implements Command {
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        User updatedUser = constructUser(request);
+        String login = (String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
+        User updatedUser;
         Router currentRouter = new Router();
         try {
-            userService.updateUser(updatedUser);
-            updatedUser = userService.findUserById(updatedUser.getId());
-            userService.getActiveUsersCache().put(updatedUser.getLogin(), updatedUser);
+            updatedUser = userService.findUserByLogin(login);
+        } catch (LibraryServiceException e) {
+            setErrorMessage(request, e.getMessage());
+            currentRouter.setPagePath(PageStorage.PROFILE_USER);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
+            return currentRouter;
+        }
+
+        try {
+            updateUserInfo(request, updatedUser);
+            userService.updateUserProfileData(updatedUser);
             currentRouter.setPagePath(CommandStorage.PROFILE_PAGE.getCommandName());
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
@@ -32,22 +40,15 @@ public class UpdateUserInfoCommand implements Command {
         return currentRouter;
     }
 
-
-    private User constructUser(HttpServletRequest request) {
-        String login = (String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
-        int id = (int) request.getSession().getAttribute(JSPAttributeStorage.USER_ID);
+    private void updateUserInfo(HttpServletRequest request, User currentUser) {
         String password = request.getParameter(JSPAttributeStorage.USER_PASSWORD);
         String email = request.getParameter(JSPAttributeStorage.USER_EMAIL).trim().toLowerCase();
         String phoneNumber = request.getParameter(JSPAttributeStorage.USER_PHONE).trim();
         String address = request.getParameter(JSPAttributeStorage.USER_ADDRESS).trim();
-
-        return new UserBuilder().setLogin(login)
-                .setId(id)
-                .setPassword(password)
-                .setEmail(email)
-                .setPhoneNumber(phoneNumber)
-                .setAddress(address)
-                .build();
+        currentUser.setPassword(password);
+        currentUser.setEmail(email);
+        currentUser.setPhoneNumber(phoneNumber);
+        currentUser.setAddress(address);
     }
 
     private void setUserInfoToRequest(HttpServletRequest request, User user) {

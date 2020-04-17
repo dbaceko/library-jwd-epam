@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang=${cookie.lang.value}>
+<html lang=${lang}>
 <head>
     <jsp:include page="include/meta.jsp"/>
 </head>

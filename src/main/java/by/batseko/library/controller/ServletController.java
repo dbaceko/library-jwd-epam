@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(name = "controller", urlPatterns = {"/controller", "/jsp/controller"})
+@WebServlet(name = "controller", urlPatterns = {"/controller", "/jsp/controller"/*, "*.jsp"*/})
 public class ServletController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(ServletController.class);
 
@@ -38,14 +38,12 @@ public class ServletController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String commandName = req.getParameter(JSPAttributeStorage.GET_METHOD);
-        handleRequest(req, resp, commandName);
+        handleRequest(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String commandName = req.getParameter(JSPAttributeStorage.POST_METHOD);
-        handleRequest(req, resp, commandName);
+        handleRequest(req, resp);
     }
 
     @Override
@@ -54,7 +52,8 @@ public class ServletController extends HttpServlet {
         super.destroy();
     }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String commandName) throws ServletException, IOException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String commandName = request.getParameter(JSPAttributeStorage.COMMAND);
         Command command = CommandStorage.getCommandByName(commandName);
         Router router = command.execute(request, response);
         LOGGER.info(String.format("%s <- page", router.getPagePath()));
@@ -62,7 +61,7 @@ public class ServletController extends HttpServlet {
             request.getRequestDispatcher(router.getPagePath()).forward(request,response);
         } else {
             String page = router.getPagePath();
-            response.sendRedirect(request.getContextPath() + "/" + getServletName() +"?" + JSPAttributeStorage.GET_METHOD + "=" + page);
+            response.sendRedirect(request.getContextPath() + "/" + getServletName() +"?" + JSPAttributeStorage.COMMAND + "=" + page);
         }
     }
 }

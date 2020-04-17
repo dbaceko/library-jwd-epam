@@ -20,16 +20,15 @@ public class ProfilePage implements Command {
         String login = (String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
         Router currentRouter = new Router();
         try {
-            User user = userService.findUserByLogin(login);
+            User user = userService.getOnlineUsersCache().get(login);
             request.setAttribute(JSPAttributeStorage.USER_REGISTRATION_DATA, user);
-            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setPagePath(PageStorage.PROFILE_USER);
             currentRouter.setRouteType(Router.RouteType.FORWARD);
-            return currentRouter;
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
-            currentRouter.setPagePath(PageStorage.HOME);
+            currentRouter.setPagePath(PageStorage.PROFILE_USER);
             currentRouter.setRouteType(Router.RouteType.FORWARD);
-            return currentRouter;
         }
+        return currentRouter;
     }
 }

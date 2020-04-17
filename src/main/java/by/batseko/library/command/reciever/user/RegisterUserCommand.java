@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RegisterUserCommand implements Command {
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {

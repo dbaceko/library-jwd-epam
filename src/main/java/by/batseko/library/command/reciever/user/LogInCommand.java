@@ -5,12 +5,16 @@ import by.batseko.library.entity.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class LogInCommand implements Command {
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static final Logger LOGGER = LogManager.getLogger(LogInCommand.class);
+
+    private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -19,9 +23,9 @@ public class LogInCommand implements Command {
         Router currentRouter = new Router();
         try {
             User user = userService.logIn(login, password);
-
+            LOGGER.info(user);
             request.getSession().setAttribute(JSPAttributeStorage.USER_LOGIN, login);
-            request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getRole().toString());
+            request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getRole().name());
             request.getSession().setAttribute(JSPAttributeStorage.USER_ID, user.getId());
             currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
