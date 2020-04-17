@@ -110,10 +110,6 @@ footer {
 
 /* REGISTRATION */
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
-
-
-
 body {
     min-width: 400px;
 }
@@ -297,7 +293,39 @@ body {
     }
 }
 
-/* REGISTRATION */
+/* Admin Online List */
+
+#users-list {
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td:first-child {
+    background: #1bbc9b;
+    opacity: 0.9;
+    color: white;
+    padding: 10px;
+}
+
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: #1bbc9b;
+}
+
+td {
+    background: #D8E6F3;
+    opacity: 0.9;
+}
+
+td:hover {
+    background: #1bbc9b;
+}
+
+th:first-child, td:first-child {
+    text-align: left;
+}
 
 
 

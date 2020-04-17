@@ -1,5 +1,6 @@
 package by.batseko.library.command;
 
+import by.batseko.library.command.reciever.admin.ToggleUserBan;
 import by.batseko.library.command.reciever.page.*;
 import by.batseko.library.command.reciever.user.LogInCommand;
 import by.batseko.library.command.reciever.user.LogOutCommand;
@@ -15,13 +16,15 @@ public enum CommandStorage {
     REGISTER_PAGE(new RegisterPage(), "registerPage"),
     LOG_IN_PAGE(new LogInPage(), "logInPage"),
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
-    ADMIN_PAGE(new AdminPage(), "adminPage"),
+    ADMIN_PAGE(new UsersOnlinePage(), "adminPage"),
+
 
     SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
     LOG_OUT(new LogOutCommand(), "logOut"),
+    TOGGLE_USER_BAN(new ToggleUserBan(),"banUser")
 
     ;
     private static final Logger LOGGER = LogManager.getLogger(CommandStorage.class);
@@ -43,12 +46,16 @@ public enum CommandStorage {
     }
 
     public static Command getCommandByName(String commandName) {
+        return getCommandEnumByName(commandName).command;
+    }
+
+    public static CommandStorage getCommandEnumByName(String commandName) {
         for (CommandStorage type: CommandStorage.values()) {
             if (type.commandName.equals(commandName)){
-                return type.command;
+                return type;
             }
         }
         LOGGER.warn(String.format("Command %s is not found, forward to HomePage", commandName));
-        return new HomePage();
+        return HOME_PAGE;
     }
 }
