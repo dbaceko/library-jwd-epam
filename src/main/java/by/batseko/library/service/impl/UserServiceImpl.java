@@ -20,13 +20,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidator validator;
     private final Encryption encryption;
-    private final ActiveUsersCache activeUserCache;
+    private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
         encryption = UtilFactory.getInstance().getEncryption();
-        activeUserCache = ActiveUsersCache.getInstance();
+        activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
     }
 
@@ -101,17 +101,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) throws LibraryServiceException {
+    public void updateUserProfileData(User user) throws LibraryServiceException {
         try {
             validator.validateUpdatedUser(user);
         } catch (ValidatorException e) {
-            LOGGER.info(String.format("invalid %s %n registration data %s", user.toString(), e.getMessage()));
+            LOGGER.info(String.format("invalid %s %n update data %s", user.toString(), e.getMessage()));
             throw new LibraryServiceException(e.getMessage());
         }
         try {
             user.setPassword(encryption.generateHash(user.getPassword()));
-            userDAO.updateUser(user);
+            userDAO.updateUserProfileData(user);
+            if(activeUserCache.get(user.getLogin()) != null) {
+                activeUserCache.put(user.getLogin(), user);
+            }
         } catch (EncryptionException | LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateUserBanStatus(User user) throws LibraryServiceException {
+        try {
+            userDAO.updateUserBanStatus(user);
+            if(activeUserCache.get(user.getLogin()) != null) {
+                activeUserCache.put(user.getLogin(), user);
+            }
+        } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage());
         }
     }
@@ -126,7 +141,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ActiveUsersCache getActiveUsersCache() {
+    public OnlineUsersCache getOnlineUsersCache() {
         return activeUserCache;
     }
 }

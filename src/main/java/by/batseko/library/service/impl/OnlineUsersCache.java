@@ -4,23 +4,25 @@ import by.batseko.library.exception.LibraryServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-public class ActiveUsersCache {
-    private static final Logger LOGGER = LogManager.getLogger(ActiveUsersCache.class);
+public class OnlineUsersCache {
+    private static final Logger LOGGER = LogManager.getLogger(OnlineUsersCache.class);
 
     private final Map<String, User> userCache;
 
-    private ActiveUsersCache(){
+    private OnlineUsersCache(){
         userCache = new ConcurrentHashMap<>();
     }
 
     private static class ActiveUsersCacheSingletonHolder {
-        static final ActiveUsersCache INSTANCE = new ActiveUsersCache();
+        static final OnlineUsersCache INSTANCE = new OnlineUsersCache();
     }
 
-    static ActiveUsersCache getInstance() {
+    static OnlineUsersCache getInstance() {
         return ActiveUsersCacheSingletonHolder.INSTANCE;
     }
 
@@ -39,6 +41,10 @@ public class ActiveUsersCache {
         }
         return userCache.get(login);
 
+    }
+
+    public List<User> getAllOnlineUsers() {
+        return new ArrayList<>(userCache.values());
     }
 
     public void remove(String login) {
