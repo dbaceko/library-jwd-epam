@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-@WebFilter(urlPatterns = {"/controller"})
+@WebFilter(urlPatterns = {"/controller", "*.jsp"})
 public class LocaleFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(LocaleFilter.class);
 
@@ -29,29 +29,34 @@ public class LocaleFilter implements Filter {
     }
 
     private void setLocale(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            LOGGER.info("cookies are empty");
-            setLocaleToCookie(request, response);
-        } else {
-            String cookieLang = null;
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE)) {
-                    LOGGER.info(String.format("cookies are contains language %s", cookie.getValue()));
-                    cookieLang = cookie.getValue();
+        Object langAttribute = request.getSession().getAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE);
+        if (langAttribute == null) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies == null) {
+                LOGGER.info("cookies are empty");
+                setLocaleToCookieAndSession(request, response);
+            } else {
+                String cookieLang = null;
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE)) {
+                        LOGGER.info(String.format("cookies are contains language %s", cookie.getValue()));
+                        cookieLang = cookie.getValue();
+                        request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, cookieLang);
+                    }
                 }
-            }
-            if (cookieLang == null) {
-                LOGGER.info("cookies are not contains language cookie");
-                setLocaleToCookie(request, response);
+                if (cookieLang == null) {
+                    LOGGER.info("cookies are not contains language cookie");
+                    setLocaleToCookieAndSession(request, response);
+                }
             }
         }
     }
 
-    private void setLocaleToCookie(HttpServletRequest request, HttpServletResponse response) {
+    private void setLocaleToCookieAndSession(HttpServletRequest request, HttpServletResponse response) {
         String currentLang = request.getLocale().getLanguage();
         Locale resultLocale = SupportedLocaleStorage.getLocaleFromLanguage(currentLang).getLocale();
         Cookie langCookie = new Cookie(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLocale.getLanguage());
         response.addCookie(langCookie);
+        request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, currentLang);
     }
 }
