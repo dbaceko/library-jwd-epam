@@ -1,7 +1,7 @@
 package by.batseko.library.dao.impl;
 
 import by.batseko.library.builder.user.UserBuilder;
-import by.batseko.library.dao.AbstractSQLLayer;
+import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.UserDAO;
 import by.batseko.library.entity.Role;
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
-public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
+public class UserDAOImpl extends BaseDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(UserDAOImpl.class);
 
     private static final String UNIQUE_LOGIN_MESSAGE = "user.login_UNIQUE";
@@ -53,9 +53,9 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
     }
 
     @Override
-    public void updateUser(User user) throws LibraryDAOException {
+    public void updateUserProfileData(User user) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_PROFILE_DATA)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getAddress());
@@ -66,12 +66,23 @@ public class UserDAOImpl extends AbstractSQLLayer implements UserDAO {
             LOGGER.debug(e);
             if(e.getMessage().contains(UNIQUE_LOGIN_MESSAGE)) {
                 throw new LibraryDAOException("query.registration.emailAlreadyExist");
-            } else if (e.getMessage().contains(UNIQUE_EMAIL_MESSAGE)) {
-                throw new LibraryDAOException("query.registration.loginAlreadyExist");
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.registration.commonError");
+            throw new LibraryDAOException("service.commonError");
+        }
+    }
+
+    @Override
+    public void updateUserBanStatus(User user) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_BAN_STATUS)) {
+            preparedStatement.setInt(1, parseBooleanToInt(user.getBanned()));
+            preparedStatement.setInt(2, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(e);
+            throw new LibraryDAOException("service.commonError");
         }
     }
 
