@@ -55,7 +55,7 @@ public class UserBuilder {
         return this;
     }
 
-    public boolean isBanned() {
+    public boolean getBanned() {
         return isBanned;
     }
 

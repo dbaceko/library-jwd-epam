@@ -26,7 +26,7 @@ public class User implements Serializable {
         login = builder.getLogin();
         password = builder.getPassword();
         firstName = builder.getFirstName();
-        isBanned = builder.isBanned();
+        isBanned = builder.getBanned();
         lastName = builder.getLastName();
         passportSerialNumber = builder.getPassportSerialNumber();
         email = builder.getEmail();
@@ -67,7 +67,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public boolean isBanned() {
+    public boolean getBanned() {
         return isBanned;
     }
 
