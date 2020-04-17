@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class AbstractSQLLayer {
-    private static final Logger LOGGER = LogManager.getLogger(AbstractSQLLayer.class);
+public abstract class BaseDAO {
+    private static final Logger LOGGER = LogManager.getLogger(BaseDAO.class);
 
     protected void closeStatement(Statement statement) {
         if (statement != null) {
@@ -28,5 +28,9 @@ public abstract class AbstractSQLLayer {
                 LOGGER.error("Can`t close resultSet", e);
             }
         }
+    }
+
+    protected int parseBooleanToInt(boolean b) {
+        return b ? 1 : 0;
     }
 }
