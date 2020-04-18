@@ -169,7 +169,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", street='" + address + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

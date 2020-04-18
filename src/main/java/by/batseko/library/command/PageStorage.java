@@ -7,7 +7,8 @@ public class PageStorage {
     public static final String REGISTER_USER = "/jsp/registration.jsp";
     public static final String PROFILE_USER = "/jsp/profile.jsp";
     public static final String LOG_IN = "/jsp/login.jsp";
-    public static final String ADMIN = "/jsp/admin/onlineUsersList.jsp";
+    public static final String ONLINE_USERS_LIST = "/jsp/admin/onlineUsersList.jsp";
+    public static final String ALL_USERS_LIST = "/jsp/admin/allUsersList.jsp";
     public static final String ERROR = "/jsp/error.jsp";
 
     private PageStorage() {}

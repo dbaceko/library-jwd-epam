@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${lang}" />
-<fmt:setBundle basename="localization" />
+<fmt:setBundle basename="localization" var="locale"/>
 <fmt:setBundle basename="exceptionMessages" var="exc_msg"/>
 
 <!DOCTYPE html>
@@ -24,14 +24,14 @@
         <fieldset class="fieldset">
             <input type="hidden" name="action" value="logIn">
             <legend class="title">
-                <fmt:message key="login.legend"/>
+                <fmt:message bundle="${locale}" key="login.legend"/>
             </legend>
             <label>
-                <span><fmt:message key="user.login"/></span>
+                <span><fmt:message bundle="${locale}" key="user.login"/></span>
                 <input type="text" name="login" class="input">
             </label>
             <label>
-                <span><fmt:message key="login.password"/></span>
+                <span><fmt:message bundle="${locale}" key="login.password"/></span>
                 <input type="password" name="password" class="input">
             </label>
             <div class="terms">
@@ -39,12 +39,11 @@
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <span><fmt:message key="login.remember"/></span>
+                <span><fmt:message bundle="${locale}" key="login.remember"/></span>
             </div>
             <label class="inputfield">
-                <input class="btn" type="submit" value=<fmt:message key="login.enter"/> >
+                <input class="btn" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
             </label>
-
         </fieldset>
     </form>
 </main>

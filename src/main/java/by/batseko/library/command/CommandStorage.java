@@ -17,6 +17,7 @@ public enum CommandStorage {
     LOG_IN_PAGE(new LogInPage(), "logInPage"),
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
     ADMIN_PAGE(new UsersOnlinePage(), "adminPage"),
+    USERS_LIST_PAGE(new AllUsersPage(), "allUsersList"),
 
 
     SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),

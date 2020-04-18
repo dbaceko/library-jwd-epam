@@ -15,6 +15,8 @@ import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
@@ -78,6 +80,20 @@ public class UserServiceImpl implements UserService {
     public User findUserById(int id) throws LibraryServiceException {
         try {
             return userDAO.findUserByID(id);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<User> findAllUsers() throws LibraryServiceException {
+        try {
+            List<User> userList = userDAO.findAllUsers();
+            if (userList.isEmpty()) {
+                throw new LibraryServiceException("query.getUsers.usersNotFound");
+            } else {
+                return userList;
+            }
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage());
         }

@@ -65,7 +65,7 @@ public class UserRolePermittedPageFilter implements Filter {
         adminPages.add(PageStorage.ROOT);
         adminPages.add(PageStorage.ROOT_HOME);
         adminPages.add(PageStorage.HOME);
-        adminPages.add(PageStorage.ADMIN);
+        adminPages.add(PageStorage.ONLINE_USERS_LIST);
         adminPages.add(PageStorage.ERROR);
         adminPages.add(PageStorage.PROFILE_USER);
     }

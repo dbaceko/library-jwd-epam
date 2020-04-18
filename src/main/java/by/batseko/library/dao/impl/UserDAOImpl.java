@@ -13,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UserDAOImpl extends BaseDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(UserDAOImpl.class);
@@ -90,11 +93,13 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     public User findUserByLogin(String userLogin) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.GET_USER_BY_LOGIN))
-        {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_LOGIN)) {
             preparedStatement.setString(1, userLogin);
             resultSet = preparedStatement.executeQuery();
-            User user = constructUserByResultSet(resultSet);
+            User user = null;
+            if (resultSet.next()) {
+                user = constructUserByResultSet(resultSet);
+            }
             if (user == null) {
                 LOGGER.debug(String.format("User not found by login %s", userLogin));
                 throw new LibraryDAOException("query.getUser.userNotFound");
@@ -112,11 +117,13 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     public User findUserByID(int userID) throws LibraryDAOException{
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.GET_USER_BY_ID))
-        {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_ID)) {
             preparedStatement.setInt(1, userID);
             resultSet = preparedStatement.executeQuery();
-            User user = constructUserByResultSet(resultSet);
+            User user = null;
+            if (resultSet.next()) {
+                user = constructUserByResultSet(resultSet);
+            }
             if (user == null) {
                 LOGGER.debug(String.format("User not found by id %d", userID));
                 throw new LibraryDAOException("query.getUser.userNotFound");
@@ -128,6 +135,33 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } finally {
             closeResultSet(resultSet);
         }
+    }
+
+    @Override
+    public List<User> findAllUsers() throws LibraryDAOException {
+        List<User> users;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_USERS);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (!resultSet.isBeforeFirst()) {
+                users = Collections.emptyList();
+            } else {
+                resultSet.last();
+                int listSize = resultSet.getRow();
+                resultSet.beforeFirst();
+                LOGGER.info(listSize);
+                users = new ArrayList<>(listSize);
+                while (resultSet.next()) {
+                    User user = constructUserByResultSet(resultSet);
+                    LOGGER.info(user);
+                    users.add(user);
+                }
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(e);
+            throw new LibraryDAOException("query.getUser.commonError", e);
+        }
+        return users;
     }
 
     @Override
@@ -143,9 +177,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     private User constructUserByResultSet(ResultSet resultSet) throws SQLException {
-        User user = null;
-        if (resultSet.next()) {
-            user = new UserBuilder().setId(resultSet.getInt(1))
+        return new UserBuilder().setId(resultSet.getInt(1))
                     .setRole(Role.getRoleById(resultSet.getInt(2)))
                     .setEmail(resultSet.getString(3))
                     .setLogin(resultSet.getString(4))
@@ -158,7 +190,5 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                     .setBanned(resultSet.getBoolean(11))
                     .setRegistrationDate(resultSet.getTimestamp(12))
                     .build();
-        }
-        return user;
     }
 }

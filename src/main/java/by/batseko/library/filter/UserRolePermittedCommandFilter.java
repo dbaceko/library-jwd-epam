@@ -48,6 +48,7 @@ public class UserRolePermittedCommandFilter implements Filter {
             PROFILE_PAGE,
             UPDATE_PROFILE_USER,
             ADMIN_PAGE,
+            USERS_LIST_PAGE,
             TOGGLE_USER_BAN
     );
 
