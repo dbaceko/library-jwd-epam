@@ -1,7 +1,8 @@
 package by.batseko.library.command;
 
 public class PageStorage {
-    public static final String ROOT_HOME = "index.jsp";
+    public static final String ROOT = "/";
+    public static final String ROOT_HOME = "/index.jsp";
     public static final String HOME = "/jsp/index.jsp";
     public static final String REGISTER_USER = "/jsp/registration.jsp";
     public static final String PROFILE_USER = "/jsp/profile.jsp";
