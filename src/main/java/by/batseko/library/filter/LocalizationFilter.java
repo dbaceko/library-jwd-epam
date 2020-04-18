@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.Locale;
 
 @WebFilter(urlPatterns = {"/controller", "*.jsp"})
-public class LocaleFilter implements Filter {
-    private static final Logger LOGGER = LogManager.getLogger(LocaleFilter.class);
+public class LocalizationFilter implements Filter {
+    private static final Logger LOGGER = LogManager.getLogger(LocalizationFilter.class);
 
     private static final String DEFAULT_CHARSET_ENCODING = "UTF-8";
 
@@ -23,12 +23,12 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        setLocale(request, response);
+        setLocalization(request, response);
         request.setCharacterEncoding(DEFAULT_CHARSET_ENCODING);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private void setLocale(HttpServletRequest request, HttpServletResponse response) {
+    private void setLocalization(HttpServletRequest request, HttpServletResponse response) {
         Object langAttribute = request.getSession().getAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE);
         if (langAttribute == null) {
             Cookie[] cookies = request.getCookies();
