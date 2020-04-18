@@ -47,7 +47,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             SWITCH_LANG,
             PROFILE_PAGE,
             UPDATE_PROFILE_USER,
-            ADMIN_PAGE
+            ADMIN_PAGE,
+            TOGGLE_USER_BAN
     );
 
     @Override

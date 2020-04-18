@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
             User user = userDAO.findUserByLogin(login);
             if (encryption.validatePassword(password, user.getPassword())) {
                 activeUserCache.put(user.getLogin(), user);
+                LOGGER.info(String.format("Add user %s to cache", user));
                 return user;
             } else {
                 LOGGER.info("Password dont match");

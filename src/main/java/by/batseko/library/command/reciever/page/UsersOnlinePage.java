@@ -17,7 +17,7 @@ public class UsersOnlinePage implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
-        request.setAttribute(JSPAttributeStorage.USERS_LIST, userService.getOnlineUsersCache().getAllOnlineUsers());
+        request.setAttribute(JSPAttributeStorage.ONLINE_USERS_LIST, userService.getOnlineUsersCache().getAllOnlineUsers());
         currentRouter.setPagePath(PageStorage.ADMIN);
         currentRouter.setRouteType(Router.RouteType.FORWARD);
         return currentRouter;
