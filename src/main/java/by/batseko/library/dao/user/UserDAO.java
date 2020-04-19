@@ -1,4 +1,4 @@
-package by.batseko.library.dao;
+package by.batseko.library.dao.user;
 
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryDAOException;

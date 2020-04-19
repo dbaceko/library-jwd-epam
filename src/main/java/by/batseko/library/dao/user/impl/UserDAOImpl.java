@@ -1,9 +1,9 @@
-package by.batseko.library.dao.impl;
+package by.batseko.library.dao.user.impl;
 
 import by.batseko.library.builder.user.UserBuilder;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
-import by.batseko.library.dao.UserDAO;
+import by.batseko.library.dao.user.UserDAO;
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ConnectionPoolException;

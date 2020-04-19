@@ -1,7 +1,7 @@
 package by.batseko.library.factory;
 
-import by.batseko.library.dao.UserDAO;
-import by.batseko.library.dao.impl.UserDAOImpl;
+import by.batseko.library.dao.user.UserDAO;
+import by.batseko.library.dao.user.impl.UserDAOImpl;
 
 public class DAOFactory {
     private final UserDAO userDAO;
