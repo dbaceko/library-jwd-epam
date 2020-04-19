@@ -1,7 +1,7 @@
 package by.batseko.library.filter;
 
 import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.UserService;

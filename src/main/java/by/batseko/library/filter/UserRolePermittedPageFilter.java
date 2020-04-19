@@ -2,7 +2,7 @@ package by.batseko.library.filter;
 
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.PageStorage;
-import by.batseko.library.entity.Role;
+import by.batseko.library.entity.user.UserRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +35,9 @@ public class UserRolePermittedPageFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        Role role = Role.valueOf(request.getSession().getAttribute(JSPAttributeStorage.USER_ROLE).toString().toUpperCase());
+        UserRole userRole = UserRole.valueOf(request.getSession().getAttribute(JSPAttributeStorage.USER_ROLE).toString().toUpperCase());
         Set<String> permittedPages;
-        switch (role) {
+        switch (userRole) {
             case ADMIN:
                 permittedPages = adminPages;
                 break;
@@ -56,7 +56,7 @@ public class UserRolePermittedPageFilter implements Filter {
         if (permittedPages.contains(requestPage)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            LOGGER.info(String.format("Page is not in %s's Role scope: %s", role.name(), requestPage));
+            LOGGER.info(String.format("Page is not in %s's Role scope: %s", userRole.name(), requestPage));
             response.sendRedirect(request.getContextPath() + PageStorage.HOME);
         }
     }

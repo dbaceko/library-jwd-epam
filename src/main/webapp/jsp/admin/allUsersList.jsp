@@ -44,7 +44,7 @@
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
                         <td>
-                            <c:if test = "${user.role.name().equals('USER')}">
+                            <c:if test = "${user.userRole.name().equals('USER')}">
                                 <form class="ban-form" action="controller" method="post">
                                     <input type="hidden" name="action" value="banUser">
                                     <input type="hidden" name="userID" value="${user.id}">

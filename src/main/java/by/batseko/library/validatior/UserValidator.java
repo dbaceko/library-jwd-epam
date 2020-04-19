@@ -1,6 +1,6 @@
 package by.batseko.library.validatior;
 
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ValidatorException;
 
 public class UserValidator {

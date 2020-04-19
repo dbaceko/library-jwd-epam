@@ -1,7 +1,7 @@
 package by.batseko.library.listener;
 
 import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.entity.Role;
+import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.impl.OnlineUsersCache;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +17,7 @@ public class SessionListener implements HttpSessionListener  {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        se.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, Role.GUEST.name());
+        se.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, UserRole.GUEST.name());
         LOGGER.debug(String.format("Session is created for %s", se.getSession().getId()));
     }
 

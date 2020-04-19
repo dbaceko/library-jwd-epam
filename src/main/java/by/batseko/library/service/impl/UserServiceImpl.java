@@ -1,7 +1,7 @@
 package by.batseko.library.service.impl;
 
 import by.batseko.library.dao.UserDAO;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.EncryptionException;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;

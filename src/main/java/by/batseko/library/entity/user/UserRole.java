@@ -1,10 +1,10 @@
-package by.batseko.library.entity;
+package by.batseko.library.entity.user;
 
 import by.batseko.library.command.SupportedLocaleStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public enum Role {
+public enum UserRole {
     ADMIN(1),
     USER(2),
     GUEST(3);
@@ -13,7 +13,7 @@ public enum Role {
 
     private final int id;
 
-    Role(int id) {
+    UserRole(int id) {
         this.id = id;
     }
 
@@ -21,10 +21,10 @@ public enum Role {
         return id;
     }
 
-    public static Role getRoleById(int id) {
-        for (Role role: Role.values()) {
-            if (role.id == id) {
-                return role;
+    public static UserRole getRoleById(int id) {
+        for (UserRole userRole : UserRole.values()) {
+            if (userRole.id == id) {
+                return userRole;
             }
         }
         LOGGER.warn(String.format("Role with id: %d is not found, default role is %s", id, GUEST));

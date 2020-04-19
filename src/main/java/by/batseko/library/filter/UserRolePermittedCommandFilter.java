@@ -3,7 +3,7 @@ package by.batseko.library.filter;
 import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.PageStorage;
-import by.batseko.library.entity.Role;
+import by.batseko.library.entity.user.UserRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,9 +57,9 @@ public class UserRolePermittedCommandFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        Role role = Role.valueOf(request.getSession().getAttribute(JSPAttributeStorage.USER_ROLE).toString().toUpperCase());
+        UserRole userRole = UserRole.valueOf(request.getSession().getAttribute(JSPAttributeStorage.USER_ROLE).toString().toUpperCase());
         Set<CommandStorage> permittedCommands;
-        switch (role) {
+        switch (userRole) {
             case ADMIN:
                 permittedCommands = adminCommands;
                 break;
@@ -84,7 +84,7 @@ public class UserRolePermittedCommandFilter implements Filter {
         if (permittedCommands.contains(command)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            LOGGER.info(String.format("Command is not in %s's Role scope: %s", role.name(), commandName));
+            LOGGER.info(String.format("Command is not in %s's Role scope: %s", userRole.name(), commandName));
             response.sendRedirect(request.getContextPath() + PageStorage.HOME);
         }
     }

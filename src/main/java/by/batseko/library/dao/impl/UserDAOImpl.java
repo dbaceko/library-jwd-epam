@@ -4,8 +4,8 @@ import by.batseko.library.builder.user.UserBuilder;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.UserDAO;
-import by.batseko.library.entity.Role;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.UserRole;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.pool.ConnectionPool;
@@ -178,7 +178,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
 
     private User constructUserByResultSet(ResultSet resultSet) throws SQLException {
         return new UserBuilder().setId(resultSet.getInt(1))
-                    .setRole(Role.getRoleById(resultSet.getInt(2)))
+                    .setUserRole(UserRole.getRoleById(resultSet.getInt(2)))
                     .setEmail(resultSet.getString(3))
                     .setLogin(resultSet.getString(4))
                     .setPassword(resultSet.getString(5))

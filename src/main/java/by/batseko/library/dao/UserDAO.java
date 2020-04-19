@@ -1,6 +1,6 @@
 package by.batseko.library.dao;
 
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryDAOException;
 
 import java.util.List;

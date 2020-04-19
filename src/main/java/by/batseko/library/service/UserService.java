@@ -1,6 +1,6 @@
 package by.batseko.library.service;
 
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.service.impl.OnlineUsersCache;
 

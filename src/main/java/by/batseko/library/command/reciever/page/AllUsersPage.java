@@ -1,14 +1,13 @@
 package by.batseko.library.command.reciever.page;
 
 import by.batseko.library.command.*;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 
 public class AllUsersPage implements Command {
