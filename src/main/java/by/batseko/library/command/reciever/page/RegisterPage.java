@@ -1,16 +1,18 @@
 package by.batseko.library.command.reciever.page;
 
 import by.batseko.library.command.Command;
-import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.PageStorage;
+import by.batseko.library.command.Router;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RegisterPage implements Command {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.REGISTER_USER);
-        return PageStorage.REGISTER_USER;
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        Router currentRouter = new Router();
+        currentRouter.setPagePath(PageStorage.REGISTER_USER);
+        currentRouter.setRouteType(Router.RouteType.REDIRECT);
+        return currentRouter;
     }
 }

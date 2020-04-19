@@ -8,7 +8,6 @@
     <jsp:include page="include/meta.jsp"/>
 </head>
 <body>
-
     <jsp:include page="include/header.jsp"/>
     <main class="content">
 

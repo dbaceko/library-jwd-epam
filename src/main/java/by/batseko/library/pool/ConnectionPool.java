@@ -26,6 +26,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
+    private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
+    private static final String URL_PROPERTY_NAME = "url";
+    private static final String POOL_SIZE_PROPERTY_NAME = "poolSize";
+    private static final String CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME = "connectionAwaitingTimeout";
+    private static final int DEFAULT_POOL_SIZE = 10;
+    private static final int DEFAULT_CONNECTION_AWAITING_TIMEOUT = 30;
+
     private final LinkedBlockingQueue<Connection> availableConnections;
     private final List<Connection> usedConnections;
     private final AtomicBoolean isInitialized;
@@ -34,7 +41,6 @@ public class ConnectionPool {
     private final Lock initLock;
     private final Properties jdbcMysqlConfigProperties;
 
-    private Driver jdbcMySQLDriver;
     private String url;
 
     private int poolSize;
@@ -58,20 +64,21 @@ public class ConnectionPool {
         return ConnectionPoolSingletonHolder.INSTANCE;
     }
 
-    public void init(String propertiesFileName) throws ConnectionPoolException {
+    public void init() throws ConnectionPoolException {
         initLock.lock();
-        if (!isInitialized.get() && propertiesFileName != null) {
+        if (!isInitialized.get()) {
             try {
-                jdbcMySQLDriver = new Driver();
+                Driver jdbcMySQLDriver = new Driver();
                 DriverManager.registerDriver(jdbcMySQLDriver);
+                initProperties(DB_CONNECTION_POOL_PROPERTIES);
+                createConnections(poolSize);
+                isInitialized.set(true);
             } catch (SQLException e) {
-                LOGGER.fatal(e);
+                throw new ConnectionPoolException("Connection pool is not initialized ", e);
+            } finally {
+                initLock.unlock();
             }
-            initProperties(propertiesFileName);
-            createConnections(poolSize);
-            isInitialized.set(true);
         }
-        initLock.unlock();
     }
 
     public Connection getConnection() throws ConnectionPoolException {
@@ -87,9 +94,8 @@ public class ConnectionPool {
                 usedConnections.add(connection);
             }
             return connection;
-        } else {
-            throw new ConnectionPoolException("Connections are closing now");
         }
+        throw new ConnectionPoolException("Connections are closing now");
     }
 
     public void destroy() {
@@ -157,7 +163,7 @@ public class ConnectionPool {
 
     private void initDBPoolSettings(Properties properties) throws ConnectionPoolException {
         try {
-            url = properties.getProperty(PoolPropertyTag.URL.getField());
+            url = properties.getProperty(URL_PROPERTY_NAME);
             poolValidator.checkContainsNull(properties);
         } catch (ValidatorException e) {
             throw new ConnectionPoolException("Invalid primary DB properties ", e);
@@ -165,12 +171,9 @@ public class ConnectionPool {
     }
 
     private void initSizeAndTimeoutPoolSettings(Properties properties) {
-        final int DEFAULT_POOL_SIZE = 10;
-        final int DEFAULT_CONNECTION_AWAITING_TIMEOUT = 30;
-
         try {
-            poolSize = Integer.parseInt(properties.getProperty(PoolPropertyTag.POOL_SIZE.getField()));
-            connectionAwaitingTimeout = Integer.parseInt(properties.getProperty(PoolPropertyTag.CONNECTION_AWAITING_TIMEOUT.getField()));
+            poolSize = Integer.parseInt(properties.getProperty(POOL_SIZE_PROPERTY_NAME));
+            connectionAwaitingTimeout = Integer.parseInt(properties.getProperty(CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME));
             if (poolValidator.isLessOrEqualsZero(poolSize)) {
                 poolSize = DEFAULT_POOL_SIZE;
                 LOGGER.warn("Invalid pool size in property settings");
@@ -185,5 +188,4 @@ public class ConnectionPool {
             LOGGER.warn("Unparseable property field", e);
         }
     }
-
 }

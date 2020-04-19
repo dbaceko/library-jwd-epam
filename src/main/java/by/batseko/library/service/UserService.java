@@ -1,18 +1,24 @@
 package by.batseko.library.service;
 
-import by.batseko.library.dao.UserDAO;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
-import by.batseko.library.factory.DAOFactory;
+import by.batseko.library.service.impl.OnlineUsersCache;
+
+import java.util.List;
 
 public interface UserService {
 
 
     User logIn(String login, String password) throws LibraryServiceException;
     void logOut(String login);
-    User getUserByLogin(String login) throws LibraryServiceException;
+    User findUserByLogin(String login) throws LibraryServiceException;
+    User findUserById(int id) throws LibraryServiceException;
+    List<User> findAllUsers() throws LibraryServiceException;
 
     void registerUser(User user) throws LibraryServiceException;
-    void updateUser(User user) throws LibraryServiceException;
-    void deleteUser(User user) throws LibraryServiceException;
+    void updateUserProfileData(User user) throws LibraryServiceException;
+    void updateUserBanStatus(User user) throws LibraryServiceException;
+    void deleteUserById(int userID) throws LibraryServiceException;
+
+    OnlineUsersCache getOnlineUsersCache();
 }

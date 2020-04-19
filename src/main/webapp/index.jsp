@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html lang=${lang}>
 <head>
-    <jsp:include page="/WEB-INF/jsp/include/meta.jsp"/>
+    <jsp:include page="/jsp/include/meta.jsp"/>
 </head>
 <body>
-    <c:redirect url="/controller?get=indexPage"/>
+    <c:redirect url="jsp/index.jsp"/>
 </body>
 </html>

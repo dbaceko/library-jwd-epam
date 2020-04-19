@@ -1,4 +1,4 @@
-package by.batseko.library.entity;
+package by.batseko.library.entity.user;
 
 import by.batseko.library.builder.user.UserBuilder;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class User implements Serializable {
     private int id;
-    private Role role;
+    private UserRole userRole;
     private String login;
     private String password;
     private boolean isBanned;
@@ -22,11 +22,11 @@ public class User implements Serializable {
 
     public User(UserBuilder builder) {
         id = builder.getId();
-        role = builder.getRole();
+        userRole = builder.getUserRole();
         login = builder.getLogin();
         password = builder.getPassword();
         firstName = builder.getFirstName();
-        isBanned = builder.isBanned();
+        isBanned = builder.getBanned();
         lastName = builder.getLastName();
         passportSerialNumber = builder.getPassportSerialNumber();
         email = builder.getEmail();
@@ -43,12 +43,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public Role getRole() {
-        return role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public String getLogin() {
@@ -67,7 +67,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public boolean isBanned() {
+    public boolean getBanned() {
         return isBanned;
     }
 
@@ -138,7 +138,7 @@ public class User implements Serializable {
         User user = (User) o;
         return id == user.id &&
                 isBanned == user.isBanned &&
-                Objects.equals(role, user.role) &&
+                Objects.equals(userRole, user.userRole) &&
                 Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstName, user.firstName) &&
@@ -152,14 +152,14 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, login, password, isBanned, firstName, lastName, passportSerialNumber, email, phoneNumber, registrationDate, address);
+        return Objects.hash(id, userRole, login, password, isBanned, firstName, lastName, passportSerialNumber, email, phoneNumber, registrationDate, address);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", role=" + role +
+                ", role=" + userRole +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", isBanned=" + isBanned +
@@ -169,7 +169,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", street='" + address + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

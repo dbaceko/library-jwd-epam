@@ -19,29 +19,26 @@
             </p>
         </div>
     </c:if>
-    <form class="form-wrapper" method="post" action="controller?post=updateUserInfo" id="user-info-form">
+    <form class="form-wrapper" method="post" action="controller" id="user-info-form">
         <fieldset class="fieldset">
+            <input type="hidden" name="action" value="updateUserInfo">
             <legend class="title">
                 <fmt:message  bundle="${locale}" key="profile.legend"/>
             </legend>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.firstname"/></span>
-                <input class="input"  type="text" name="firstname" value=${user_registration_data.firstName}>
+                <span><fmt:message  bundle="${locale}" key="user.password"/></span>
+                <input type="password"  name="password" class="input">
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.lastname"/></span>
-                <input type="text" name="lastname" class="input" value=${user_registration_data.lastName}>
-            </label>
-            <label>
-                <span><fmt:message  bundle="${locale}" key="registration.email"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.email"/></span>
                 <input type="text" name="email" class="input" value=${user_registration_data.email}>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.phone"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.phone"/></span>
                 <input type="text" name="phone" class="input" value=${user_registration_data.phoneNumber}>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.address"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.address"/></span>
                 <input type="text" name="address" class="input" value=${user_registration_data.address}>
             </label>
             <label class="inputfield">
@@ -49,9 +46,6 @@
             </label>
         </fieldset>
     </form>
-    <div class="books_in_usage">
-        lib content
-    </div>
 </main>
 <jsp:include page="include/footer.jsp"/>
 </body>

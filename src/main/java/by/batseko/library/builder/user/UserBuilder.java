@@ -1,16 +1,13 @@
 package by.batseko.library.builder.user;
 
-import by.batseko.library.entity.Role;
-import by.batseko.library.entity.User;
+import by.batseko.library.entity.user.UserRole;
+import by.batseko.library.entity.user.User;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class UserBuilder {
-    private static final Role DEFAULT_ROLE = Role.USER;
-
     private int id;
-    private Role role;
+    private UserRole userRole;
     private String login;
     private String password;
     private boolean isBanned;
@@ -22,11 +19,6 @@ public class UserBuilder {
     private Timestamp registrationDate;
     private String address;
 
-    public UserBuilder(){
-        role = DEFAULT_ROLE;
-        registrationDate = new Timestamp(new Date().getTime());
-    }
-
     public int getId() {
         return id;
     }
@@ -36,12 +28,12 @@ public class UserBuilder {
         return this;
     }
 
-    public Role getRole() {
-        return role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public UserBuilder setRole(Role role) {
-        this.role = role;
+    public UserBuilder setUserRole(UserRole userRole) {
+        this.userRole = userRole;
         return this;
     }
 
@@ -63,7 +55,7 @@ public class UserBuilder {
         return this;
     }
 
-    public boolean isBanned() {
+    public boolean getBanned() {
         return isBanned;
     }
 

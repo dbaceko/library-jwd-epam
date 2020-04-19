@@ -1,11 +1,15 @@
 package by.batseko.library.command;
 
 public class PageStorage {
-    public static final String HOME = "/WEB-INF/jsp/index.jsp";
-    public static final String REGISTER_USER = "/WEB-INF/jsp/registration.jsp";
-    public static final String PROFILE_USER = "/WEB-INF/jsp/profile.jsp";
-    public static final String LOG_IN = "/WEB-INF/jsp/login.jsp";
-    public static final String ERROR = "/WEB-INF/jsp/error.jsp";
+    public static final String ROOT = "/";
+    public static final String ROOT_HOME = "/index.jsp";
+    public static final String HOME = "/jsp/index.jsp";
+    public static final String REGISTER_USER = "/jsp/registration.jsp";
+    public static final String PROFILE_USER = "/jsp/profile.jsp";
+    public static final String LOG_IN = "/jsp/login.jsp";
+    public static final String ONLINE_USERS_LIST = "/jsp/admin/onlineUsersList.jsp";
+    public static final String ALL_USERS_LIST = "/jsp/admin/allUsersList.jsp";
+    public static final String ERROR = "/jsp/error.jsp";
 
     private PageStorage() {}
 }

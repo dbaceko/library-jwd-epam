@@ -19,46 +19,47 @@
             </p>
         </div>
     </c:if>
-    <form class="form-wrapper" method="post" action="controller?post=registerUser"  id="register-form">
+    <form class="form-wrapper" method="post" action="controller"  id="register-form">
         <fieldset class="fieldset">
+            <input type="hidden" name="action" value="registerUser">
             <legend class="title">
                 <fmt:message  bundle="${locale}" key="registration.legend"/>
             </legend>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.firstname"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.firstname"/></span>
                 <input class="input"  type="text" name="firstname"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.firstName} </c:if>>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.lastname"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.lastname"/></span>
                 <input type="text" name="lastname" class="input"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.lastName} </c:if>>
             </label>
             <label class="inputfield">
-                <span><fmt:message  bundle="${locale}" key="registration.passportSN"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.passportSN"/></span>
                 <input type="password" name="passport" class="input">
             </label>
             <label class="inputfield">
-                <span><fmt:message  bundle="${locale}" key="registration.login"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.login"/></span>
                 <input type="text"  name="login" class="input"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.login} </c:if>>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.password"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.password"/></span>
                 <input type="password"  name="password" class="input">
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.email"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.email"/></span>
                 <input type="text" name="email" class="input"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.email} </c:if>>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.phone"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.phone"/></span>
                 <input type="text" name="phone" class="input"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.phoneNumber} </c:if>>
             </label>
             <label>
-                <span><fmt:message  bundle="${locale}" key="registration.address"/></span>
+                <span><fmt:message  bundle="${locale}" key="user.address"/></span>
                 <input type="text" name="address" class="input"
                 <c:if test="${not empty user_registration_data}"> value=${user_registration_data.address} </c:if>>
             </label>

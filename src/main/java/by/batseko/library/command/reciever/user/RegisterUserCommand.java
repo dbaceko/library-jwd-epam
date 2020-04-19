@@ -1,10 +1,8 @@
 package by.batseko.library.command.reciever.user;
 
 import by.batseko.library.builder.user.UserBuilder;
-import by.batseko.library.command.Command;
-import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.PageStorage;
-import by.batseko.library.entity.User;
+import by.batseko.library.command.*;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.UserService;
@@ -12,23 +10,23 @@ import by.batseko.library.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RegisterUser implements Command {
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
+public class RegisterUserCommand implements Command {
+    private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
         User newUser = constructUser(request);
-
+        Router currentRouter = new Router();
         try {
             userService.registerUser(newUser);
+            return new LogInCommand().execute(request, response);
         } catch (LibraryServiceException e) {
-            setUserInfoToSession(request, newUser);
-            setErrorMessageToSession(request, e.getMessage());
-            request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.REGISTER_USER);
-            return PageStorage.REGISTER_USER;
+            setErrorMessage(request, e.getMessage());
+            setUserInfoToRequest(request, newUser);
+            currentRouter.setPagePath(PageStorage.REGISTER_USER);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
         }
-        request.getSession().setAttribute(JSPAttributeStorage.PAGE, PageStorage.LOG_IN);
-        return PageStorage.LOG_IN;
+        return currentRouter;
     }
 
     private User constructUser(HttpServletRequest request) {
@@ -52,11 +50,7 @@ public class RegisterUser implements Command {
                 .build();
     }
 
-    private void setUserInfoToSession(HttpServletRequest request, User user) {
+    private void setUserInfoToRequest(HttpServletRequest request, User user) {
         request.setAttribute(JSPAttributeStorage.USER_REGISTRATION_DATA, user);
-    }
-
-    private void setErrorMessageToSession(HttpServletRequest request, String message) {
-        request.setAttribute(JSPAttributeStorage.EXCEPTION_MESSAGE, message);
     }
 }
