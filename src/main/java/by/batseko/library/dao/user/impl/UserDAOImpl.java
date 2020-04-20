@@ -89,15 +89,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_LOGIN)) {
             preparedStatement.setString(1, userLogin);
             resultSet = preparedStatement.executeQuery();
-            User user = null;
-            if (resultSet.next()) {
-                user = constructUserByResultSet(resultSet);
-            }
-            if (user == null) {
-                LOGGER.debug(String.format("User not found by login %s", userLogin));
-                throw new LibraryDAOException("query.user.getUser.userNotFound");
-            }
-            return user;
+            return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
@@ -113,15 +105,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_ID)) {
             preparedStatement.setInt(1, userID);
             resultSet = preparedStatement.executeQuery();
-            User user = null;
-            if (resultSet.next()) {
-                user = constructUserByResultSet(resultSet);
-            }
-            if (user == null) {
-                LOGGER.debug(String.format("User not found by id %d", userID));
-                throw new LibraryDAOException("query.user.getUser.userNotFound");
-            }
-            return user;
+            return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
@@ -142,7 +126,6 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
-                LOGGER.info(listSize);
                 users = new ArrayList<>(listSize);
                 while (resultSet.next()) {
                     User user = constructUserByResultSet(resultSet);
@@ -166,6 +149,14 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("query.user.deleteUser.commonError");
+        }
+    }
+
+    private User extractFoundedUserFromResultSet(ResultSet resultSet) throws SQLException, LibraryDAOException {
+        if (resultSet.next()) {
+            return constructUserByResultSet(resultSet);
+        } else {
+            throw new LibraryDAOException("query.user.getUser.userNotFound");
         }
     }
 
