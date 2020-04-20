@@ -1,9 +1,6 @@
 package by.batseko.library.pool;
 
 import by.batseko.library.exception.ConnectionPoolException;
-import by.batseko.library.exception.ValidatorException;
-import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.validatior.PoolValidator;
 import com.mysql.cj.jdbc.Driver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,8 +25,6 @@ public class ConnectionPool {
 
     private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
     private static final String URL_PROPERTY_NAME = "url";
-    private static final String POOL_SIZE_PROPERTY_NAME = "poolSize";
-    private static final String CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME = "connectionAwaitingTimeout";
     private static final int DEFAULT_POOL_SIZE = 10;
     private static final int DEFAULT_CONNECTION_AWAITING_TIMEOUT = 30;
 
@@ -37,19 +32,14 @@ public class ConnectionPool {
     private final List<Connection> usedConnections;
     private final AtomicBoolean isInitialized;
     private final AtomicBoolean isPoolClosing;
-    private final PoolValidator poolValidator;
     private final Lock initLock;
     private final Properties jdbcMysqlConfigProperties;
 
     private String url;
 
-    private int poolSize;
-    private int connectionAwaitingTimeout;
-
     private ConnectionPool() {
         availableConnections = new LinkedBlockingQueue<>();
         usedConnections = new LinkedList<>();
-        poolValidator = ValidatorFactory.getInstance().getPoolValidator();
         isInitialized = new AtomicBoolean(false);
         isPoolClosing = new AtomicBoolean(false);
         initLock = new ReentrantLock();
@@ -71,7 +61,7 @@ public class ConnectionPool {
                 Driver jdbcMySQLDriver = new Driver();
                 DriverManager.registerDriver(jdbcMySQLDriver);
                 initProperties(DB_CONNECTION_POOL_PROPERTIES);
-                createConnections(poolSize);
+                createConnections(DEFAULT_POOL_SIZE);
                 isInitialized.set(true);
             } catch (SQLException e) {
                 throw new ConnectionPoolException("Connection pool is not initialized ", e);
@@ -86,7 +76,7 @@ public class ConnectionPool {
             Connection connection = null;
             if (!availableConnections.isEmpty()) {
                 try {
-                    connection = availableConnections.poll(connectionAwaitingTimeout, TimeUnit.SECONDS);
+                    connection = availableConnections.poll(DEFAULT_CONNECTION_AWAITING_TIMEOUT, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     LOGGER.error("Can't get connection", e);
                     Thread.currentThread().interrupt();
@@ -154,38 +144,12 @@ public class ConnectionPool {
     private void initProperties(String propertiesFileName) throws ConnectionPoolException {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFileName)) {
             jdbcMysqlConfigProperties.load(inputStream);
-            initDBPoolSettings(jdbcMysqlConfigProperties);
-            initSizeAndTimeoutPoolSettings(jdbcMysqlConfigProperties);
+            if (jdbcMysqlConfigProperties.isEmpty()) {
+                throw new ConnectionPoolException("DB properties has not been loaded");
+            }
+            url = jdbcMysqlConfigProperties.getProperty(URL_PROPERTY_NAME);
         } catch (IOException e) {
             throw new ConnectionPoolException("DB properties has not been loaded ", e);
-        }
-    }
-
-    private void initDBPoolSettings(Properties properties) throws ConnectionPoolException {
-        try {
-            url = properties.getProperty(URL_PROPERTY_NAME);
-            poolValidator.checkContainsNull(properties);
-        } catch (ValidatorException e) {
-            throw new ConnectionPoolException("Invalid primary DB properties ", e);
-        }
-    }
-
-    private void initSizeAndTimeoutPoolSettings(Properties properties) {
-        try {
-            poolSize = Integer.parseInt(properties.getProperty(POOL_SIZE_PROPERTY_NAME));
-            connectionAwaitingTimeout = Integer.parseInt(properties.getProperty(CONNECTION_AWAITING_TIMEOUT_PROPERTY_NAME));
-            if (poolValidator.isLessOrEqualsZero(poolSize)) {
-                poolSize = DEFAULT_POOL_SIZE;
-                LOGGER.warn("Invalid pool size in property settings");
-            }
-            if (poolValidator.isLessOrEqualsZero(connectionAwaitingTimeout)) {
-                connectionAwaitingTimeout = DEFAULT_CONNECTION_AWAITING_TIMEOUT;
-                LOGGER.warn("Invalid connection awaiting timeout in property settings");
-            }
-        } catch (NumberFormatException e) {
-            poolSize = DEFAULT_POOL_SIZE;
-            connectionAwaitingTimeout = DEFAULT_CONNECTION_AWAITING_TIMEOUT;
-            LOGGER.warn("Unparseable property field", e);
         }
     }
 }
