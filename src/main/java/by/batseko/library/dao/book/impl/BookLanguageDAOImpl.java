@@ -2,8 +2,8 @@ package by.batseko.library.dao.book.impl;
 
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
-import by.batseko.library.dao.book.BookGenreDAO;
-import by.batseko.library.entity.book.Genre;
+import by.batseko.library.dao.book.BookLanguageDAO;
+import by.batseko.library.entity.book.BookLanguage;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -14,41 +14,41 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
-    private static final Logger LOGGER = LogManager.getLogger(BookGenreDAOImpl.class);
+public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
+    private static final Logger LOGGER = LogManager.getLogger(BookLanguageDAOImpl.class);
 
     @Override
-    public void addBookGenre(Genre genre) throws LibraryDAOException {
+    public void addBookLanguage(BookLanguage bookLanguage) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_AUTHOR)) {
-            preparedStatement.setString(1, genre.getUuid());
-            preparedStatement.setString(2, genre.getGenre());
+            preparedStatement.setString(1, bookLanguage.getUuid());
+            preparedStatement.setString(2, bookLanguage.getLanguage());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.debug(e);
-            throw new LibraryDAOException("query.genre.creation.alreadyExist", e);
+            throw new LibraryDAOException("query.bookLanguage.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.genre.creation.commonError", e);
+            throw new LibraryDAOException("query.bookLanguage.creation.commonError", e);
         }
     }
 
     @Override
-    public Genre findBookGenreByUUID(String bookGenreUUID) throws LibraryDAOException {
+    public BookLanguage findBookLanguageByUUID(String bookLanguageUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
-            preparedStatement.setString(1, bookGenreUUID);
+            preparedStatement.setString(1, bookLanguageUUID);
             resultSet = preparedStatement.executeQuery();
-            Genre genre = null;
+            BookLanguage bookLanguage = null;
             if (resultSet.next()) {
-                genre = constructGenreByResultSet(resultSet);
+                bookLanguage = constructBookLanguageByResultSet(resultSet);
             }
-            if (genre == null) {
-                LOGGER.debug(String.format("Genre not found by uuid %s", bookGenreUUID));
-                throw new LibraryDAOException("query.genre.read.notFound");
+            if (bookLanguage == null) {
+                LOGGER.debug(String.format("Book language not found by uuid %s", bookLanguageUUID));
+                throw new LibraryDAOException("query.bookLanguage.read.notFound");
             }
-            return genre;
+            return bookLanguage;
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
@@ -58,36 +58,36 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     }
 
     @Override
-    public List<Genre> findAllBookGenres() throws LibraryDAOException {
-        List<Genre> genres;
+    public List<BookLanguage> findAllBookLanguages() throws LibraryDAOException {
+        List<BookLanguage> bookLanguages;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_AUTHORS);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
-                genres = Collections.emptyList();
+                bookLanguages = Collections.emptyList();
             } else {
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
                 LOGGER.info(listSize);
-                genres = new ArrayList<>(listSize);
+                bookLanguages = new ArrayList<>(listSize);
                 while (resultSet.next()) {
-                    Genre genre = constructGenreByResultSet(resultSet);
-                    LOGGER.info(genre);
-                    genres.add(genre);
+                    BookLanguage bookLanguage = constructBookLanguageByResultSet(resultSet);
+                    LOGGER.info(bookLanguage);
+                    bookLanguages.add(bookLanguage);
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
         }
-        return genres;
+        return bookLanguages;
     }
 
-    private Genre constructGenreByResultSet(ResultSet resultSet) throws SQLException {
-        Genre genre = new Genre();
-        genre.setUuid(resultSet.getString(1));
-        genre.setGenre(resultSet.getString(2));
-        return genre;
+    private BookLanguage constructBookLanguageByResultSet(ResultSet resultSet) throws SQLException {
+        BookLanguage bookLanguage = new BookLanguage();
+        bookLanguage.setUuid(resultSet.getString(1));
+        bookLanguage.setLanguage(resultSet.getString(2));
+        return bookLanguage;
     }
 }

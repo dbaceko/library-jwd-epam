@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class BookLanguage implements Serializable {
-    private int id;
+    private String uuid;
     private String language;
 
-    public int getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getLanguage() {
@@ -28,19 +28,19 @@ public class BookLanguage implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookLanguage bookLanguage1 = (BookLanguage) o;
-        return getId() == bookLanguage1.getId() &&
+        return Objects.equals(getUuid(), bookLanguage1.getUuid()) &&
                 Objects.equals(getLanguage(), bookLanguage1.getLanguage());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLanguage());
+        return Objects.hash(getUuid(), getLanguage());
     }
 
     @Override
     public String toString() {
         return "Language{" +
-                "id=" + id +
+                "id=" + uuid +
                 ", language='" + language + '\'' +
                 '}';
     }
