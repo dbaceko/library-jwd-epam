@@ -45,10 +45,11 @@ public class UserServiceImpl implements UserService {
                 throw new LibraryServiceException("validation.login.incorrect");
             }
         } catch (EncryptionException e) {
-            throw new LibraryServiceException("service.commonError");
+            LOGGER.warn(e);
+            throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            LOGGER.info(e);
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -66,11 +67,12 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn(e);
         }
         if (user == null) {
-            LOGGER.warn("User is not in cache");
+            LOGGER.info("User is not in cache");
             try {
                 user = userDAO.findUserByLogin(login);
             } catch (LibraryDAOException e) {
-                throw new LibraryServiceException(e.getMessage());
+                LOGGER.warn(e);
+                throw new LibraryServiceException(e.getMessage(), e);
             }
         }
         return user;
@@ -81,7 +83,8 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.findUserByID(id);
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -95,7 +98,8 @@ public class UserServiceImpl implements UserService {
                 return userList;
             }
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -104,16 +108,18 @@ public class UserServiceImpl implements UserService {
         try {
             validator.validateNewUser(user);
         } catch (ValidatorException e) {
-            LOGGER.info(String.format("invalid %s %n registration data %s", user.toString(), e.getMessage()));
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.info(String.format("Invalid %s %n registration data %s", user, e.getMessage()));
+            throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
             user.setPassword(encryption.generateHash(user.getPassword()));
             userDAO.registerUser(user);
         } catch (EncryptionException e) {
-            throw new LibraryServiceException("service.commonError");
+            LOGGER.warn(e);
+            throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -123,7 +129,7 @@ public class UserServiceImpl implements UserService {
             validator.validateUpdatedUser(user);
         } catch (ValidatorException e) {
             LOGGER.info(String.format("invalid %s %n update data %s", user.toString(), e.getMessage()));
-            throw new LibraryServiceException(e.getMessage());
+            throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
             user.setPassword(encryption.generateHash(user.getPassword()));
@@ -132,7 +138,8 @@ public class UserServiceImpl implements UserService {
                 activeUserCache.put(user.getLogin(), user);
             }
         } catch (EncryptionException | LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -144,7 +151,8 @@ public class UserServiceImpl implements UserService {
                 activeUserCache.put(user.getLogin(), user);
             }
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -153,7 +161,8 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.findUserByID(userID);
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage());
+            LOGGER.info(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 

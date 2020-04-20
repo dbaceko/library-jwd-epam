@@ -26,10 +26,8 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookAuthorDAO {
             preparedStatement.setString(3, author.getLastname());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            LOGGER.debug(e);
             throw new LibraryDAOException("query.author.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("query.author.creation.commonError", e);
         }
     }
@@ -41,17 +39,13 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookAuthorDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
             preparedStatement.setString(1, bookAuthorUUID);
             resultSet = preparedStatement.executeQuery();
-            Author author = null;
             if (resultSet.next()) {
-                author = constructAuthorByResultSet(resultSet);
-            }
-            if (author == null) {
+                return constructAuthorByResultSet(resultSet);
+            } else {
                 LOGGER.debug(String.format("Author not found by uuid %s", bookAuthorUUID));
                 throw new LibraryDAOException("query.author.read.notFound");
             }
-            return author;
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -79,7 +73,6 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookAuthorDAO {
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return authors;

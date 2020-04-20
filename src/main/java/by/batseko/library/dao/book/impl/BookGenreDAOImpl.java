@@ -25,10 +25,8 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
             preparedStatement.setString(2, genre.getGenre());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            LOGGER.debug(e);
             throw new LibraryDAOException("query.genre.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("query.genre.creation.commonError", e);
         }
     }
@@ -40,17 +38,13 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
             preparedStatement.setString(1, bookGenreUUID);
             resultSet = preparedStatement.executeQuery();
-            Genre genre = null;
             if (resultSet.next()) {
-                genre = constructGenreByResultSet(resultSet);
-            }
-            if (genre == null) {
+                return constructGenreByResultSet(resultSet);
+            } else {
                 LOGGER.debug(String.format("Genre not found by uuid %s", bookGenreUUID));
                 throw new LibraryDAOException("query.genre.read.notFound");
             }
-            return genre;
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -69,7 +63,6 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
-                LOGGER.info(listSize);
                 genres = new ArrayList<>(listSize);
                 while (resultSet.next()) {
                     Genre genre = constructGenreByResultSet(resultSet);
@@ -78,7 +71,6 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
-            LOGGER.warn(e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return genres;

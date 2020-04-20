@@ -62,7 +62,6 @@ public class Encryption {
         try {
             return secretKeyFactory.generateSecret(pbeKeySpec).getEncoded();
         } catch (InvalidKeySpecException e) {
-            LOGGER.error("Encryption KeySpec exception: ", e);
             throw new EncryptionException(e);
         }
     }
