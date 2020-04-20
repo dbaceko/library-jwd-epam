@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         try {
             List<User> userList = userDAO.findAllUsers();
             if (userList.isEmpty()) {
-                throw new LibraryServiceException("query.getUsers.usersNotFound");
+                throw new LibraryServiceException("query.user.getUsers.usersNotFound");
             } else {
                 return userList;
             }

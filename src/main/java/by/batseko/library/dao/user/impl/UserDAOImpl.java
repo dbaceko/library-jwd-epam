@@ -38,13 +38,13 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.debug(e);
             if(e.getMessage().contains(UNIQUE_LOGIN_MESSAGE)) {
-                throw new LibraryDAOException("query.registration.emailAlreadyExist");
+                throw new LibraryDAOException("query.user.registration.emailAlreadyExist", e);
             } else if (e.getMessage().contains(UNIQUE_EMAIL_MESSAGE)) {
-                throw new LibraryDAOException("query.registration.loginAlreadyExist");
+                throw new LibraryDAOException("query.user.registration.loginAlreadyExist", e);
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.registration.commonError");
+            throw new LibraryDAOException("query.user.registration.commonError", e);
         }
     }
 
@@ -61,11 +61,11 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.debug(e);
             if(e.getMessage().contains(UNIQUE_LOGIN_MESSAGE)) {
-                throw new LibraryDAOException("query.registration.emailAlreadyExist");
+                throw new LibraryDAOException("query.user.registration.emailAlreadyExist", e);
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("service.commonError");
+            throw new LibraryDAOException("service.commonError", e);
         }
     }
 
@@ -78,7 +78,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("service.commonError");
+            throw new LibraryDAOException("service.commonError", e);
         }
     }
 
@@ -95,12 +95,12 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             }
             if (user == null) {
                 LOGGER.debug(String.format("User not found by login %s", userLogin));
-                throw new LibraryDAOException("query.getUser.userNotFound");
+                throw new LibraryDAOException("query.user.getUser.userNotFound");
             }
             return user;
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.getUser.commonError", e);
+            throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
         }
@@ -119,12 +119,12 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             }
             if (user == null) {
                 LOGGER.debug(String.format("User not found by id %d", userID));
-                throw new LibraryDAOException("query.getUser.userNotFound");
+                throw new LibraryDAOException("query.user.getUser.userNotFound");
             }
             return user;
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.getUser.commonError", e);
+            throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
         }
@@ -152,7 +152,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.getUser.commonError", e);
+            throw new LibraryDAOException("service.commonError", e);
         }
         return users;
     }
@@ -165,7 +165,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(e);
-            throw new LibraryDAOException("query.deleteUser.commonError");
+            throw new LibraryDAOException("query.user.deleteUser.commonError");
         }
     }
 
