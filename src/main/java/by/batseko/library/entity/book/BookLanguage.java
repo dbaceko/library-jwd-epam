@@ -40,7 +40,7 @@ public class BookLanguage implements Serializable {
     @Override
     public String toString() {
         return "Language{" +
-                "id=" + uuid +
+                "uuid=" + uuid +
                 ", language='" + language + '\'' +
                 '}';
     }
