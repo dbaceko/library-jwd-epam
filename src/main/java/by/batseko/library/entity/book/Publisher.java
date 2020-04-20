@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Publisher implements Serializable {
-    private int id;
+    private String uuid;
     private String publisherTitle;
 
-    public int getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getPublisherTitle() {
@@ -28,19 +28,19 @@ public class Publisher implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Publisher publisher1 = (Publisher) o;
-        return id == publisher1.id &&
+        return Objects.equals(uuid, publisher1.uuid) &&
                 Objects.equals(publisherTitle, publisher1.publisherTitle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publisherTitle);
+        return Objects.hash(uuid, publisherTitle);
     }
 
     @Override
     public String toString() {
         return "Publisher{" +
-                "id=" + id +
+                "uuid=" + uuid +
                 ", publisher='" + publisherTitle + '\'' +
                 '}';
     }

@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Genre implements Serializable {
-    private int id;
+    private String uuid;
     private String genre;
 
-    public int getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getGenre() {
@@ -28,19 +28,19 @@ public class Genre implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Genre genre1 = (Genre) o;
-        return id == genre1.id &&
+        return Objects.equals(uuid, genre1.uuid) &&
                 Objects.equals(genre, genre1.genre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, genre);
+        return Objects.hash(uuid, genre);
     }
 
     @Override
     public String toString() {
         return "Genre{" +
-                "id=" + id +
+                "uuid=" + uuid +
                 ", genre='" + genre + '\'' +
                 '}';
     }

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Author implements Serializable {
-    String uuid;
-    String name;
-    String surname;
+    private String uuid;
+    private String fristname;
+    private String lastname;
 
     public String getUuid() {
         return uuid;
@@ -16,20 +16,20 @@ public class Author implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getName() {
-        return name;
+    public String getFristname() {
+        return fristname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFristname(String fristname) {
+        this.fristname = fristname;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     @Override
@@ -38,21 +38,21 @@ public class Author implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
         return  Objects.equals(uuid, author.uuid) &&
-                Objects.equals(name, author.name) &&
-                Objects.equals(surname, author.surname);
+                Objects.equals(fristname, author.fristname) &&
+                Objects.equals(lastname, author.lastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, surname);
+        return Objects.hash(uuid, fristname, lastname);
     }
 
     @Override
     public String toString() {
         return "Author{" +
                 "uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
+                ", name='" + fristname + '\'' +
+                ", surname='" + lastname + '\'' +
                 '}';
     }
 }
