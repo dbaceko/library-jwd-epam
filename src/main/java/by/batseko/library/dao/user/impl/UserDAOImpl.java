@@ -8,7 +8,6 @@ import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
-import by.batseko.library.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,12 +21,6 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
 
     private static final String UNIQUE_LOGIN_MESSAGE = "user.login_UNIQUE";
     private static final String UNIQUE_EMAIL_MESSAGE = "user.email_UNIQUE";
-
-    private final ConnectionPool pool;
-
-    public UserDAOImpl(){
-        pool = ConnectionPool.getInstance();
-    }
 
     @Override
     public void registerUser(User user) throws LibraryDAOException {
