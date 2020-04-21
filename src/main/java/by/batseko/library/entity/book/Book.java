@@ -1,5 +1,7 @@
 package by.batseko.library.entity.book;
 
+import by.batseko.library.builder.book.BookBuilder;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +15,20 @@ public class Book implements Serializable {
     private int publishYear;
     private int pagesQuantity;
     private String description;
+
+    public Book(BookBuilder builder) {
+        this.uuid = builder.getUuid();
+        this.genre = builder.getGenre();
+        this.bookLanguage = builder.getBookLanguage();
+        this.publisher = builder.getPublisher();
+        this.author = builder.getAuthor();
+        this.title = builder.getTitle();
+        this.publishYear = builder.getPublishYear();
+        this.pagesQuantity = builder.getPagesQuantity();
+        this.description = builder.getDescription();
+    }
+
+    public Book() {}
 
     public String getUuid() {
         return uuid;

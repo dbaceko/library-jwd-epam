@@ -35,6 +35,8 @@ public class User implements Serializable {
         address = builder.getAddress();
     }
 
+    public User() {}
+
     public int getId() {
         return id;
     }
