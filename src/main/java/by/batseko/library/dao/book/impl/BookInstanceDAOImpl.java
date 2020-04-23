@@ -22,7 +22,7 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
             preparedStatement.setString(1, bookUUID);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
-            throw new LibraryDAOException("query.genre.creation.commonError", e);
+            throw new LibraryDAOException("query.bookInstance.creation.commonError", e);
         }
     }
 }

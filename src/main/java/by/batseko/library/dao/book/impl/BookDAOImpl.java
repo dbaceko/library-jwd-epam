@@ -64,7 +64,12 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_BY_UUID);
             ResultSet resultSet = preparedStatement.executeQuery()) {
-            return constructBookByResultSet(resultSet);
+            if (resultSet.next()) {
+                return constructBookByResultSet(resultSet);
+            } else {
+                LOGGER.debug(String.format("Book not found by uuid %s", bookUUID));
+                throw new LibraryDAOException("query.book.read.notFound");
+            }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
         }
