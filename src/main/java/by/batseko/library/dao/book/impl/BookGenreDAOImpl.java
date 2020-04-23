@@ -20,7 +20,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     @Override
     public void addBookGenre(Genre genre) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_AUTHOR)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_GENRE)) {
             preparedStatement.setString(1, genre.getUuid());
             preparedStatement.setString(2, genre.getGenre());
             preparedStatement.executeUpdate();
@@ -35,7 +35,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     public Genre findBookGenreByUUID(String bookGenreUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_GENRE_BY_UUID)) {
             preparedStatement.setString(1, bookGenreUUID);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -55,7 +55,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     public List<Genre> findAllBookGenres() throws LibraryDAOException {
         List<Genre> genres;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_AUTHORS);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_GENRES);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
                 genres = Collections.emptyList();
@@ -74,12 +74,5 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
             throw new LibraryDAOException("service.commonError", e);
         }
         return genres;
-    }
-
-    private Genre constructGenreByResultSet(ResultSet resultSet) throws SQLException {
-        Genre genre = new Genre();
-        genre.setUuid(resultSet.getString(1));
-        genre.setGenre(resultSet.getString(2));
-        return genre;
     }
 }

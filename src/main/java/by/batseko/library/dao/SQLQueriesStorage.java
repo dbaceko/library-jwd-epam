@@ -21,17 +21,21 @@ public class SQLQueriesStorage {
     public static final String FIND_ALL_BOOK_PUBLISHERS = "SELECT * FROM book_publisher";
 
     public static final String INSERT_BOOK_GENRE = "INSERT INTO book_genre (uuid, genre) value (?, ?)";
-    public static final String FIND_BOOK_GENRE_BY_ID = "SELECT * FROM book_genre WHERE uuid = (?)";
+    public static final String FIND_BOOK_GENRE_BY_UUID = "SELECT * FROM book_genre WHERE uuid = (?)";
     public static final String FIND_ALL_BOOK_GENRES = "SELECT * FROM book_genre";
 
     public static final String INSERT_BOOK_LANGUAGE = "INSERT INTO book_language (uuid, language) value (?, ?)";
-    public static final String FIND_BOOK_LANGUAGE_BY_ID = "SELECT * FROM book_language WHERE uuid = (?)";
+    public static final String FIND_BOOK_LANGUAGE_BY_UUID = "SELECT * FROM book_language WHERE uuid = (?)";
     public static final String FIND_ALL_BOOK_LANGUAGES = "SELECT * FROM book_language";
 
     public static final String INSERT_BOOK = "INSERT INTO book (uuid, genre_uuid, language_uuid, publisher_uuid, author_uuid, " +
             "title, publish_year, pages_quantity, description) value (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    public static final String FIND_BOOK_BY_UUID = "SELECT * FROM book WHERE uuid = (?)";
+    public static final String FIND_BOOK_BY_UUID = "SELECT book.*, count(book_instance.uuid) as available_book_quantity " +
+            "FROM book LEFT JOIN book_instance ON book.uuid = book_instance.book_uuid " +
+            "WHERE book.uuid = (?) AND book_instance.is_available = 1";
     public static final String FIND_ALL_BOOKS = "SELECT * FROM book";
+
+    public static final String INSERT_BOOK_INSTANCE = "INSERT INTO book_instance (book_uuid) value (?)";
 
     private SQLQueriesStorage() {}
 }

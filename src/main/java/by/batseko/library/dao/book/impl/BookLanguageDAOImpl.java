@@ -20,7 +20,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
     @Override
     public void addBookLanguage(BookLanguage bookLanguage) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_AUTHOR)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_LANGUAGE)) {
             preparedStatement.setString(1, bookLanguage.getUuid());
             preparedStatement.setString(2, bookLanguage.getLanguage());
             preparedStatement.executeUpdate();
@@ -35,7 +35,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
     public BookLanguage findBookLanguageByUUID(String bookLanguageUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_LANGUAGE_BY_UUID)) {
             preparedStatement.setString(1, bookLanguageUUID);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -55,7 +55,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
     public List<BookLanguage> findAllBookLanguages() throws LibraryDAOException {
         List<BookLanguage> bookLanguages;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_AUTHORS);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_LANGUAGES);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
                 bookLanguages = Collections.emptyList();
@@ -76,10 +76,4 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
         return bookLanguages;
     }
 
-    private BookLanguage constructBookLanguageByResultSet(ResultSet resultSet) throws SQLException {
-        BookLanguage bookLanguage = new BookLanguage();
-        bookLanguage.setUuid(resultSet.getString(1));
-        bookLanguage.setLanguage(resultSet.getString(2));
-        return bookLanguage;
-    }
 }

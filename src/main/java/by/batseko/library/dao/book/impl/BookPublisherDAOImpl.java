@@ -20,7 +20,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
     @Override
     public void addBookPublisher(Publisher publisher) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_AUTHOR)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_PUBLISHER)) {
             preparedStatement.setString(1, publisher.getUuid());
             preparedStatement.setString(2, publisher.getPublisherTitle());
             preparedStatement.executeUpdate();
@@ -35,7 +35,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
     public Publisher findBookPublisherByUUID(String bookPublisherUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_AUTHOR_BY_UUID)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_PUBLISHER_BY_UUID)) {
             preparedStatement.setString(1, bookPublisherUUID);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -55,7 +55,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
     public List<Publisher> findAllBookPublishers() throws LibraryDAOException {
         List<Publisher> publishers;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_AUTHORS);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_PUBLISHERS);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
                 publishers = Collections.emptyList();
@@ -77,10 +77,4 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
         return publishers;
     }
 
-    private Publisher constructPublisherByResultSet(ResultSet resultSet) throws SQLException {
-        Publisher publisher = new Publisher();
-        publisher.setUuid(resultSet.getString(1));
-        publisher.setPublisherTitle(resultSet.getString(2));
-        return publisher;
-    }
 }

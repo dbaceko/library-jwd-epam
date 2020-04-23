@@ -77,12 +77,4 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookAuthorDAO {
         }
         return authors;
     }
-
-    private Author constructAuthorByResultSet(ResultSet resultSet) throws SQLException {
-        Author author = new Author();
-        author.setUuid(resultSet.getString(1));
-        author.setFristname(resultSet.getString(2));
-        author.setLastname(resultSet.getString(3));
-        return author;
-    }
 }
