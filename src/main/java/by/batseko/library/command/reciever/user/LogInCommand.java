@@ -4,7 +4,7 @@ import by.batseko.library.command.*;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.UserService;
+import by.batseko.library.service.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

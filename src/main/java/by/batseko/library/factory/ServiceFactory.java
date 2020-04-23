@@ -1,7 +1,7 @@
 package by.batseko.library.factory;
 
-import by.batseko.library.service.UserService;
-import by.batseko.library.service.impl.UserServiceImpl;
+import by.batseko.library.service.user.UserService;
+import by.batseko.library.service.user.impl.UserServiceImpl;
 
 public class ServiceFactory {
     private final UserService userService;

@@ -1,4 +1,4 @@
-package by.batseko.library.service.impl;
+package by.batseko.library.service.user.impl;
 
 import by.batseko.library.dao.user.UserDAO;
 import by.batseko.library.entity.user.User;
@@ -9,7 +9,7 @@ import by.batseko.library.exception.ValidatorException;
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.service.UserService;
+import by.batseko.library.service.user.UserService;
 import by.batseko.library.util.Encryption;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidator validator;
     private final Encryption encryption;
-    private final OnlineUsersCache activeUserCache;
+    private final by.batseko.library.service.user.impl.OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
         encryption = UtilFactory.getInstance().getEncryption();
-        activeUserCache = OnlineUsersCache.getInstance();
+        activeUserCache = by.batseko.library.service.user.impl.OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
     }
 
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public OnlineUsersCache getOnlineUsersCache() {
+    public by.batseko.library.service.user.impl.OnlineUsersCache getOnlineUsersCache() {
         return activeUserCache;
     }
 }

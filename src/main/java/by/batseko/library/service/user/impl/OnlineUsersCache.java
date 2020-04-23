@@ -1,4 +1,4 @@
-package by.batseko.library.service.impl;
+package by.batseko.library.service.user.impl;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import org.apache.logging.log4j.LogManager;

@@ -3,7 +3,7 @@ package by.batseko.library.listener;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.impl.OnlineUsersCache;
+import by.batseko.library.service.user.impl.OnlineUsersCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
