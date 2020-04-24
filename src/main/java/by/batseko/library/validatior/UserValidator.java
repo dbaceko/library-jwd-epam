@@ -31,38 +31,38 @@ public class UserValidator {
 
     private void validateLogin(String login) throws ValidatorException {
         if (StringUtils.isBlank(login) || !login.matches(LOGIN_REGEX)) {
-            throw new ValidatorException("validation.registration.login");
+            throw new ValidatorException("validation.user.registration.login");
         }
     }
 
     private void validatePhone(String phone) throws ValidatorException {
         if (StringUtils.isBlank(phone) || !phone.matches(PHONE_REGEX)) {
-            throw new ValidatorException("validation.registration.phone");
+            throw new ValidatorException("validation.user.registration.phone");
         }
     }
 
     private void validatePassword(String password) throws ValidatorException {
         if (StringUtils.isBlank(password) || !password.matches(PASSWORD_REGEX)) {
-            throw new ValidatorException("validation.registration.password");
+            throw new ValidatorException("validation.user.registration.password");
         }
     }
 
     private void validateEmail(String email) throws ValidatorException {
         if (StringUtils.isBlank(email) || email.length() > MAX_EMAIL_FIELD_LENGTH || !email.matches(EMAIL_REGEX)) {
-            throw new ValidatorException("validation.registration.email");
+            throw new ValidatorException("validation.user.registration.email");
         }
     }
 
     private void validatePassportSN(String passport) throws ValidatorException {
         if (StringUtils.isBlank(passport) || !passport.matches(PASSPORT_SN_REGEX)) {
-            throw new ValidatorException("validation.registration.passportSN");
+            throw new ValidatorException("validation.user.registration.passportSN");
         }
     }
 
     private void validateFieldLength(String... fields) throws ValidatorException {
         for (String field : fields) {
             if (StringUtils.isBlank(field) || field.length() > MAX_FIELD_LENGTH) {
-                throw new ValidatorException("validation.registration.fieldlength");
+                throw new ValidatorException("validation.user.registration.fieldlength");
             }
         }
     }

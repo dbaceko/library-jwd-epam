@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
                 return user;
             } else {
                 LOGGER.info("Password dont match");
-                throw new LibraryServiceException("validation.login.incorrect");
+                throw new LibraryServiceException("validation.user.login.incorrect");
             }
         } catch (EncryptionException e) {
             LOGGER.warn(e);
