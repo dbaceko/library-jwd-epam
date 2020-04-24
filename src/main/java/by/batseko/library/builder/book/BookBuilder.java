@@ -1,6 +1,7 @@
 package by.batseko.library.builder.book;
 
 import by.batseko.library.entity.book.*;
+import by.batseko.library.entity.book.bookcomponent.*;
 
 public class BookBuilder {
     private String uuid;
@@ -32,12 +33,36 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder setGenreUUID(String uuid) {
+        defineGenreIfNull();
+        genre.setUuid(uuid);
+        return this;
+    }
+
+    public BookBuilder setGenreTitle(String genre) {
+        defineGenreIfNull();
+        this.genre.setGenreTitle(genre);
+        return this;
+    }
+
     public BookLanguage getBookLanguage() {
         return bookLanguage;
     }
 
     public BookBuilder setBookLanguage(BookLanguage bookLanguage) {
         this.bookLanguage = bookLanguage;
+        return this;
+    }
+
+    public BookBuilder setBookLanguageUUID(String uuid) {
+        defineBookLanguageIfNull();
+        bookLanguage.setUuid(uuid);
+        return this;
+    }
+
+    public BookBuilder setBookLanguageTitle(String bookLanguage) {
+        defineBookLanguageIfNull();
+        this.bookLanguage.setLanguageTitle(bookLanguage);
         return this;
     }
 
@@ -50,12 +75,36 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder setPublisherUUID(String uuid) {
+        definePublisherIfNull();
+        publisher.setUuid(uuid);
+        return this;
+    }
+
+    public BookBuilder setPublisherTitle(String publisher) {
+        definePublisherIfNull();
+        this.publisher.setPublisherTitle(publisher);
+        return this;
+    }
+
     public Author getAuthor() {
         return author;
     }
 
     public BookBuilder setAuthor(Author author) {
         this.author = author;
+        return this;
+    }
+
+    public BookBuilder setAuthorUUID(String uuid) {
+        defineAuthorIfNull();
+        publisher.setUuid(uuid);
+        return this;
+    }
+
+    public BookBuilder setAuthorName(String publisher) {
+        defineAuthorIfNull();
+        this.publisher.setPublisherTitle(publisher);
         return this;
     }
 
@@ -106,5 +155,29 @@ public class BookBuilder {
 
     public Book build() {
         return new Book(this);
+    }
+
+    private void defineGenreIfNull() {
+        if (genre == null) {
+            genre = new Genre();
+        }
+    }
+
+    private void defineAuthorIfNull() {
+        if (genre == null) {
+            genre = new Genre();
+        }
+    }
+
+    private void definePublisherIfNull() {
+        if (genre == null) {
+            genre = new Genre();
+        }
+    }
+
+    private void defineBookLanguageIfNull() {
+        if (genre == null) {
+            genre = new Genre();
+        }
     }
 }

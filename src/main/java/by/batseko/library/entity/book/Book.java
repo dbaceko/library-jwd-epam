@@ -1,9 +1,14 @@
 package by.batseko.library.entity.book;
 
 import by.batseko.library.builder.book.BookBuilder;
+import by.batseko.library.entity.book.bookcomponent.Author;
+import by.batseko.library.entity.book.bookcomponent.BookLanguage;
+import by.batseko.library.entity.book.bookcomponent.Genre;
+import by.batseko.library.entity.book.bookcomponent.Publisher;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Book implements Serializable {
     private String uuid;
@@ -110,6 +115,10 @@ public class Book implements Serializable {
 
     public void setAvailableBookQuantity(int availableBookQuantity) {
         this.availableBookQuantity = availableBookQuantity;
+    }
+
+    public void defineUUID() {
+        uuid = UUID.randomUUID().toString();
     }
 
     @Override

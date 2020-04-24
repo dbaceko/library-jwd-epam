@@ -1,19 +1,10 @@
-package by.batseko.library.entity.book;
+package by.batseko.library.entity.book.bookcomponent;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Publisher implements Serializable {
-    private String uuid;
+public class Publisher extends BaseBookComponent implements Serializable {
     private String publisherTitle;
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
 
     public String getPublisherTitle() {
         return publisherTitle;
