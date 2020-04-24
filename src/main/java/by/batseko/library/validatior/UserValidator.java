@@ -2,6 +2,7 @@ package by.batseko.library.validatior;
 
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ValidatorException;
+import org.apache.commons.lang3.StringUtils;
 
 public class UserValidator {
     private static final String LOGIN_REGEX = "^[\\w-]{3,25}$";
@@ -29,38 +30,38 @@ public class UserValidator {
     }
 
     private void validateLogin(String login) throws ValidatorException {
-        if (login == null || !login.matches(LOGIN_REGEX)) {
+        if (StringUtils.isBlank(login) || !login.matches(LOGIN_REGEX)) {
             throw new ValidatorException("validation.registration.login");
         }
     }
 
     private void validatePhone(String phone) throws ValidatorException {
-        if (phone == null || !phone.matches(PHONE_REGEX)) {
+        if (StringUtils.isBlank(phone) || !phone.matches(PHONE_REGEX)) {
             throw new ValidatorException("validation.registration.phone");
         }
     }
 
     private void validatePassword(String password) throws ValidatorException {
-        if (password == null || !password.matches(PASSWORD_REGEX)) {
+        if (StringUtils.isBlank(password) || !password.matches(PASSWORD_REGEX)) {
             throw new ValidatorException("validation.registration.password");
         }
     }
 
     private void validateEmail(String email) throws ValidatorException {
-        if (email == null || email.length() > MAX_EMAIL_FIELD_LENGTH || !email.matches(EMAIL_REGEX)) {
+        if (StringUtils.isBlank(email) || email.length() > MAX_EMAIL_FIELD_LENGTH || !email.matches(EMAIL_REGEX)) {
             throw new ValidatorException("validation.registration.email");
         }
     }
 
     private void validatePassportSN(String passport) throws ValidatorException {
-        if (passport == null || !passport.matches(PASSPORT_SN_REGEX)) {
+        if (StringUtils.isBlank(passport) || !passport.matches(PASSPORT_SN_REGEX)) {
             throw new ValidatorException("validation.registration.passportSN");
         }
     }
 
     private void validateFieldLength(String... fields) throws ValidatorException {
         for (String field : fields) {
-            if (field.length() > MAX_FIELD_LENGTH) {
+            if (StringUtils.isBlank(field) || field.length() > MAX_FIELD_LENGTH) {
                 throw new ValidatorException("validation.registration.fieldlength");
             }
         }
