@@ -2,8 +2,8 @@ package by.batseko.library.dao.book.impl;
 
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
-import by.batseko.library.dao.book.BookLanguageDAO;
-import by.batseko.library.entity.book.BookLanguage;
+import by.batseko.library.dao.book.BookComponentDAO;
+import by.batseko.library.entity.book.bookcomponent.BookLanguage;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
+public class BookLanguageDAOImpl extends BaseDAO implements BookComponentDAO<BookLanguage> {
     private static final Logger LOGGER = LogManager.getLogger(BookLanguageDAOImpl.class);
 
     @Override
-    public void addBookLanguage(BookLanguage bookLanguage) throws LibraryDAOException {
+    public void add(BookLanguage bookLanguage) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_LANGUAGE)) {
             preparedStatement.setString(1, bookLanguage.getUuid());
-            preparedStatement.setString(2, bookLanguage.getLanguage());
+            preparedStatement.setString(2, bookLanguage.getLanguageTitle());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.bookLanguage.creation.alreadyExist", e);
@@ -32,7 +32,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
     }
 
     @Override
-    public BookLanguage findBookLanguageByUUID(String bookLanguageUUID) throws LibraryDAOException {
+    public BookLanguage findByUUID(String bookLanguageUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_LANGUAGE_BY_UUID)) {
@@ -52,7 +52,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookLanguageDAO {
     }
 
     @Override
-    public List<BookLanguage> findAllBookLanguages() throws LibraryDAOException {
+    public List<BookLanguage> findAll() throws LibraryDAOException {
         List<BookLanguage> bookLanguages;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_LANGUAGES);

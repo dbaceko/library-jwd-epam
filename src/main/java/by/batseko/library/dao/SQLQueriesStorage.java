@@ -12,7 +12,7 @@ public class SQLQueriesStorage {
     public static final String UPDATE_USER_BAN_STATUS = "UPDATE user SET is_banned = (?) WHERE id = (?)";
     public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
 
-    public static final String INSERT_BOOK_AUTHOR = "INSERT INTO book_author (uuid, firstname, lastname) value (?, ?, ?)";
+    public static final String INSERT_BOOK_AUTHOR = "INSERT INTO book_author (uuid, author) value (?, ?)";
     public static final String FIND_BOOK_AUTHOR_BY_UUID = "SELECT * FROM book_author WHERE uuid = (?)";
     public static final String FIND_ALL_BOOK_AUTHORS = "SELECT * FROM book_author";
 

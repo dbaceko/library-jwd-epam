@@ -2,8 +2,8 @@ package by.batseko.library.dao.book.impl;
 
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
-import by.batseko.library.dao.book.BookGenreDAO;
-import by.batseko.library.entity.book.Genre;
+import by.batseko.library.dao.book.BookComponentDAO;
+import by.batseko.library.entity.book.bookcomponent.Genre;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
+public class BookGenreDAOImpl extends BaseDAO implements BookComponentDAO<Genre> {
     private static final Logger LOGGER = LogManager.getLogger(BookGenreDAOImpl.class);
 
     @Override
-    public void addBookGenre(Genre genre) throws LibraryDAOException {
+    public void add(Genre genre) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_GENRE)) {
             preparedStatement.setString(1, genre.getUuid());
-            preparedStatement.setString(2, genre.getGenre());
+            preparedStatement.setString(2, genre.getGenreTitle());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.genre.creation.alreadyExist", e);
@@ -32,7 +32,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     }
 
     @Override
-    public Genre findBookGenreByUUID(String bookGenreUUID) throws LibraryDAOException {
+    public Genre findByUUID(String bookGenreUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_GENRE_BY_UUID)) {
@@ -52,7 +52,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookGenreDAO {
     }
 
     @Override
-    public List<Genre> findAllBookGenres() throws LibraryDAOException {
+    public List<Genre> findAll() throws LibraryDAOException {
         List<Genre> genres;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_GENRES);

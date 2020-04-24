@@ -4,13 +4,17 @@ import by.batseko.library.dao.book.*;
 import by.batseko.library.dao.book.impl.*;
 import by.batseko.library.dao.user.UserDAO;
 import by.batseko.library.dao.user.impl.UserDAOImpl;
+import by.batseko.library.entity.book.bookcomponent.Author;
+import by.batseko.library.entity.book.bookcomponent.BookLanguage;
+import by.batseko.library.entity.book.bookcomponent.Genre;
+import by.batseko.library.entity.book.bookcomponent.Publisher;
 
 public class DAOFactory {
     private final UserDAO userDAO;
-    private final BookAuthorDAO bookAuthorDAO;
-    private final BookGenreDAO bookGenreDAO;
-    private final BookLanguageDAO bookLanguageDAO;
-    private final BookPublisherDAO bookPublisherDAO;
+    private final BookComponentDAO<Author> bookAuthorDAO;
+    private final BookComponentDAO<Genre> bookGenreDAO;
+    private final BookComponentDAO<Publisher> bookPublisherDAO;
+    private final BookComponentDAO<BookLanguage> bookLanguageDAO;
     private final BookInstanceDAO bookInstanceDAO;
     private final BookDAO bookDAO;
 
@@ -36,19 +40,19 @@ public class DAOFactory {
         return userDAO;
     }
 
-    public BookAuthorDAO getBookAuthorDAO() {
+    public BookComponentDAO<Author> getBookAuthorDAO() {
         return bookAuthorDAO;
     }
 
-    public BookGenreDAO getBookGenreDAO() {
+    public BookComponentDAO<Genre> getBookGenreDAO() {
         return bookGenreDAO;
     }
 
-    public BookLanguageDAO getBookLanguageDAO() {
+    public BookComponentDAO<BookLanguage> getBookLanguageDAO() {
         return bookLanguageDAO;
     }
 
-    public BookPublisherDAO getBookPublisherDAO() {
+    public BookComponentDAO<Publisher> getBookPublisherDAO() {
         return bookPublisherDAO;
     }
 

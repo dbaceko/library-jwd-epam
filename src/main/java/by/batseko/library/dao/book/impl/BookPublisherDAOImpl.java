@@ -2,8 +2,8 @@ package by.batseko.library.dao.book.impl;
 
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
-import by.batseko.library.dao.book.BookPublisherDAO;
-import by.batseko.library.entity.book.Publisher;
+import by.batseko.library.dao.book.BookComponentDAO;
+import by.batseko.library.entity.book.bookcomponent.Publisher;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
+public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Publisher> {
     private static final Logger LOGGER = LogManager.getLogger(BookPublisherDAOImpl.class);
 
     @Override
-    public void addBookPublisher(Publisher publisher) throws LibraryDAOException {
+    public void add(Publisher publisher) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_PUBLISHER)) {
             preparedStatement.setString(1, publisher.getUuid());
@@ -32,7 +32,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
     }
 
     @Override
-    public Publisher findBookPublisherByUUID(String bookPublisherUUID) throws LibraryDAOException {
+    public Publisher findByUUID(String bookPublisherUUID) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_PUBLISHER_BY_UUID)) {
@@ -52,7 +52,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookPublisherDAO {
     }
 
     @Override
-    public List<Publisher> findAllBookPublishers() throws LibraryDAOException {
+    public List<Publisher> findAll() throws LibraryDAOException {
         List<Publisher> publishers;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_PUBLISHERS);

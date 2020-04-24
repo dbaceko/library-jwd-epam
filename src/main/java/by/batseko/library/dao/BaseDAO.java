@@ -2,6 +2,10 @@ package by.batseko.library.dao;
 
 import by.batseko.library.builder.book.BookBuilder;
 import by.batseko.library.entity.book.*;
+import by.batseko.library.entity.book.bookcomponent.Author;
+import by.batseko.library.entity.book.bookcomponent.BookLanguage;
+import by.batseko.library.entity.book.bookcomponent.Genre;
+import by.batseko.library.entity.book.bookcomponent.Publisher;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -15,8 +19,7 @@ public abstract class BaseDAO {
     private static final Logger LOGGER = LogManager.getLogger(BaseDAO.class);
 
     private static final String BOOK_AUTHOR_UUID_COLUMN_NAME = "book_author.uuid";
-    private static final String BOOK_AUTHOR_FIRSTNAME_COLUMN_NAME = "book_author.firstname";
-    private static final String BOOK_AUTHOR_LASTNAME_COLUMN_NAME = "book_author.lastname";
+    private static final String BOOK_AUTHOR_COLUMN_NAME = "book_author.author";
 
     private static final String BOOK_GENRE_UUID_COLUMN_NAME = "book_genre.uuid";
     private static final String BOOK_GENRE_GENRE_COLUMN_NAME = "book_genre.genre";
@@ -87,22 +90,21 @@ public abstract class BaseDAO {
     protected Author constructAuthorByResultSet(ResultSet resultSet) throws SQLException {
         Author author = new Author();
         author.setUuid(resultSet.getString(BOOK_AUTHOR_UUID_COLUMN_NAME));
-        author.setFristname(resultSet.getString(BOOK_AUTHOR_FIRSTNAME_COLUMN_NAME));
-        author.setLastname(resultSet.getString(BOOK_AUTHOR_LASTNAME_COLUMN_NAME));
+        author.setAuthorName(resultSet.getString(BOOK_AUTHOR_COLUMN_NAME));
         return author;
     }
 
     protected Genre constructGenreByResultSet(ResultSet resultSet) throws SQLException {
         Genre genre = new Genre();
         genre.setUuid(resultSet.getString(BOOK_GENRE_UUID_COLUMN_NAME));
-        genre.setGenre(resultSet.getString(BOOK_GENRE_GENRE_COLUMN_NAME));
+        genre.setGenreTitle(resultSet.getString(BOOK_GENRE_GENRE_COLUMN_NAME));
         return genre;
     }
 
     protected BookLanguage constructBookLanguageByResultSet(ResultSet resultSet) throws SQLException {
         BookLanguage bookLanguage = new BookLanguage();
         bookLanguage.setUuid(resultSet.getString(BOOK_LANGUAGE_UUID_COLUMN_NAME));
-        bookLanguage.setLanguage(resultSet.getString(BOOK_LANGUAGE_COLUMN_NAME));
+        bookLanguage.setLanguageTitle(resultSet.getString(BOOK_LANGUAGE_COLUMN_NAME));
         return bookLanguage;
     }
 
