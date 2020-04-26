@@ -3,7 +3,6 @@ package by.batseko.library.dao.book.impl;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.book.BookDAO;
-import by.batseko.library.dao.book.BookInstanceDAO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
@@ -17,12 +16,6 @@ import java.util.List;
 
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
-
-    private final BookInstanceDAO bookInstanceDAO;
-
-    public BookDAOImpl() {
-        bookInstanceDAO = new BookInstanceDAOImpl();
-    }
 
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
@@ -44,11 +37,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             preparedStatement.setInt(8, book.getPagesQuantity());
             preparedStatement.setString(9, book.getDescription());
             preparedStatement.executeUpdate();
-            bookInstanceDAO.addBookInstance(book.getUuid(), quantity, connection);
+            BookInstanceDAOImpl.addBookInstance(book.getUuid(), quantity, connection);
             connection.commit();
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.info(String.format("Book %s is already exist", book));
-            bookInstanceDAO.addBookInstance(getBookUUIDFromBookFields(book, connection), quantity, connection);
+            BookInstanceDAOImpl.addBookInstance(getBookUUIDFromBookFields(book, connection), quantity, connection);
             connectionCommitChanges(connection);
         } catch (SQLException e) {
             connectionsRollback(connection);

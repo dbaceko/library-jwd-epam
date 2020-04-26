@@ -30,7 +30,7 @@ public class SQLQueriesStorage {
 
     public static final String INSERT_BOOK = "INSERT INTO book (uuid, genre_uuid, language_uuid, publisher_uuid, " +
             "author_uuid, title, publish_year, pages_quantity, description) value (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    public static final String FIND_BOOK_BY_UUID = "SELECT book.* , " +
+    public static final String FIND_BOOK_BY_UUID = "SELECT book.title, book.publish_year, book.pages_quantity, book.description, " +
             "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
             "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
             "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
@@ -41,7 +41,7 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "WHERE book.uuid = (?)";
-    public static final String FIND_ALL_BOOKS = "SELECT book.* , " +
+    public static final String FIND_ALL_BOOKS = "SELECT book.title, book.publish_year, book.pages_quantity, book.description, " +
             "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
             "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
             "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
@@ -56,6 +56,10 @@ public class SQLQueriesStorage {
             "AND book.author_uuid = (?) AND book.title = (?) AND book.publish_year = (?) AND book.pages_quantity = (?)";
 
     public static final String INSERT_BOOK_INSTANCE = "INSERT INTO book_instance (uuid, book_uuid) value (?, ?)";
+    public static final String FIND_AVAILABLE_BOOKS_QUANTITY_BY_UUID = "SELECT count(book_instance.uuid) as available_book_quantity" +
+            "FROM book_instance WHERE book_instance.uuid = (?) AND book_instance.is_available = 1";
+    public static final String FIND_BOOKS_QUANTITY_BY_UUID = "SELECT count(book_instance.uuid) as available_book_quantity" +
+            "FROM book_instance WHERE book_instance.uuid = (?)";
 
     private SQLQueriesStorage() {}
 }
