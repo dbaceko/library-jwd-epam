@@ -5,6 +5,10 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+textarea {
+    resize: none;
+}
+
 /* HEADER */
 
 header {
@@ -23,7 +27,7 @@ header {
 }
 
 .admin-bar div {
-    margin: 0 20%;
+    margin: 0 10%;
 }
 
 header ul {
@@ -149,7 +153,11 @@ body {
     background: rgba(245, 245, 245, 0.9);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.125);
     padding: 30px;
-    margin-bottom: 30px;
+    margin: 30px;
+}
+
+.error-message {
+    margin: 60px auto 0 auto;
 }
 
 .form-wrapper .title {
@@ -206,8 +214,6 @@ body {
 }
 
 .form-wrapper fieldset .inputfield .custom_select select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
     outline: none;
     width: 100%;
@@ -217,7 +223,6 @@ body {
     border: 1px solid #d5dbd9;
     border-radius: 3px;
 }
-
 
 .form-wrapper fieldset label .input:focus,
 .form-wrapper fieldset .inputfield .custom_select select:focus {
@@ -289,6 +294,19 @@ td form .btn,
     margin: 10px 0;
 }
 
+.form-wrapper fieldset .book-select_wrapper button {
+    width: 30%;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: 0;
+    background: #1bbc9b;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+    margin: 10px 0;
+}
+
 .form-wrapper fieldset .inputfield .btn:hover {
     background: #1bbc9b;
 }
@@ -346,6 +364,23 @@ th:first-child, td:first-child {
     text-align: left;
 }
 
+.form-wrapper fieldset .book-select_wrapper {
+    display: flex;
+    justify-content: space-between;
+}
 
+.form-wrapper fieldset .book-select_wrapper input {
+    height: 50px;
+    font-size: large;
+}
 
+.form-wrapper fieldset .book-select_wrapper .book-select {
+    border: 1px solid #d5dbd9;
+    width: 200px;
+    height: 20px;
+    text-align: left;
+    line-height: normal;
+    font-size: 14px;
+    vertical-align: top;
+}
 
