@@ -5,7 +5,7 @@
 <fmt:setBundle basename="localization"/>
 <header>
     <ul>
-        <li><a href="${pageContext.request.contextPath}/index.jsp"><h1>
+        <li><a href="${pageContext.request.contextPath}/jsp/index.jsp"><h1>
             <fmt:message key="header.home"/>
         </h1></a></li>
 

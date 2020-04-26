@@ -27,19 +27,19 @@
             </legend>
             <label>
                 <span><fmt:message  bundle="${locale}" key="user.password"/></span>
-                <input type="password"  name="password" class="input">
+                <input type="password"  name="password" class="input" required>
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="user.email"/></span>
-                <input type="text" name="email" class="input" value=${user_registration_data.email}>
+                <input type="text" name="email" class="input" value=${user_registration_data.email} required>
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="user.phone"/></span>
-                <input type="text" name="phone" class="input" value=${user_registration_data.phoneNumber}>
+                <input type="text" name="phone" class="input" value=${user_registration_data.phoneNumber} required>
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="user.address"/></span>
-                <input type="text" name="address" class="input" value=${user_registration_data.address}>
+                <input type="text" name="address" class="input" value=${user_registration_data.address} required>
             </label>
             <label class="inputfield">
                 <input class="btn" type="submit" value=<fmt:message  bundle="${locale}" key="profile.btn.updateInfo"/>>
