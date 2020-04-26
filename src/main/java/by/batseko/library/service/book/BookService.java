@@ -7,7 +7,7 @@ import by.batseko.library.service.book.impl.CommonBookComponentsCache;
 import java.util.List;
 
 public interface BookService {
-    void add(Book book) throws LibraryServiceException;
+    void add(Book book, int quantity) throws LibraryServiceException;
     Book findByUUID(String uuid) throws LibraryServiceException;
     List<Book> findAll() throws LibraryServiceException;
     CommonBookComponentsCache getBookComponentsCache();

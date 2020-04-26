@@ -27,7 +27,6 @@ public class BookValidator {
     public void validateNewBook(Book book) throws ValidatorException {
         validateTitle(book.getTitle());
         validateDescription(book.getDescription());
-        validateBookQuantity(book.getAvailableBookQuantity());
         validatePagesQuantity(book.getPagesQuantity());
         validatePublishYear(book.getPublishYear());
         validateBookComponents(book.getAuthor(), book.getGenre(), book.getBookLanguage(), book.getPublisher());
@@ -69,7 +68,7 @@ public class BookValidator {
         }
     }
 
-    private void validateBookQuantity(int bookQuantity) throws ValidatorException {
+    public void validateBookQuantity(int bookQuantity) throws ValidatorException {
         if (bookQuantity < 1) {
             throw new ValidatorException("validation.book.add.bookQuantity");
         }

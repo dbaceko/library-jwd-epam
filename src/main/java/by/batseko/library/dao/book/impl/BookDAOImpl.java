@@ -25,7 +25,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     }
 
     @Override
-    public void addBook(Book book) throws LibraryDAOException {
+    public void addBook(Book book, int quantity) throws LibraryDAOException {
         Connection connection;
         try {
             connection = pool.getConnection();
@@ -44,11 +44,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             preparedStatement.setInt(8, book.getPagesQuantity());
             preparedStatement.setString(9, book.getDescription());
             preparedStatement.executeUpdate();
-            bookInstanceDAO.addBookInstance(book.getUuid(), book.getAvailableBookQuantity(), connection);
+            bookInstanceDAO.addBookInstance(book.getUuid(), quantity, connection);
             connection.commit();
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.info(String.format("Book %s is already exist", book));
-            bookInstanceDAO.addBookInstance(getBookUUIDFromBookFields(book, connection), book.getAvailableBookQuantity(), connection);
+            bookInstanceDAO.addBookInstance(getBookUUIDFromBookFields(book, connection), quantity, connection);
             connectionCommitChanges(connection);
         } catch (SQLException e) {
             connectionsRollback(connection);

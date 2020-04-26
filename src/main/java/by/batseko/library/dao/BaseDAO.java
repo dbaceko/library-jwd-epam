@@ -35,7 +35,6 @@ public abstract class BaseDAO {
     private static final String BOOK_PUBLISH_YEAR_COLUMN_NAME = "book.publish_year";
     private static final String BOOK_PAGES_QUANTITY_COLUMN_NAME = "book.pages_quantity";
     private static final String BOOK_PAGES_DESCRIPTION_COLUMN_NAME = "book.description";
-    private static final String BOOK_AVAILABLE_QUANTITY_COLUMN_NAME = "book.available_book_quantity";
 
     protected final ConnectionPool pool;
 
@@ -125,7 +124,6 @@ public abstract class BaseDAO {
                 .setPublishYear(resultSet.getInt(BOOK_PUBLISH_YEAR_COLUMN_NAME))
                 .setPagesQuantity(resultSet.getInt(BOOK_PAGES_QUANTITY_COLUMN_NAME))
                 .setDescription(resultSet.getString(BOOK_PAGES_DESCRIPTION_COLUMN_NAME))
-                .setAvailableBookQuantity(resultSet.getInt(BOOK_AVAILABLE_QUANTITY_COLUMN_NAME))
                 .build();
     }
 }

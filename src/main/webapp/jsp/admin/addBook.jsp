@@ -74,9 +74,7 @@
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="book.quantity"/></span>
-                <input type="number"  name="bookQuantity" class="input" required
-                    <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.availableBookQuantity} </c:if>
-                />
+                <input type="number"  name="bookQuantity" class="input" required/>
             </label>
             <label>
                 <textarea name="bookDescription" rows="10" cols="45" class="input" maxlength="500" required

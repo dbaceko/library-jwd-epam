@@ -19,8 +19,9 @@ public class AddBook implements Command {
         Router currentRouter = new Router();
 
         Book resultBook = constructBookFromRequest(request);
+        int bookQuantity = Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_QUANTITY));
         try {
-            bookService.add(resultBook);
+            bookService.add(resultBook, bookQuantity);
         } catch (LibraryServiceException e) {
             request.setAttribute(JSPAttributeStorage.BOOK_PREVIOUS_DATA, resultBook);
             setErrorMessage(request, e.getMessage());
@@ -40,7 +41,6 @@ public class AddBook implements Command {
                 .setPublishYear(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PUBLISH_YEAR)))
                 .setPagesQuantity(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PAGES_QUANTITY)))
                 .setDescription(request.getParameter(JSPAttributeStorage.BOOK_DESCRIPTION))
-                .setAvailableBookQuantity(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_QUANTITY)))
                 .build();
     }
 }

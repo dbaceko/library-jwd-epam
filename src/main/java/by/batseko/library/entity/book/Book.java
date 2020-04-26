@@ -20,7 +20,6 @@ public class Book implements Serializable {
     private int publishYear;
     private int pagesQuantity;
     private String description;
-    private int availableBookQuantity;
 
     public Book(BookBuilder builder) {
         this.uuid = builder.getUuid();
@@ -32,7 +31,6 @@ public class Book implements Serializable {
         this.publishYear = builder.getPublishYear();
         this.pagesQuantity = builder.getPagesQuantity();
         this.description = builder.getDescription();
-        this.availableBookQuantity = builder.getAvailableBookQuantity();
     }
 
     public Book() {}
@@ -109,14 +107,6 @@ public class Book implements Serializable {
         this.description = description;
     }
 
-    public int getAvailableBookQuantity() {
-        return availableBookQuantity;
-    }
-
-    public void setAvailableBookQuantity(int availableBookQuantity) {
-        this.availableBookQuantity = availableBookQuantity;
-    }
-
     public void defineUUID() {
         uuid = UUID.randomUUID().toString();
     }
@@ -128,7 +118,6 @@ public class Book implements Serializable {
         Book book = (Book) o;
         return publishYear == book.publishYear &&
                 pagesQuantity == book.pagesQuantity &&
-                availableBookQuantity == book.availableBookQuantity &&
                 Objects.equals(uuid, book.uuid) &&
                 Objects.equals(genre, book.genre) &&
                 Objects.equals(bookLanguage, book.bookLanguage) &&
@@ -140,7 +129,7 @@ public class Book implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, genre, bookLanguage, publisher, author, title, publishYear, pagesQuantity, description, availableBookQuantity);
+        return Objects.hash(uuid, genre, bookLanguage, publisher, author, title, publishYear, pagesQuantity, description);
     }
 
     @Override

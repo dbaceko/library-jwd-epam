@@ -28,12 +28,29 @@ public class SQLQueriesStorage {
     public static final String FIND_BOOK_LANGUAGE_BY_UUID = "SELECT * FROM book_language WHERE uuid = (?)";
     public static final String FIND_ALL_BOOK_LANGUAGES = "SELECT * FROM book_language";
 
-    public static final String INSERT_BOOK = "INSERT INTO book (uuid, genre_uuid, language_uuid, publisher_uuid, author_uuid, " +
-            "title, publish_year, pages_quantity, description) value (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    public static final String FIND_BOOK_BY_UUID = "SELECT book.*, count(book_instance.uuid) as available_book_quantity " +
-            "FROM book LEFT JOIN book_instance ON book.uuid = book_instance.book_uuid " +
-            "WHERE book.uuid = (?) AND book_instance.is_available = 1";
-    public static final String FIND_ALL_BOOKS = "SELECT * FROM book";
+    public static final String INSERT_BOOK = "INSERT INTO book (uuid, genre_uuid, language_uuid, publisher_uuid, " +
+            "author_uuid, title, publish_year, pages_quantity, description) value (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String FIND_BOOK_BY_UUID = "SELECT book.* , " +
+            "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
+            "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
+            "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
+            "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\"" +
+            "FROM book " +
+            "LEFT JOIN book_genre ON book.genre_uuid = book_genre.uuid "  +
+            "LEFT JOIN book_publisher ON book.publisher_uuid = book_publisher.uuid " +
+            "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
+            "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
+            "WHERE book.uuid = (?)";
+    public static final String FIND_ALL_BOOKS = "SELECT book.* , " +
+            "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
+            "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
+            "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
+            "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\"" +
+            "FROM book " +
+            "LEFT JOIN book_genre ON book.genre_uuid = book_genre.uuid "  +
+            "LEFT JOIN book_publisher ON book.publisher_uuid = book_publisher.uuid " +
+            "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
+            "LEFT JOIN book_language ON book.language_uuid = book_language.uuid";
     public static final String FIND_BOOK_UUID_BY_FIELDS = "SELECT uuid FROM book " +
             "WHERE book.genre_uuid = (?) AND book.language_uuid = (?) AND book.publisher_uuid = (?) " +
             "AND book.author_uuid = (?) AND book.title = (?) AND book.publish_year = (?) AND book.pages_quantity = (?)";

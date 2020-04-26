@@ -13,7 +13,6 @@ public class BookBuilder {
     private int publishYear;
     private int pagesQuantity;
     private String description;
-    private int availableBookQuantity;
 
     public String getUuid() {
         return uuid;
@@ -141,15 +140,6 @@ public class BookBuilder {
 
     public BookBuilder setDescription(String description) {
         this.description = description;
-        return this;
-    }
-
-    public int getAvailableBookQuantity() {
-        return availableBookQuantity;
-    }
-
-    public BookBuilder setAvailableBookQuantity(int availableBookQuantity) {
-        this.availableBookQuantity = availableBookQuantity;
         return this;
     }
 

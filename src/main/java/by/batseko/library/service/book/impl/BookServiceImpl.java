@@ -28,16 +28,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void add(Book book) throws LibraryServiceException {
+    public void add(Book book, int quantity) throws LibraryServiceException {
         try {
             bookValidator.validateNewBook(book);
+            bookValidator.validateBookQuantity(quantity);
             LOGGER.info(String.format("Try to add book: %s", book));
             book.setGenre(bookComponentsCache.getGenres().get(book.getGenre().getUuid()));
             book.setAuthor(bookComponentsCache.getAuthors().get(book.getAuthor().getUuid()));
             book.setBookLanguage(bookComponentsCache.getBookLanguages().get(book.getBookLanguage().getUuid()));
             book.setPublisher(bookComponentsCache.getPublishers().get(book.getPublisher().getUuid()));
             book.defineUUID();
-            bookDAO.addBook(book);
+            bookDAO.addBook(book, quantity);
         } catch (LibraryDAOException | ValidatorException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
