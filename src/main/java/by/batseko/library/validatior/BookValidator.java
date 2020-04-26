@@ -1,6 +1,7 @@
 package by.batseko.library.validatior;
 
 import by.batseko.library.entity.book.Book;
+import by.batseko.library.entity.book.bookcomponent.BaseBookComponent;
 import by.batseko.library.exception.ValidatorException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,6 +30,7 @@ public class BookValidator {
         validateBookQuantity(book.getAvailableBookQuantity());
         validatePagesQuantity(book.getPagesQuantity());
         validatePublishYear(book.getPublishYear());
+        validateBookComponents(book.getAuthor(), book.getGenre(), book.getBookLanguage(), book.getPublisher());
     }
 
     public void validateAuthor(String author) throws ValidatorException {
@@ -82,6 +84,14 @@ public class BookValidator {
     private void validatePublishYear(int publishYear) throws ValidatorException {
         if (publishYear < MIN_PUBLISH_YEAR || publishYear > calendar.get(Calendar.YEAR)) {
             throw new ValidatorException("validation.book.add.publishYear");
+        }
+    }
+
+    private void validateBookComponents(BaseBookComponent... bookComponents) throws ValidatorException {
+        for (BaseBookComponent component: bookComponents) {
+            if (component == null || StringUtils.isBlank(component.getUuid())) {
+                throw new ValidatorException("validation.book.add.bookComponent");
+            }
         }
     }
 }
