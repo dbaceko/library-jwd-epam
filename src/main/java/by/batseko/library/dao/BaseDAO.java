@@ -27,8 +27,8 @@ public abstract class BaseDAO {
     private static final String BOOK_LANGUAGE_UUID_COLUMN_NAME = "book_language.uuid";
     private static final String BOOK_LANGUAGE_COLUMN_NAME = "book_language.language";
 
-    private static final String PUBLISHER_UUID_COLUMN_NAME = "book_publisher.uuid";
-    private static final String PUBLISHER_COLUMN_NAME = "book_publisher.title";
+    private static final String BOOK_PUBLISHER_UUID_COLUMN_NAME = "book_publisher.uuid";
+    private static final String BOOK_PUBLISHER_COLUMN_NAME = "book_publisher.title";
 
     private static final String BOOK_UUID_COLUMN_NAME = "book.uuid";
     private static final String BOOK_TITLE_COLUMN_NAME = "book.title";
@@ -110,8 +110,8 @@ public abstract class BaseDAO {
 
     protected Publisher constructPublisherByResultSet(ResultSet resultSet) throws SQLException {
         Publisher publisher = new Publisher();
-        publisher.setUuid(resultSet.getString(PUBLISHER_UUID_COLUMN_NAME));
-        publisher.setPublisherTitle(resultSet.getString(PUBLISHER_COLUMN_NAME));
+        publisher.setUuid(resultSet.getString(BOOK_PUBLISHER_UUID_COLUMN_NAME));
+        publisher.setPublisherTitle(resultSet.getString(BOOK_PUBLISHER_COLUMN_NAME));
         return publisher;
     }
 

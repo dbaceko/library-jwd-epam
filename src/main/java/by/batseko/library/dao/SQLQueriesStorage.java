@@ -34,8 +34,11 @@ public class SQLQueriesStorage {
             "FROM book LEFT JOIN book_instance ON book.uuid = book_instance.book_uuid " +
             "WHERE book.uuid = (?) AND book_instance.is_available = 1";
     public static final String FIND_ALL_BOOKS = "SELECT * FROM book";
+    public static final String FIND_BOOK_UUID_BY_FIELDS = "SELECT uuid FROM book " +
+            "WHERE book.genre_uuid = (?) AND book.language_uuid = (?) AND book.publisher_uuid = (?) " +
+            "AND book.author_uuid = (?) AND book.title = (?) AND book.publish_year = (?) AND book.pages_quantity = (?)";
 
-    public static final String INSERT_BOOK_INSTANCE = "INSERT INTO book_instance (book_uuid) value (?)";
+    public static final String INSERT_BOOK_INSTANCE = "INSERT INTO book_instance (uuid, book_uuid) value (?, ?)";
 
     private SQLQueriesStorage() {}
 }

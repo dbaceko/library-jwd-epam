@@ -58,6 +58,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_PUBLISHERS);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
+                LOGGER.info("publishers is empty");
                 publishers = Collections.emptyList();
             } else {
                 resultSet.last();

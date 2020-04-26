@@ -7,7 +7,6 @@ import by.batseko.library.dao.book.BookInstanceDAO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
-import by.batseko.library.factory.DAOFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +21,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     private final BookInstanceDAO bookInstanceDAO;
 
     public BookDAOImpl() {
-        bookInstanceDAO = DAOFactory.getInstance().getBookInstanceDAO();
+        bookInstanceDAO = new BookInstanceDAOImpl();
     }
 
     @Override
@@ -45,11 +44,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             preparedStatement.setInt(8, book.getPagesQuantity());
             preparedStatement.setString(9, book.getDescription());
             preparedStatement.executeUpdate();
-            bookInstanceDAO.addBookInstance(book.getUuid());
+            bookInstanceDAO.addBookInstance(book.getUuid(), book.getAvailableBookQuantity(), connection);
             connection.commit();
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.info(String.format("Book %s is already exist", book));
-            bookInstanceDAO.addBookInstance(book.getUuid());
+            bookInstanceDAO.addBookInstance(getBookUUIDFromBookFields(book, connection), book.getAvailableBookQuantity(), connection);
             connectionCommitChanges(connection);
         } catch (SQLException e) {
             connectionsRollback(connection);
@@ -61,9 +60,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
 
     @Override
     public Book findBookByUUID(String bookUUID) throws LibraryDAOException {
+        ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_BY_UUID);
-            ResultSet resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_BY_UUID)){
+            preparedStatement.setString(1, bookUUID);
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return constructBookByResultSet(resultSet);
             } else {
@@ -72,6 +73,8 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
         }
     }
 
@@ -98,5 +101,30 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             throw new LibraryDAOException("service.commonError", e);
         }
         return books;
+    }
+
+
+    private String getBookUUIDFromBookFields(Book book, Connection connection) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_UUID_BY_FIELDS)){
+            preparedStatement.setString(1, book.getGenre().getUuid());
+            preparedStatement.setString(2, book.getBookLanguage().getUuid());
+            preparedStatement.setString(3, book.getPublisher().getUuid());
+            preparedStatement.setString(4, book.getAuthor().getUuid());
+            preparedStatement.setString(5, book.getTitle());
+            preparedStatement.setInt(6, book.getPublishYear());
+            preparedStatement.setInt(7, book.getPagesQuantity());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            } else {
+                LOGGER.debug(String.format("Book %s not found by ", book));
+                throw new LibraryDAOException("query.book.read.notFound");
+            }
+        } catch (SQLException | LibraryDAOException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
     }
 }
