@@ -39,9 +39,9 @@ public class BookBuilder {
         return this;
     }
 
-    public BookBuilder setGenreTitle(String genre) {
+    public BookBuilder setGenreTitle(String genreTitle) {
         defineGenreIfNull();
-        this.genre.setGenreTitle(genre);
+        this.genre.setGenreTitle(genreTitle);
         return this;
     }
 
@@ -98,13 +98,13 @@ public class BookBuilder {
 
     public BookBuilder setAuthorUUID(String uuid) {
         defineAuthorIfNull();
-        publisher.setUuid(uuid);
+        author.setUuid(uuid);
         return this;
     }
 
-    public BookBuilder setAuthorName(String publisher) {
+    public BookBuilder setAuthorName(String authorName) {
         defineAuthorIfNull();
-        this.publisher.setPublisherTitle(publisher);
+        this.author.setAuthorName(authorName);
         return this;
     }
 
@@ -164,20 +164,20 @@ public class BookBuilder {
     }
 
     private void defineAuthorIfNull() {
-        if (genre == null) {
-            genre = new Genre();
+        if (author == null) {
+            author = new Author();
         }
     }
 
     private void definePublisherIfNull() {
-        if (genre == null) {
-            genre = new Genre();
+        if (publisher == null) {
+            publisher = new Publisher();
         }
     }
 
     private void defineBookLanguageIfNull() {
-        if (genre == null) {
-            genre = new Genre();
+        if (bookLanguage == null) {
+            bookLanguage = new BookLanguage();
         }
     }
 }
