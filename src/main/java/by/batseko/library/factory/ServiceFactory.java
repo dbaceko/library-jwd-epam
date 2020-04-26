@@ -20,10 +20,10 @@ public class ServiceFactory {
     private ServiceFactory() {
         userService = new UserServiceImpl();
         bookService = new BookServiceImpl();
-        bookAuthorService = new BookAuthorServiceImplService();
-        bookGenreService = new BookGenreServiceImplService();
-        bookLanguageService = new BookLanguageServiceImplService();
-        bookPublisherService = new BookPublisherServiceImplService();
+        bookAuthorService = new BookAuthorServiceImpl();
+        bookGenreService = new BookGenreServiceImpl();
+        bookLanguageService = new BookLanguageServiceImpl();
+        bookPublisherService = new BookPublisherServiceImpl();
     }
 
     private static class ServiceFactorySingletonHolder {

@@ -1,13 +1,27 @@
 package by.batseko.library.service.book.impl;
 
+import by.batseko.library.dao.book.BookComponentDAO;
 import by.batseko.library.entity.book.bookcomponent.Publisher;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.ValidatorException;
 
+import by.batseko.library.factory.DAOFactory;
+import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookComponentService;
+import by.batseko.library.validatior.BookValidator;
 
-public class BookPublisherServiceImplService extends BaseBookService implements BookComponentService<Publisher> {
+public class BookPublisherServiceImpl implements BookComponentService<Publisher> {
+    private final BookComponentDAO<Publisher> bookPublisherDAO;
+    private final BookValidator bookValidator;
+    private final CommonBookComponentsCache bookComponentsCache;
+
+    public BookPublisherServiceImpl() {
+        bookPublisherDAO = DAOFactory.getInstance().getBookPublisherDAO();
+        bookValidator = ValidatorFactory.getInstance().getBookValidator();
+        bookComponentsCache = CommonBookComponentsCache.getInstance();
+    }
+
     @Override
     public void add(Publisher publisher) throws LibraryServiceException {
         try {
@@ -16,7 +30,7 @@ public class BookPublisherServiceImplService extends BaseBookService implements 
             bookPublisherDAO.add(publisher);
             bookComponentsCache.getPublishers().put(publisher);
         } catch (LibraryDAOException | ValidatorException e) {
-            throw new LibraryServiceException(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
@@ -25,7 +39,7 @@ public class BookPublisherServiceImplService extends BaseBookService implements 
         try {
             return bookPublisherDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e);
+            throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 }

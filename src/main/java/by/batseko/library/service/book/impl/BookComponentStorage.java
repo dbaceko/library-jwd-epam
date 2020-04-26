@@ -5,7 +5,7 @@ import by.batseko.library.entity.book.bookcomponent.BaseBookComponent;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-class BookComponentStorage<T extends BaseBookComponent> {
+public class BookComponentStorage<T extends BaseBookComponent> {
     private final ConcurrentHashMap<String, T> component;
 
     BookComponentStorage() {

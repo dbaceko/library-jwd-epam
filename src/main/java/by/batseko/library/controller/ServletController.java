@@ -7,6 +7,7 @@ import by.batseko.library.command.Router;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.ControllerRuntimeException;
 import by.batseko.library.pool.ConnectionPool;
+import by.batseko.library.service.book.impl.CommonBookComponentsCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(name = "controller", urlPatterns = {"/controller", "/jsp/controller"/*, "*.jsp"*/})
+@WebServlet(name = "controller", urlPatterns = {"/controller", "/jsp/controller"})
 public class ServletController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(ServletController.class);
 
@@ -26,7 +27,6 @@ public class ServletController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-
         super.init();
         try {
             ConnectionPool.getInstance().init();
@@ -34,6 +34,7 @@ public class ServletController extends HttpServlet {
             LOGGER.fatal(e);
             throw new ControllerRuntimeException(e);
         }
+        CommonBookComponentsCache.getInstance().initBookComponentsCache();
     }
 
     @Override
