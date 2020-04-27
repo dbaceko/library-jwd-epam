@@ -38,6 +38,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             throw new LibraryDAOException("query.bookOrder.creation.commonError", e);
         } finally {
             connectionSetAutoCommit(connection, true);
+            closeConnection(connection);
         }
     }
 
@@ -50,6 +51,29 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("query.bookOrder.update.status", e);
+        }
+    }
+
+    @Override
+    public void cancelBookOrder(BookOrder bookOrder) throws LibraryDAOException {
+        Connection connection;
+        try {
+            connection = pool.getConnection();
+        } catch (ConnectionPoolException e) {
+            throw new LibraryDAOException("query.bookOrder.update.status", e);
+        }
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_BOOK_ORDER_STATUS)) {
+            connection.setAutoCommit(false);
+            preparedStatement.setInt(1, bookOrder.getOrderStatus().getId());
+            preparedStatement.setString(2, bookOrder.getUuid());
+            preparedStatement.executeUpdate();
+            BookInstanceDAOImpl.updateBookInstanceAvailableStatus(bookOrder.getBookInstance().getUuid(), true, connection);
+        } catch (SQLException e) {
+            connectionsRollback(connection);
+            throw new LibraryDAOException("query.bookOrder.update.status", e);
+        } finally {
+            connectionSetAutoCommit(connection, true);
+            closeConnection(connection);
         }
     }
 

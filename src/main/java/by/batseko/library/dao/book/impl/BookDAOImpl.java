@@ -48,6 +48,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             throw new LibraryDAOException("query.book.creation.commonError", e);
         } finally {
             connectionSetAutoCommit(connection, true);
+            closeConnection(connection);
         }
     }
 

@@ -9,6 +9,7 @@ public interface BookOrderDAO {
     void addBookOrder(BookOrder bookOrder) throws LibraryDAOException;
 
     void updateBookOrderStatus(BookOrder bookOrder) throws LibraryDAOException;
+    void cancelBookOrder(BookOrder bookOrder) throws LibraryDAOException;
 
     List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException;
     List<BookOrder> findAllOrders() throws LibraryDAOException;

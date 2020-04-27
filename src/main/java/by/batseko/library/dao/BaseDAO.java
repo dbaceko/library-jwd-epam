@@ -81,6 +81,17 @@ public abstract class BaseDAO {
         }
     }
 
+    protected void closeConnection(Connection connection) throws LibraryDAOException {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                LOGGER.error("Can`t close connection", e);
+                throw new LibraryDAOException("service.commonError", e);
+            }
+        }
+    }
+
     protected void connectionCommitChanges(Connection connection) throws LibraryDAOException {
         if (connection != null) {
             try {
