@@ -33,6 +33,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.setInt(4, bookOrder.getOrderType().getId());
             preparedStatement.executeUpdate();
             BookInstanceDAOImpl.updateBookInstanceAvailableStatus(bookOrder.getBookInstance().getUuid(), false, connection);
+            connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
             throw new LibraryDAOException("query.bookOrder.creation.commonError", e);
@@ -68,6 +69,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.setString(2, bookOrder.getUuid());
             preparedStatement.executeUpdate();
             BookInstanceDAOImpl.updateBookInstanceAvailableStatus(bookOrder.getBookInstance().getUuid(), true, connection);
+            connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
             throw new LibraryDAOException("query.bookOrder.update.status", e);
