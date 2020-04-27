@@ -1,6 +1,6 @@
 package by.batseko.library.command.reciever.user;
 
-import by.batseko.library.builder.user.UserBuilder;
+import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.*;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;

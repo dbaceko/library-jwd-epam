@@ -1,4 +1,4 @@
-package by.batseko.library.builder.book;
+package by.batseko.library.builder;
 
 import by.batseko.library.entity.book.*;
 import by.batseko.library.entity.book.bookcomponent.*;

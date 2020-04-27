@@ -1,6 +1,6 @@
 package by.batseko.library.entity.book;
 
-import by.batseko.library.builder.book.BookBuilder;
+import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.entity.book.bookcomponent.Author;
 import by.batseko.library.entity.book.bookcomponent.BookLanguage;
 import by.batseko.library.entity.book.bookcomponent.Genre;

@@ -1,4 +1,4 @@
-package by.batseko.library.builder.user;
+package by.batseko.library.builder;
 
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.entity.user.User;

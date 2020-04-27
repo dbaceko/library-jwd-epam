@@ -1,6 +1,6 @@
 package by.batseko.library.dao.user.impl;
 
-import by.batseko.library.builder.user.UserBuilder;
+import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.user.UserDAO;

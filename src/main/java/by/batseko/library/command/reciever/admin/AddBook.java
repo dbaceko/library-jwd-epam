@@ -1,6 +1,6 @@
 package by.batseko.library.command.reciever.admin;
 
-import by.batseko.library.builder.book.BookBuilder;
+import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.command.*;
 import by.batseko.library.command.reciever.page.AddBookPage;
 import by.batseko.library.entity.book.Book;

@@ -1,6 +1,5 @@
 package by.batseko.library.entity.user;
 
-import by.batseko.library.command.SupportedLocaleStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +8,7 @@ public enum UserRole {
     USER(2),
     GUEST(3);
 
-    private static final Logger LOGGER = LogManager.getLogger(SupportedLocaleStorage.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserRole.class);
 
     private final int id;
 
