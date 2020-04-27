@@ -1,6 +1,6 @@
 package by.batseko.library.command;
 
-import by.batseko.library.command.reciever.admin.ToggleUserBan;
+import by.batseko.library.command.reciever.admin.*;
 import by.batseko.library.command.reciever.page.*;
 import by.batseko.library.command.reciever.user.LogInCommand;
 import by.batseko.library.command.reciever.user.LogOutCommand;
@@ -8,7 +8,6 @@ import by.batseko.library.command.reciever.user.RegisterUserCommand;
 import by.batseko.library.command.reciever.user.UpdateUserInfoCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 public enum CommandStorage {
     ERROR_PAGE(new ErrorPage(), "errorPage"),
@@ -18,16 +17,22 @@ public enum CommandStorage {
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
     ADMIN_PAGE(new UsersOnlinePage(), "adminPage"),
     USERS_LIST_PAGE(new AllUsersPage(), "allUsersList"),
-
+    ADD_BOOK_PAGE(new AddBookPage(), "addBookPage"),
+    ADD_BOOK(new AddBook(), "addBook"),
+    ADD_BOOK_COMPONENT_PAGE(new AddBookComponentPage(), "addBookComponentPage"),
+    ADD_BOOK_AUTHOR(new AddBookAuthor(), "addBookAuthor"),
+    ADD_BOOK_PUBLISHER(new AddBookPublisher(), "addBookPublisher"),
+    ADD_BOOK_GENRE(new AddBookGenre(), "addBookGenre"),
+    ADD_BOOK_LANGUAGE(new AddBookLanguage(), "addBookLanguage"),
 
     SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
     LOG_OUT(new LogOutCommand(), "logOut"),
-    TOGGLE_USER_BAN(new ToggleUserBan(),"banUser")
+    TOGGLE_USER_BAN(new ToggleUserBan(),"banUser");
 
-    ;
+
     private static final Logger LOGGER = LogManager.getLogger(CommandStorage.class);
 
     private final Command command;

@@ -18,7 +18,7 @@ import java.util.Set;
 
 import static by.batseko.library.command.CommandStorage.*;
 
-@WebFilter(urlPatterns = "/command")
+@WebFilter(urlPatterns = "/controller")
 public class UserRolePermittedCommandFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(UserRolePermittedCommandFilter.class);
 
@@ -49,7 +49,14 @@ public class UserRolePermittedCommandFilter implements Filter {
             UPDATE_PROFILE_USER,
             ADMIN_PAGE,
             USERS_LIST_PAGE,
-            TOGGLE_USER_BAN
+            TOGGLE_USER_BAN,
+            ADD_BOOK_PAGE,
+            ADD_BOOK,
+            ADD_BOOK_COMPONENT_PAGE,
+            ADD_BOOK_AUTHOR,
+            ADD_BOOK_PUBLISHER,
+            ADD_BOOK_LANGUAGE,
+            ADD_BOOK_GENRE
     );
 
     @Override

@@ -1,11 +1,11 @@
 package by.batseko.library.command.reciever.user;
 
-import by.batseko.library.builder.user.UserBuilder;
+import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.*;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.UserService;
+import by.batseko.library.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package by.batseko.library.service.impl;
+package by.batseko.library.service.user.impl;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import org.apache.logging.log4j.LogManager;
@@ -50,8 +50,9 @@ public class OnlineUsersCache {
     public void remove(String login) {
         if (login == null) {
             LOGGER.warn("Can't remove null login from cache");
+        } else {
+            userCache.remove(login);
         }
-        userCache.remove(login);
     }
 
     public void removeAll() {

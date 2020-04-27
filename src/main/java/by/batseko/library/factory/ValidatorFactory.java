@@ -1,15 +1,15 @@
 package by.batseko.library.factory;
 
-import by.batseko.library.validatior.PoolValidator;
+import by.batseko.library.validatior.BookValidator;
 import by.batseko.library.validatior.UserValidator;
 
 public class  ValidatorFactory {
     private final UserValidator userValidator;
-    private final PoolValidator poolValidator;
+    private final BookValidator bookValidator;
 
     private ValidatorFactory() {
         userValidator = new UserValidator();
-        poolValidator = new PoolValidator();
+        bookValidator = new BookValidator();
     }
 
     private static class ValidatorFactorySingletonHolder {
@@ -24,7 +24,7 @@ public class  ValidatorFactory {
         return userValidator;
     }
 
-    public PoolValidator getPoolValidator() {
-        return poolValidator;
+    public BookValidator getBookValidator() {
+        return bookValidator;
     }
 }

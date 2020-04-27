@@ -13,11 +13,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.version>3.8.1</maven.compiler.version>
     <junit.version>4.13</junit.version>
     <log4j.version>2.13.0</log4j.version>
     <jstl.version>1.2</jstl.version>
     <servlet.version>4.0.1</servlet.version>
     <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
+    <apache-utills.version>3.10</apache-utills.version>
   </properties>
 
   <dependencies>
@@ -48,39 +50,20 @@
       <artifactId>jstl</artifactId>
       <version>${jstl.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${apache-utills.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
     <finalName>library-jwd-epam</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
       <plugins>
         <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>${maven.compiler.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

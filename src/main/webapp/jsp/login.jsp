@@ -28,11 +28,11 @@
             </legend>
             <label>
                 <span><fmt:message bundle="${locale}" key="user.login"/></span>
-                <input type="text" name="login" class="input">
+                <input type="text" name="login" class="input" required>
             </label>
             <label>
                 <span><fmt:message bundle="${locale}" key="login.password"/></span>
-                <input type="password" name="password" class="input">
+                <input type="password" name="password" class="input" required>
             </label>
             <div class="terms">
                 <label class="check">

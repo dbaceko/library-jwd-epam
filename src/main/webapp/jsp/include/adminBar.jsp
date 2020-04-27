@@ -14,10 +14,13 @@
                 <li><a class="active" href="${pageContext.request.contextPath}/controller?action=allUsersList">
                     <fmt:message bundle="${locale}" key="admin.usersList" />
                 </a></li>
-                <li><a class="active" href="${pageContext.request.contextPath}/controller?action=registerPage">
+                <li><a class="active" href="${pageContext.request.contextPath}/controller?action=addBookPage">
                     <fmt:message bundle="${locale}" key="admin.addBook" />
                 </a></li>
-                <li><a class="active" href="${pageContext.request.contextPath}/controller?action=registerPage">
+                <li><a class="active" href="${pageContext.request.contextPath}/controller?action=addBookComponentPage">
+                    <fmt:message bundle="${locale}" key="admin.addBookComponent" />
+                </a></li>
+                <li><a class="active" href="#">
                     <fmt:message bundle="${locale}" key="admin.orders" />
                 </a></li>
             </ul>

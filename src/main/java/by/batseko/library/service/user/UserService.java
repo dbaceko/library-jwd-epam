@@ -1,8 +1,8 @@
-package by.batseko.library.service;
+package by.batseko.library.service.user;
 
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
-import by.batseko.library.service.impl.OnlineUsersCache;
+import by.batseko.library.service.user.impl.OnlineUsersCache;
 
 import java.util.List;
 

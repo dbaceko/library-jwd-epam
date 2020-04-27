@@ -1,6 +1,6 @@
 package by.batseko.library.entity.user;
 
-import by.batseko.library.builder.user.UserBuilder;
+import by.batseko.library.builder.UserBuilder;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -34,6 +34,8 @@ public class User implements Serializable {
         registrationDate = builder.getRegistrationDate();
         address = builder.getAddress();
     }
+
+    public User() {}
 
     public int getId() {
         return id;

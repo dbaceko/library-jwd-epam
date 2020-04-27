@@ -1,7 +1,14 @@
 package by.batseko.library.entity.book;
 
+import by.batseko.library.builder.BookBuilder;
+import by.batseko.library.entity.book.bookcomponent.Author;
+import by.batseko.library.entity.book.bookcomponent.BookLanguage;
+import by.batseko.library.entity.book.bookcomponent.Genre;
+import by.batseko.library.entity.book.bookcomponent.Publisher;
+
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Book implements Serializable {
     private String uuid;
@@ -13,6 +20,20 @@ public class Book implements Serializable {
     private int publishYear;
     private int pagesQuantity;
     private String description;
+
+    public Book(BookBuilder builder) {
+        this.uuid = builder.getUuid();
+        this.genre = builder.getGenre();
+        this.bookLanguage = builder.getBookLanguage();
+        this.publisher = builder.getPublisher();
+        this.author = builder.getAuthor();
+        this.title = builder.getTitle();
+        this.publishYear = builder.getPublishYear();
+        this.pagesQuantity = builder.getPagesQuantity();
+        this.description = builder.getDescription();
+    }
+
+    public Book() {}
 
     public String getUuid() {
         return uuid;
@@ -86,25 +107,29 @@ public class Book implements Serializable {
         this.description = description;
     }
 
+    public void defineUUID() {
+        uuid = UUID.randomUUID().toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return getPublishYear() == book.getPublishYear() &&
-                getPagesQuantity() == book.getPagesQuantity() &&
-                Objects.equals(getUuid(), book.getUuid()) &&
-                Objects.equals(getGenre(), book.getGenre()) &&
-                Objects.equals(getBookLanguage(), book.getBookLanguage()) &&
-                Objects.equals(getPublisher(), book.getPublisher()) &&
-                Objects.equals(getAuthor(), book.getAuthor()) &&
-                Objects.equals(getTitle(), book.getTitle()) &&
-                Objects.equals(getDescription(), book.getDescription());
+        return publishYear == book.publishYear &&
+                pagesQuantity == book.pagesQuantity &&
+                Objects.equals(uuid, book.uuid) &&
+                Objects.equals(genre, book.genre) &&
+                Objects.equals(bookLanguage, book.bookLanguage) &&
+                Objects.equals(publisher, book.publisher) &&
+                Objects.equals(author, book.author) &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(description, book.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUuid(), getGenre(), getBookLanguage(), getPublisher(), getAuthor(), getTitle(), getPublishYear(), getPagesQuantity(), getDescription());
+        return Objects.hash(uuid, genre, bookLanguage, publisher, author, title, publishYear, pagesQuantity, description);
     }
 
     @Override
