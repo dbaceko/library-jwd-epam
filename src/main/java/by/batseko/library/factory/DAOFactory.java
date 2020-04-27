@@ -17,6 +17,7 @@ public class DAOFactory {
     private final BookComponentDAO<BookLanguage> bookLanguageDAO;
     private final BookInstanceDAO bookInstanceDAO;
     private final BookDAO bookDAO;
+    private final BookOrderDAO bookOrderDAO;
 
     private DAOFactory(){
         userDAO = new UserDAOImpl();
@@ -26,6 +27,7 @@ public class DAOFactory {
         bookGenreDAO = new BookGenreDAOImpl();
         bookInstanceDAO = new BookInstanceDAOImpl();
         bookDAO = new BookDAOImpl();
+        bookOrderDAO = new BookOrderDAOImpl();
     }
 
     private static class DAOFactorySingletonHolder {
@@ -62,5 +64,9 @@ public class DAOFactory {
 
     public BookDAO getBookDAO() {
         return bookDAO;
+    }
+
+    public BookOrderDAO getBookOrderDAO() {
+        return bookOrderDAO;
     }
 }
