@@ -1,10 +1,8 @@
 package by.batseko.library.dao.user.impl;
 
-import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.user.UserDAO;
-import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
@@ -147,21 +145,5 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } else {
             throw new LibraryDAOException("query.user.getUser.userNotFound");
         }
-    }
-
-    private User constructUserByResultSet(ResultSet resultSet) throws SQLException {
-        return new UserBuilder().setId(resultSet.getInt(1))
-                    .setUserRole(UserRole.getRoleById(resultSet.getInt(2)))
-                    .setEmail(resultSet.getString(3))
-                    .setLogin(resultSet.getString(4))
-                    .setPassword(resultSet.getString(5))
-                    .setFirstName(resultSet.getNString(6))
-                    .setLastName(resultSet.getNString(7))
-                    .setPassportSerialNumber(resultSet.getString(8))
-                    .setAddress(resultSet.getNString(9))
-                    .setPhoneNumber(resultSet.getString(10))
-                    .setBanned(resultSet.getBoolean(11))
-                    .setRegistrationDate(resultSet.getTimestamp(12))
-                    .build();
     }
 }

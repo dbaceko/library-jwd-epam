@@ -30,6 +30,17 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
         }
     }
 
+    static void updateBookInstanceAvailableStatus(String bookInstanceUUID, boolean isAvailable, Connection connection) throws LibraryDAOException {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_BOOK_INSTANCE_AVAILABLE_STATUS)) {
+            preparedStatement.setBoolean(1, isAvailable);
+            preparedStatement.setString(2, bookInstanceUUID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new LibraryDAOException("query.bookInstance.update.status", e);
+        }
+
+    }
+
     @Override
     public int findAvailableBooksQuantityByUUID(String bookUUID) throws LibraryDAOException {
         return findBooksQuantityByUUID(bookUUID, SQLQueriesStorage.FIND_AVAILABLE_BOOKS_QUANTITY_BY_UUID);
