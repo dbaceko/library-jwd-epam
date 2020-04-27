@@ -58,9 +58,11 @@ public class SQLQueriesStorage {
     public static final String INSERT_BOOK_INSTANCE = "INSERT INTO book_instance (uuid, book_uuid) value (?, ?)";
     public static final String UPDATE_BOOK_INSTANCE_AVAILABLE_STATUS = "UPDATE book_instance SET is_available = (?), WHERE uuid = (?)";
     public static final String FIND_AVAILABLE_BOOKS_QUANTITY_BY_UUID = "SELECT count(book_instance.uuid) as available_book_quantity" +
-            "FROM book_instance WHERE book_instance.uuid = (?) AND book_instance.is_available = 1";
+            "FROM book_instance WHERE book_instance.book_uuid = (?) AND book_instance.is_available = 1";
+    public static final String FIND_AVAILABLE_BOOK_INSTANCE_UUID_BY_BOOK_UUID = "SELECT book_instance.uuid" +
+            "FROM book_instance WHERE book_instance.book_uuid = (?) AND book_instance.is_available = 1";
     public static final String FIND_BOOKS_QUANTITY_BY_UUID = "SELECT count(book_instance.uuid) as available_book_quantity" +
-            "FROM book_instance WHERE book_instance.uuid = (?)";
+            "FROM book_instance WHERE book_instance.book_uuid = (?)";
 
     public static final String INSERT_BOOK_ORDER = "INSERT INTO book_order (uuid, user_id, book_instance_uuid, order_type_id) " +
             "value (?, ?, ?, ?)";

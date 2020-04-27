@@ -3,6 +3,7 @@ package by.batseko.library.dao.book.impl;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.book.BookInstanceDAO;
+import by.batseko.library.entity.book.bookcomponent.Genre;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
@@ -38,7 +42,6 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
         } catch (SQLException e) {
             throw new LibraryDAOException("query.bookInstance.update.status", e);
         }
-
     }
 
     @Override
@@ -49,6 +52,29 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
     @Override
     public int findBooksQuantityByUUID(String bookUUID) throws LibraryDAOException {
         return findBooksQuantityByUUID(bookUUID, SQLQueriesStorage.FIND_BOOKS_QUANTITY_BY_UUID);
+    }
+
+    @Override
+    public List<String> findAllAvailableBookInstanceUUIDsByBoolUUID(String bookUUID) throws LibraryDAOException {
+        List<String> bookInstanceUUIDs;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_AVAILABLE_BOOK_INSTANCE_UUID_BY_BOOK_UUID);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (!resultSet.isBeforeFirst()) {
+                bookInstanceUUIDs = Collections.emptyList();
+            } else {
+                resultSet.last();
+                int listSize = resultSet.getRow();
+                resultSet.beforeFirst();
+                bookInstanceUUIDs = new ArrayList<>(listSize);
+                while (resultSet.next()) {
+                    bookInstanceUUIDs.add(resultSet.getString(1));
+                }
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        }
+        return bookInstanceUUIDs;
     }
 
     private int findBooksQuantityByUUID(String bookUUID, String sqlQuery) throws LibraryDAOException {
