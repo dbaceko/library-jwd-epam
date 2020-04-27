@@ -1,6 +1,5 @@
 package by.batseko.library.dao.book;
 
-import by.batseko.library.entity.book.BookInstance;
 import by.batseko.library.exception.LibraryDAOException;
 
 import java.util.List;

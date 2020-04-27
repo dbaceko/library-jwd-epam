@@ -16,6 +16,7 @@ public class ServiceFactory {
     private final BookComponentService<Genre> bookGenreService;
     private final BookComponentService<BookLanguage> bookLanguageService;
     private final BookComponentService<Publisher> bookPublisherService;
+    private final BookOrderService bookOrderService;
 
     private ServiceFactory() {
         userService = new UserServiceImpl();
@@ -24,6 +25,7 @@ public class ServiceFactory {
         bookGenreService = new BookGenreServiceImpl();
         bookLanguageService = new BookLanguageServiceImpl();
         bookPublisherService = new BookPublisherServiceImpl();
+        bookOrderService = new BookOrderServiceImpl();
     }
 
     private static class ServiceFactorySingletonHolder {
@@ -56,5 +58,9 @@ public class ServiceFactory {
 
     public BookComponentService<Publisher> getBookPublisherService() {
         return bookPublisherService;
+    }
+
+    public BookOrderService getBookOrderService() {
+        return bookOrderService;
     }
 }
