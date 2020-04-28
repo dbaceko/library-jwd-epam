@@ -4,11 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum OrderStatus {
-    INVALID(0, ""),
-    PENDING(1, ""),
-    ISSUED_BY(2, ""),
-    RETURNED(3, ""),
-    CLOSE(4, "");
+    INVALID(0, "orderStatus.invalid"),
+    PENDING(1, "orderStatus.pending"),
+    ISSUED_BY(2, "orderStatus.issuedBy"),
+    RETURNED(3, "orderStatus.returned"),
+    CLOSE(4, "orderStatus.close");
 
     private static final Logger LOGGER = LogManager.getLogger(OrderStatus.class);
 
