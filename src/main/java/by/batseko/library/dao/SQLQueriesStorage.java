@@ -45,8 +45,11 @@ public class SQLQueriesStorage {
             "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
             "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
             "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
-            "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\"" +
+            "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\", " +
+            "COUNT(book_instance.book_uuid) as \"total_book_instance_quantity\", " +
+            "COUNT(CASE WHEN book_instance.is_available = 1 THEN 1 ELSE NULL END) as \"available_book_instance_quantity\"" +
             "FROM book " +
+            "LEFT JOIN book ON book_instance.book_uuid = book.uuid" +
             "LEFT JOIN book_genre ON book.genre_uuid = book_genre.uuid "  +
             "LEFT JOIN book_publisher ON book.publisher_uuid = book_publisher.uuid " +
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
@@ -77,7 +80,7 @@ public class SQLQueriesStorage {
             "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
             "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\"," +
             "user.id as \"user.id\", user.login as \"user.login\"" +
-            "book_instance.uuid as \"book_instance.uuid\", book_instance.is_available as \"book_instance..is_available\"" +
+            "book_instance.uuid as \"book_instance.uuid\", book_instance.is_available as \"book_instance.is_available\"" +
             "FROM book_order " +
             "LEFT JOIN book_instance ON book_order.book_instance_uuid = book_instance.uuid" +
             "LEFT JOIN book ON book_instance.book_uuid = book.uuid" +

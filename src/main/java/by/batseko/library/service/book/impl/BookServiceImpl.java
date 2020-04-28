@@ -1,6 +1,7 @@
 package by.batseko.library.service.book.impl;
 
 import by.batseko.library.dao.book.BookDAO;
+import by.batseko.library.dto.BookDTO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
@@ -54,9 +55,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() throws LibraryServiceException {
+    public List<BookDTO> findAllBookDTO() throws LibraryServiceException {
         try {
-            return bookDAO.findAllBooks();
+            return bookDAO.findAllBooksDTO();
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }

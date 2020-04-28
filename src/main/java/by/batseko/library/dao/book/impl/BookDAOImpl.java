@@ -3,6 +3,7 @@ package by.batseko.library.dao.book.impl;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.book.BookDAO;
+import by.batseko.library.dto.BookDTO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
@@ -16,6 +17,9 @@ import java.util.List;
 
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
+
+    private static final String TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "total_book_instance_quantity";
+    private static final String AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "available_book_instance_quantity";
 
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
@@ -73,28 +77,33 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> findAllBooks() throws LibraryDAOException {
-        List<Book> books;
+    public List<BookDTO> findAllBooksDTO() throws LibraryDAOException {
+        List<BookDTO> bookDTOList;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOKS);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
-                books = Collections.emptyList();
+                bookDTOList = Collections.emptyList();
             } else {
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
-                books = new ArrayList<>(listSize);
+                bookDTOList = new ArrayList<>(listSize);
+                BookDTO currentBookDTO;
                 while (resultSet.next()) {
+                    currentBookDTO = new BookDTO();
                     Book book = constructBookByResultSet(resultSet);
-                    LOGGER.info(book);
-                    books.add(book);
+                    currentBookDTO.setBook(book);
+                    currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                    currentBookDTO.setTotalBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                    LOGGER.info(currentBookDTO);
+                    bookDTOList.add(currentBookDTO);
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
         }
-        return books;
+        return bookDTOList;
     }
 
 
