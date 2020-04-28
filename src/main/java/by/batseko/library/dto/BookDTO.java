@@ -2,7 +2,9 @@ package by.batseko.library.dto;
 
 import by.batseko.library.entity.book.Book;
 
-public class BookDTO {
+import java.io.Serializable;
+
+public class BookDTO implements Serializable {
     private Book book;
     private int totalBooksQuantity;
     private int totalAvailableBooksQuantity;
