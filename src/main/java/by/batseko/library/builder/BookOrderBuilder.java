@@ -14,7 +14,7 @@ public class BookOrderBuilder {
     private BookInstance bookInstance;
     private OrderType orderType;
     private OrderStatus orderStatus;
-    private Timestamp data;
+    private Timestamp date;
 
     public String getUuid() {
         return uuid;
@@ -61,12 +61,12 @@ public class BookOrderBuilder {
         return this;
     }
 
-    public Timestamp getData() {
-        return data;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public BookOrderBuilder setData(Timestamp data) {
-        this.data = data;
+    public BookOrderBuilder setDate(Timestamp date) {
+        this.date = date;
         return this;
     }
 
