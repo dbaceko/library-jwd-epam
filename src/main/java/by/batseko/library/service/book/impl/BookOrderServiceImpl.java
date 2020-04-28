@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BookOrderServiceImpl implements BookOrderService {
     private static final Logger LOGGER = LogManager.getLogger(BookOrderServiceImpl.class);
@@ -23,13 +24,15 @@ public class BookOrderServiceImpl implements BookOrderService {
     public void addBookOrder(BookOrder bookOrder) throws LibraryServiceException {
         List<String> availableBookInstanceUUIDs;
         try {
-            availableBookInstanceUUIDs = bookInstanceDAO.findAllAvailableBookInstanceUUIDsByBoolUUID(bookOrder.getBookInstance().getUuid());
+            String bookUUID = bookOrder.getBookInstance().getBook().getUuid();
+            availableBookInstanceUUIDs = bookInstanceDAO.findAllAvailableBookInstanceUUIDsByBookUUID(bookUUID);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         LibraryServiceException availableInstancesEndedException = new LibraryServiceException("query.bookInstance.find.empty");
         for (int i = 0; i < availableBookInstanceUUIDs.size(); i++) {
             try {
+                bookOrder.setUuid(UUID.randomUUID().toString());
                 bookOrder.getBookInstance().setUuid(availableBookInstanceUUIDs.get(i));
                 bookOrderDAO.addBookOrder(bookOrder);
                 return;

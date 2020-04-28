@@ -92,10 +92,9 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
                 BookDTO currentBookDTO;
                 while (resultSet.next()) {
                     currentBookDTO = new BookDTO();
-                    Book book = constructBookByResultSet(resultSet);
-                    currentBookDTO.setBook(book);
-                    currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
-                    currentBookDTO.setTotalBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                    currentBookDTO.setBook(constructBookByResultSet(resultSet));
+                    currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                    currentBookDTO.setTotalBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
                     LOGGER.info(currentBookDTO);
                     bookDTOList.add(currentBookDTO);
                 }

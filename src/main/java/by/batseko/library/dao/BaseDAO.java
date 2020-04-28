@@ -56,10 +56,10 @@ public abstract class BaseDAO {
     private static final String BOOK_PAGES_QUANTITY_COLUMN_NAME = "book.pages_quantity";
     private static final String BOOK_PAGES_DESCRIPTION_COLUMN_NAME = "book.description";
 
-    private static final String ORDER_UUID_COLUMN_NAME = "order.uuid";
-    private static final String ORDER_ORDER_TYPE_ID_COLUMN_NAME = "order.order_type_id";
-    private static final String ORDER_ORDER_STATUS_ID_COLUMN_NAME = "order.order_status_id";
-    private static final String ORDER_DATE_ID_COLUMN_NAME = "order.date";
+    private static final String ORDER_UUID_COLUMN_NAME = "book_order.uuid";
+    private static final String ORDER_ORDER_TYPE_ID_COLUMN_NAME = "book_order.order_type_id";
+    private static final String ORDER_ORDER_STATUS_ID_COLUMN_NAME = "book_order.order_status_id";
+    private static final String ORDER_DATE_ID_COLUMN_NAME = "book_order.date";
 
     private static final String BOOK_INSTANCE_UUID_COLUMN_NAME = "book_instance.uuid";
     private static final String BOOK_INSTANCE_IS_AVAILABLE_COLUMN_NAME = "book_instance.is_available";
@@ -197,7 +197,7 @@ public abstract class BaseDAO {
                 .setBookInstance(bookInstance)
                 .setOrderType(OrderType.getOrderTypeById(resultSet.getInt(ORDER_ORDER_TYPE_ID_COLUMN_NAME)))
                 .setOrderStatus(OrderStatus.getOrderStatusById(resultSet.getInt(ORDER_ORDER_STATUS_ID_COLUMN_NAME)))
-                .setData(resultSet.getTimestamp(ORDER_DATE_ID_COLUMN_NAME))
+                .setDate(resultSet.getTimestamp(ORDER_DATE_ID_COLUMN_NAME))
                 .build();
     }
 }

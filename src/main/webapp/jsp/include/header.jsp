@@ -24,9 +24,12 @@
             <li><a class="active" href="${pageContext.request.contextPath}/controller?action=logOut">
                 <fmt:message key="header.logout"/>
             </a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?action=userOrdersPage">
+                <fmt:message key="header.userOrdersPage"/>
+            </a></li>
         </c:if>
         <c:if test="${userRole.equals('ADMIN')}">
-            <li><a class="active" href="${pageContext.request.contextPath}/controller?action=adminPage">
+            <li><a href="${pageContext.request.contextPath}/controller?action=adminPage">
                 <fmt:message key="header.adminPage"/>
             </a></li>
         </c:if>
@@ -41,7 +44,7 @@
                         </button >
                         <button type="submit" name="language" value="en">
                             <fmt:message key="header.lang.eng"/>
-                        </button >
+                        </button>
                     </div>
                 </form>
             </div>

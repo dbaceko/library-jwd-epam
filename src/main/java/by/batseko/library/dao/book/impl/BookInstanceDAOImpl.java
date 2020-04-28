@@ -3,7 +3,6 @@ package by.batseko.library.dao.book.impl;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.book.BookInstanceDAO;
-import by.batseko.library.entity.book.bookcomponent.Genre;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
 import org.apache.logging.log4j.LogManager;
@@ -55,11 +54,13 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
     }
 
     @Override
-    public List<String> findAllAvailableBookInstanceUUIDsByBoolUUID(String bookUUID) throws LibraryDAOException {
+    public List<String> findAllAvailableBookInstanceUUIDsByBookUUID(String bookUUID) throws LibraryDAOException {
         List<String> bookInstanceUUIDs;
+        ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_AVAILABLE_BOOK_INSTANCE_UUID_BY_BOOK_UUID);
-            ResultSet resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_AVAILABLE_BOOK_INSTANCE_UUID_BY_BOOK_UUID)) {
+            preparedStatement.setString(1, bookUUID);
+            resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
                 bookInstanceUUIDs = Collections.emptyList();
             } else {
@@ -70,9 +71,12 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
                 while (resultSet.next()) {
                     bookInstanceUUIDs.add(resultSet.getString(1));
                 }
+                LOGGER.info(bookInstanceUUIDs);
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
         }
         return bookInstanceUUIDs;
     }

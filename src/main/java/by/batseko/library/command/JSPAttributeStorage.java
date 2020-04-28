@@ -23,13 +23,14 @@ public class JSPAttributeStorage {
     public static final String USER_ROLE = "userRole";
     public static final String USER_ID = "userID";
 
-
+    public static final String BOOK_DATA_TRANSFER_OBJECT = "bookDTO";
     public static final String BOOK_PREVIOUS_DATA = "bookPreviousData";
     public static final String BOOK_LANGUAGES = "bookLanguages";
     public static final String BOOK_PUBLISHERS = "publishers";
     public static final String BOOK_GENRES = "genres";
     public static final String BOOK_AUTHORS = "authors";
 
+    public static final String BOOK_UUID = "bookUUID";
     public static final String BOOK_LANGUAGE = "bookLanguage";
     public static final String BOOK_PUBLISHER = "publisher";
     public static final String BOOK_GENRE = "genre";
@@ -39,6 +40,12 @@ public class JSPAttributeStorage {
     public static final String BOOK_PAGES_QUANTITY = "bookPagesQuantity";
     public static final String BOOK_QUANTITY = "bookQuantity";
     public static final String BOOK_DESCRIPTION = "bookDescription";
+
+    public static final String ORDER_TYPE_RESULT = "orderTypeResult";
+    public static final String ORDER_TYPE_SUBSCRIPTION = "orderTypeSubscription";
+    public static final String ORDER_TYPE_READING_HOLE = "orderTypeReadingHole";
+
+    public static final String ORDER_LIST = "orderList";
 
     private JSPAttributeStorage(){}
 }
