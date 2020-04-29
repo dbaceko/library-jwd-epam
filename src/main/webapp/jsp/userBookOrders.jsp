@@ -36,6 +36,7 @@
                     <th><fmt:message bundle="${locale}" key="book.title"/></th>
                     <th><fmt:message bundle="${locale}" key="book.publishYear"/></th>
                     <th><fmt:message bundle="${locale}" key="book.pagesQuantity"/></th>
+                    <th><fmt:message bundle="${locale}" key="book.btn.tableHeader.order"/></th>
                 </tr>
                 <c:forEach var="order" items="${orderList}">
                     <tr>
@@ -49,6 +50,28 @@
                         <td>${order.bookInstance.book.title}</td>
                         <td>${order.bookInstance.book.publishYear}</td>
                         <td>${order.bookInstance.book.pagesQuantity}</td>
+                        <td>
+                            <form class="book_order-form" action="controller" method="post">
+                                <input type="hidden" name="orderUUID" value="${order.uuid}">
+                                <input type="hidden" name="bookInstanceUUID" value="${order.bookInstance.uuid}">
+                                <input type="hidden" name="login" value="${order.user.login}">
+                                <c:choose>
+                                    <c:when test = "${order.orderStatus.name().equals('ISSUED_BY')}">
+                                        <button name="action" value="returnBookOrder">
+                                            <span><fmt:message bundle="${locale}" key="order.btn.returnBook"/></span>
+                                        </button>
+                                    </c:when>
+                                    <c:when test = "${order.orderStatus.name().equals('PENDING')}">
+                                        <button name="action" value="cancelBookOrder">
+                                            <span><fmt:message bundle="${locale}" key="order.btn.cancelOrder"/></span>
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span><fmt:message bundle="${locale}" key="book.btn.unavailable.order"/></span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

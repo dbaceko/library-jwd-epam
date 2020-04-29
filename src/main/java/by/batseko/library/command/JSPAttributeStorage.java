@@ -41,6 +41,9 @@ public class JSPAttributeStorage {
     public static final String BOOK_QUANTITY = "bookQuantity";
     public static final String BOOK_DESCRIPTION = "bookDescription";
 
+    public static final String BOOK_INSTANCE_UUID = "bookInstanceUUID";
+
+    public static final String ORDER_UUID = "orderUUID";
     public static final String ORDER_TYPE_RESULT = "orderTypeResult";
     public static final String ORDER_TYPE_SUBSCRIPTION = "orderTypeSubscription";
     public static final String ORDER_TYPE_READING_HOLE = "orderTypeReadingHole";

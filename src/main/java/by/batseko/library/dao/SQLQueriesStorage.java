@@ -70,7 +70,7 @@ public class SQLQueriesStorage {
     public static final String INSERT_BOOK_ORDER = "INSERT INTO book_order (uuid, user_id, book_instance_uuid, order_type_id) " +
             "value (?, ?, ?, ?)";
 
-    public static final String UPDATE_BOOK_ORDER_STATUS = "UPDATE book_order  SET order_status_id = (?), WHERE uuid = (?)";
+    public static final String UPDATE_BOOK_ORDER_STATUS = "UPDATE book_order SET order_status_id = (?) WHERE uuid = (?)";
 
     public static final String FIND_BOOK_ORDER_BY_UUID = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +

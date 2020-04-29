@@ -41,7 +41,9 @@ public class UserRolePermittedCommandFilter implements Filter {
             UPDATE_PROFILE_USER,
             BOOK_CATALOG_PAGE,
             USER_ORDERS_PAGE,
-            ADD_BOOK_ORDER
+            ADD_BOOK_ORDER,
+            CANCEL_BOOK_ORDER,
+            RETURN_BOOK_ORDER
     );
 
     private static final Set<CommandStorage> adminCommands = EnumSet.of(
@@ -63,7 +65,10 @@ public class UserRolePermittedCommandFilter implements Filter {
             ADD_BOOK_GENRE,
             BOOK_CATALOG_PAGE,
             USER_ORDERS_PAGE,
-            ADD_BOOK_ORDER
+            ADD_BOOK_ORDER,
+            APPROVE_BOOK_ORDER,
+            CANCEL_BOOK_ORDER,
+            RETURN_BOOK_ORDER
     );
 
     @Override

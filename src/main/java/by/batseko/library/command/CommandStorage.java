@@ -18,6 +18,9 @@ public enum CommandStorage {
     BOOK_CATALOG_PAGE(new BookCatalogPage(),"bookCatalogPage"),
 
     ADD_BOOK_ORDER(new AddBookOrder(), "addBookOrder"),
+    APPROVE_BOOK_ORDER(new ApproveBookOrder(), "approveBookOrder"),
+    CANCEL_BOOK_ORDER(new CancelBookOrder(), "cancelBookOrder"),
+    RETURN_BOOK_ORDER(new ReturnBookOrder(), "returnBookOrder"),
 
     ADD_BOOK_PAGE(new AddBookPage(), "addBookPage"),
     ADD_BOOK(new AddBook(), "addBook"),
