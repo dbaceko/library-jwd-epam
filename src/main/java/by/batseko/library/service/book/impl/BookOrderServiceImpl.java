@@ -36,7 +36,7 @@ public class BookOrderServiceImpl implements BookOrderService {
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
-        LibraryServiceException availableInstancesEndedException = new LibraryServiceException("query.bookInstance.find.empty");
+        LibraryServiceException bookIsUnavailableException = new LibraryServiceException("query.bookInstance.find.empty");
         for (int i = 0; i < availableBookInstanceUUIDs.size(); i++) {
             try {
                 bookOrder.setUuid(UUID.randomUUID().toString());
@@ -44,46 +44,30 @@ public class BookOrderServiceImpl implements BookOrderService {
                 bookOrderDAO.addBookOrder(bookOrder);
                 BookOrdersCache.UserBookOrdersMap currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
                 if (currentUserCachedOrders != null) {
-                    currentUserCachedOrders.put(bookOrder.getUuid(), findOrderByUUID(bookOrder.getUuid()));
+                    currentUserCachedOrders.put(bookOrder.getUuid(), bookOrderDAO.findOrderByUUID(bookOrder.getUuid()));
                 }
                 return;
             } catch (LibraryDAOException e) {
                 if (i == availableBookInstanceUUIDs.size() - 1) {
                     LOGGER.warn(String.format("All books %s is already booked", bookOrder.getBookInstance().getBook()));
-                    availableInstancesEndedException = new LibraryServiceException(e.getMessage(), e);
+                    bookIsUnavailableException = new LibraryServiceException(e.getMessage(), e);
                 } else {
                     LOGGER.info(String.format("Book instance %s is already booked", bookOrder.getBookInstance()));
                 }
             }
         }
-        throw availableInstancesEndedException;
-    }
-
-    @Override
-    public void cancelBookOrder(BookOrder bookOrder) throws LibraryServiceException {
-        bookOrder.setOrderStatus(OrderStatus.CLOSE);
-        try {
-            bookOrderDAO.cancelBookOrder(bookOrder);
-            updateBookOrderCacheOrderStatus(bookOrder);
-        } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage(), e);
-        }
+        throw bookIsUnavailableException;
     }
 
     @Override
     public void updateBookOrderStatus(BookOrder bookOrder) throws LibraryServiceException {
         try {
-            bookOrderDAO.updateBookOrderStatus(bookOrder);
+            if (bookOrder.getOrderStatus() == OrderStatus.CLOSE) {
+                bookOrderDAO.cancelBookOrder(bookOrder);
+            } else {
+                bookOrderDAO.updateBookOrderStatus(bookOrder);
+            }
             updateBookOrderCacheOrderStatus(bookOrder);
-        } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public BookOrder findOrderByUUID(String uuid) throws LibraryServiceException {
-        try {
-            return bookOrderDAO.findOrderByUUID(uuid);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
