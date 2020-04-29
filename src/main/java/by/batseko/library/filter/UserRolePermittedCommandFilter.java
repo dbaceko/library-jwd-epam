@@ -68,7 +68,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             ADD_BOOK_ORDER,
             APPROVE_BOOK_ORDER,
             CANCEL_BOOK_ORDER,
-            RETURN_BOOK_ORDER
+            RETURN_BOOK_ORDER,
+            OPEN_ORDERS_PAGE
     );
 
     @Override

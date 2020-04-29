@@ -29,6 +29,7 @@ public enum CommandStorage {
     ADD_BOOK_PUBLISHER(new AddBookPublisher(), "addBookPublisher"),
     ADD_BOOK_GENRE(new AddBookGenre(), "addBookGenre"),
     ADD_BOOK_LANGUAGE(new AddBookLanguage(), "addBookLanguage"),
+    OPEN_ORDERS_PAGE(new OpenOrdersPage(), "openOrdersPage"),
 
     SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),

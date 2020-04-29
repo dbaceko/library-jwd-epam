@@ -20,7 +20,7 @@
                 <li><a class="active" href="${pageContext.request.contextPath}/controller?action=addBookComponentPage">
                     <fmt:message bundle="${locale}" key="admin.addBookComponent" />
                 </a></li>
-                <li><a class="active" href="#">
+                <li><a class="active" href="${pageContext.request.contextPath}/controller?action=openOrdersPage">
                     <fmt:message bundle="${locale}" key="admin.orders" />
                 </a></li>
             </ul>

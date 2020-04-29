@@ -1,11 +1,13 @@
 package by.batseko.library.command.reciever.user;
 
 import by.batseko.library.builder.BookOrderBuilder;
+import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.Command;
 import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.command.reciever.page.BookCatalogPage;
+import by.batseko.library.entity.book.BookInstance;
 import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.entity.order.OrderStatus;
 import by.batseko.library.exception.LibraryServiceException;
@@ -27,8 +29,13 @@ public class ApproveBookOrder implements Command {
         Router router = new Router();
         try {
             String orderUUID = request.getParameter(JSPAttributeStorage.ORDER_UUID);
+            String orderUserLogin = request.getParameter(JSPAttributeStorage.USER_LOGIN);
+            BookInstance bookInstance = new BookInstance();
+            bookInstance.setUuid(request.getParameter(JSPAttributeStorage.BOOK_INSTANCE_UUID));
             BookOrder bookOrder = new BookOrderBuilder().setUuid(orderUUID)
                     .setOrderStatus(OrderStatus.ISSUED_BY)
+                    .setBookInstance(bookInstance)
+                    .setUser(new UserBuilder().setLogin(orderUserLogin).build())
                     .build();
             bookOrderService.updateBookOrderStatus(bookOrder);
             router.setPagePath(CommandStorage.USER_ORDERS_PAGE.getCommandName());

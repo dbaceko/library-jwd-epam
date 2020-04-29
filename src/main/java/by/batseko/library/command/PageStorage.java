@@ -10,6 +10,7 @@ public class PageStorage {
     public static final String ALL_USERS_LIST = "/jsp/admin/allUsersList.jsp";
     public static final String BOOK_CATALOG_PAGE = "/jsp/bookCatalog.jsp";
     public static final String USER_ORDERS_PAGE = "/jsp/userBookOrders.jsp";
+    public static final String OPEN_ORDERS_PAGE = "/jsp/admin/openOrdersPage.jsp";
     public static final String ADD_BOOK = "/jsp/admin/addBook.jsp";
     public static final String ADD_BOOK_COMPONENT = "/jsp/admin/addBookComponent.jsp";
     public static final String ERROR = "/jsp/error.jsp";
