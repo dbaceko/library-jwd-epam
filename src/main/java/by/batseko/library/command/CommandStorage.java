@@ -14,7 +14,7 @@ public enum CommandStorage {
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
     ADMIN_PAGE(new UsersOnlinePage(), "adminPage"),
     USERS_LIST_PAGE(new AllUsersPage(), "allUsersList"),
-    USER_ORDERS_PAGE(new UserOrdersPage(),"userOrdersPage"),
+    USER_ORDERS_PAGE(new MyOrdersPage(),"userOrdersPage"),
     BOOK_CATALOG_PAGE(new BookCatalogPage(),"bookCatalogPage"),
 
     ADD_BOOK_ORDER(new AddBookOrder(), "addBookOrder"),

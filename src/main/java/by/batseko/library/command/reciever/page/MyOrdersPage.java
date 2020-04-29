@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class UserOrdersPage implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(UserOrdersPage.class);
+public class MyOrdersPage implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(MyOrdersPage.class);
 
     private static final BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
 
@@ -24,7 +24,13 @@ public class UserOrdersPage implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router router = new Router();
         try {
-            List<BookOrder> bookOrders = bookOrderService.findAllOrdersByUserId((Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID));
+            List<BookOrder> bookOrders = bookOrderService.getBookOrdersCache()
+                    .get((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
+                    .getAllValues();
+            if (bookOrders == null) {
+                LOGGER.warn(String.format("User %s orders non in cache", request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN)));
+                bookOrders = bookOrderService.findAllOrdersByUserId((Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID));
+            }
             request.setAttribute(JSPAttributeStorage.ORDER_LIST, bookOrders);
             router.setPagePath(PageStorage.USER_ORDERS_PAGE);
             router.setRouteType(Router.RouteType.FORWARD);
