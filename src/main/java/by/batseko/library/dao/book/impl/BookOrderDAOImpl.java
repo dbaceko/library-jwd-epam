@@ -80,6 +80,26 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
     }
 
     @Override
+    public BookOrder findOrderByUUID(String uuid) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_ORDER_BY_UUID)) {
+            preparedStatement.setString(1, uuid);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return constructOrderByResultSet(resultSet);
+            } else {
+                LOGGER.debug(String.format("Book order not found by uuid %s", uuid));
+                throw new LibraryDAOException("query.order.read.notFound");
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
     public List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();

@@ -11,6 +11,7 @@ public interface BookOrderDAO {
     void updateBookOrderStatus(BookOrder bookOrder) throws LibraryDAOException;
     void cancelBookOrder(BookOrder bookOrder) throws LibraryDAOException;
 
+    BookOrder findOrderByUUID(String uuid) throws LibraryDAOException;
     List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException;
     List<BookOrder> findAllOrders() throws LibraryDAOException;
     List<BookOrder> findAllOpenedRequestsOrders() throws LibraryDAOException;
