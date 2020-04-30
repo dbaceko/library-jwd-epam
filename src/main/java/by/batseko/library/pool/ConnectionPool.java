@@ -1,6 +1,7 @@
 package by.batseko.library.pool;
 
 import by.batseko.library.exception.ConnectionPoolException;
+import by.batseko.library.exception.ConnectionPoolInitializationRuntimeException;
 import com.mysql.cj.jdbc.Driver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +18,6 @@ import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
@@ -30,9 +29,7 @@ public class ConnectionPool {
 
     private final LinkedBlockingQueue<Connection> availableConnections;
     private final List<Connection> usedConnections;
-    private final AtomicBoolean isInitialized;
     private final AtomicBoolean isPoolClosing;
-    private final Lock initLock;
     private final Properties jdbcMysqlConfigProperties;
 
     private String url;
@@ -40,10 +37,9 @@ public class ConnectionPool {
     private ConnectionPool() {
         availableConnections = new LinkedBlockingQueue<>();
         usedConnections = new LinkedList<>();
-        isInitialized = new AtomicBoolean(false);
         isPoolClosing = new AtomicBoolean(false);
-        initLock = new ReentrantLock();
         jdbcMysqlConfigProperties = new Properties();
+        init();
     }
 
     private static class ConnectionPoolSingletonHolder {
@@ -54,20 +50,14 @@ public class ConnectionPool {
         return ConnectionPoolSingletonHolder.INSTANCE;
     }
 
-    public void init() throws ConnectionPoolException {
-        initLock.lock();
-        if (!isInitialized.get()) {
-            try {
-                Driver jdbcMySQLDriver = new Driver();
-                DriverManager.registerDriver(jdbcMySQLDriver);
-                initProperties(DB_CONNECTION_POOL_PROPERTIES);
-                createConnections(DEFAULT_POOL_SIZE);
-                isInitialized.set(true);
-            } catch (SQLException e) {
-                throw new ConnectionPoolException("Connection pool is not initialized ", e);
-            } finally {
-                initLock.unlock();
-            }
+    private void init() {
+        try {
+            DriverManager.registerDriver(new Driver());
+            initProperties(DB_CONNECTION_POOL_PROPERTIES);
+            createConnections(DEFAULT_POOL_SIZE);
+        } catch (ConnectionPoolException | SQLException e) {
+            LOGGER.fatal("Connection pool is not initialized ", e);
+            throw new ConnectionPoolInitializationRuntimeException("Connection pool is not initialized ", e);
         }
     }
 
@@ -90,7 +80,6 @@ public class ConnectionPool {
 
     public void destroy() {
         isPoolClosing.set(true);
-        initLock.lock();
         for (Connection connection : availableConnections) {
             closeConnection((ProxyConnection) connection);
         }
@@ -108,9 +97,7 @@ public class ConnectionPool {
                 LOGGER.warn(String.format("Error to deregister driver %s", driver), e);
             }
         }
-        isInitialized.set(false);
         isPoolClosing.set(false);
-        initLock.unlock();
     }
 
     private void closeConnection(ProxyConnection connection) {
@@ -134,6 +121,7 @@ public class ConnectionPool {
         for (int i = 0; i < connectionsCount; i++) {
             try {
                 ProxyConnection proxyConnection = new ProxyConnection(DriverManager.getConnection(url, jdbcMysqlConfigProperties));
+                proxyConnection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
                 availableConnections.add(proxyConnection);
             } catch (SQLException e) {
                 LOGGER.warn("Connection not created", e);
