@@ -15,6 +15,7 @@ import by.batseko.library.entity.user.User;
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.pool.ConnectionPool;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,6 +52,10 @@ public abstract class BaseDAO {
     private static final String BOOK_PUBLISHER_COLUMN_NAME = "book_publisher.title";
 
     private static final String BOOK_UUID_COLUMN_NAME = "book.uuid";
+    private static final String BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME = "book.author_uuid";
+    private static final String BOOK_BOOK_GENRE_UUID_COLUMN_NAME = "book.genre_uuid";
+    private static final String BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME = "book.language_uuid";
+    private static final String BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME = "book.publisher_uuid";
     private static final String BOOK_TITLE_COLUMN_NAME = "book.title";
     private static final String BOOK_PUBLISH_YEAR_COLUMN_NAME = "book.publish_year";
     private static final String BOOK_PAGES_QUANTITY_COLUMN_NAME = "book.pages_quantity";
@@ -199,5 +204,48 @@ public abstract class BaseDAO {
                 .setOrderStatus(OrderStatus.getOrderStatusById(resultSet.getInt(ORDER_ORDER_STATUS_ID_COLUMN_NAME)))
                 .setDate(resultSet.getTimestamp(ORDER_DATE_ID_COLUMN_NAME))
                 .build();
+    }
+
+    private static final String MIDDLE_OF_PREDICATE = " = '";
+    private static final String END_OF_PREDICATE = "' AND ";
+
+    protected String constructFindQueryFromBook(Book book) {
+        StringBuilder queryWhereStatement = new StringBuilder();
+        String bookGenreUUID = book.getGenre().getUuid();
+        String bookAuthorUUID = book.getAuthor().getUuid();
+        String bookPublisherUUID = book.getPublisher().getUuid();
+        String bookLanguageUUID = book.getBookLanguage().getUuid();
+        String bookTitle = book.getTitle();
+        int bookPublishYear = book.getPublishYear();
+        int bookPagesQuantity = book.getPagesQuantity();
+
+        if (!StringUtils.isBlank(bookGenreUUID)) {
+            queryWhereStatement.append(BOOK_BOOK_GENRE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookGenreUUID + END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookAuthorUUID)) {
+            queryWhereStatement.append(BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookAuthorUUID + END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookPublisherUUID)) {
+            queryWhereStatement.append(BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPublisherUUID + END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookLanguageUUID)) {
+            queryWhereStatement.append(BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookLanguageUUID + END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookTitle)) {
+            queryWhereStatement.append(BOOK_TITLE_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookTitle + END_OF_PREDICATE);
+        }
+        if (bookPublishYear != 0) {
+            queryWhereStatement.append(BOOK_PUBLISH_YEAR_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPublishYear + END_OF_PREDICATE);
+        }
+        if (bookPagesQuantity != 0) {
+            queryWhereStatement.append(BOOK_PAGES_QUANTITY_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPagesQuantity + END_OF_PREDICATE);
+        }
+        if (queryWhereStatement.length() == 0) {
+            return SQLQueriesStorage.FIND_ALL_BOOKS;
+        } else {
+            return SQLQueriesStorage.FIND_ALL_BOOKS + " WHERE "
+                    + queryWhereStatement.delete(
+                    queryWhereStatement.length() - END_OF_PREDICATE.length() + 1, queryWhereStatement.length());
+        }
     }
 }
