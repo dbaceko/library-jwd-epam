@@ -74,6 +74,29 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
+    public void setRememberUserToken(int userId, String userToken) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN)) {
+            preparedStatement.setString(1, userToken);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        }
+    }
+
+    @Override
+    public void deleteRememberUserToken(int userId) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN_TO_NULL)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        }
+    }
+
+    @Override
     public User findUserByLogin(String userLogin) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
@@ -89,11 +112,27 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
-    public User findUserByID(int userID) throws LibraryDAOException {
+    public User findUserByIdAndToken(int userId, String token) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_ID_AND_TOKEN)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, token);
+            resultSet = preparedStatement.executeQuery();
+            return extractFoundedUserFromResultSet(resultSet);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public User findUserById(int userId) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_ID)) {
-            preparedStatement.setInt(1, userID);
+            preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
@@ -129,10 +168,10 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
-    public void deleteUserByID(int userID) throws LibraryDAOException {
+    public void deleteUserById(int userId) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.DELETE_USER)) {
-            preparedStatement.setInt(1, userID);
+            preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("query.user.deleteUser.commonError");

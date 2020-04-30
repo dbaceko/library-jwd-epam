@@ -36,7 +36,7 @@
             </label>
             <div class="terms">
                 <label class="check">
-                    <input type="checkbox">
+                    <input type="checkbox" name="generateRememberUserToken">
                     <span class="checkmark"></span>
                 </label>
                 <span><fmt:message bundle="${locale}" key="login.remember"/></span>

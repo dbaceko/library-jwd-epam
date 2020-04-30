@@ -22,6 +22,9 @@ public class JSPAttributeStorage {
     public static final String USER_ADDRESS = "address";
     public static final String USER_ROLE = "userRole";
     public static final String USER_ID = "userID";
+    public static final String GENERATE_REMEMBER_USER_TOKEN = "generateRememberUserToken";
+    public static final String COOKIE_REMEMBER_USER_TOKEN = "rememberToken";
+    public static final String COOKIE_REMEMBER_USER_TOKEN_DIVIDER = ":";
 
     public static final String BOOK_DATA_TRANSFER_OBJECT = "bookDTO";
     public static final String BOOK_PREVIOUS_DATA = "bookPreviousData";

@@ -9,9 +9,11 @@ public interface UserDAO {
     void registerUser(User user) throws LibraryDAOException;
     void updateUserProfileData(User user) throws LibraryDAOException;
     void updateUserBanStatus(User user) throws LibraryDAOException;
+    void setRememberUserToken(int userId, String userToken) throws LibraryDAOException;
+    void deleteRememberUserToken(int userId) throws LibraryDAOException;
     User findUserByLogin(String userLogin) throws LibraryDAOException;
-    User findUserByID(int userID) throws LibraryDAOException;
+    User findUserByIdAndToken(int userId,String token) throws LibraryDAOException;
+    User findUserById(int userId) throws LibraryDAOException;
     List<User> findAllUsers() throws LibraryDAOException;
-    void deleteUserByID(int userID) throws LibraryDAOException;
-
+    void deleteUserById(int userId) throws LibraryDAOException;
 }
