@@ -211,11 +211,11 @@ public abstract class BaseDAO {
 
     protected String constructFindQueryFromBook(Book book) {
         StringBuilder queryWhereStatement = new StringBuilder();
-        String bookGenreUUID = book.getGenre().getUuid();
-        String bookAuthorUUID = book.getAuthor().getUuid();
-        String bookPublisherUUID = book.getPublisher().getUuid();
-        String bookLanguageUUID = book.getBookLanguage().getUuid();
-        String bookTitle = book.getTitle();
+        String bookGenreUUID = injectionProtection(book.getGenre().getUuid());
+        String bookAuthorUUID = injectionProtection(book.getAuthor().getUuid());
+        String bookPublisherUUID = injectionProtection(book.getPublisher().getUuid());
+        String bookLanguageUUID = injectionProtection(book.getBookLanguage().getUuid());
+        String bookTitle = injectionProtection(book.getTitle());
         int bookPublishYear = book.getPublishYear();
         int bookPagesQuantity = book.getPagesQuantity();
 
@@ -247,5 +247,9 @@ public abstract class BaseDAO {
                     + queryWhereStatement.delete(
                     queryWhereStatement.length() - END_OF_PREDICATE.length() + 1, queryWhereStatement.length());
         }
+    }
+
+    private String injectionProtection(String value) {
+        return value.replace("'", "/'" );
     }
 }
