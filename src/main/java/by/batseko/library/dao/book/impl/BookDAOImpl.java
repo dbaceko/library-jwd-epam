@@ -77,10 +77,19 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     }
 
     @Override
+    public List<BookDTO> findBooksDTOByFields(Book book) throws LibraryDAOException {
+        return findBooksDTOByQuery(constructFindQueryFromBook(book));
+    }
+
+    @Override
     public List<BookDTO> findAllBooksDTO() throws LibraryDAOException {
+        return findBooksDTOByQuery(SQLQueriesStorage.FIND_ALL_BOOKS);
+    }
+
+    private List<BookDTO> findBooksDTOByQuery(String query) throws LibraryDAOException {
         List<BookDTO> bookDTOList;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOKS);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (!resultSet.isBeforeFirst()) {
                 bookDTOList = Collections.emptyList();

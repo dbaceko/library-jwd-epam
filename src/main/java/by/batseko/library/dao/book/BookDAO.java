@@ -9,5 +9,6 @@ import java.util.List;
 public interface BookDAO {
     void addBook(Book book, int quantity) throws LibraryDAOException;
     Book findBookByUUID(String bookUUID) throws LibraryDAOException;
+    List<BookDTO> findBooksDTOByFields(Book book) throws LibraryDAOException;
     List<BookDTO> findAllBooksDTO() throws LibraryDAOException;
 }
