@@ -3,6 +3,7 @@ package by.batseko.library.dao;
 import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.builder.UserBuilder;
+import by.batseko.library.dto.BookDTO;
 import by.batseko.library.entity.book.*;
 import by.batseko.library.entity.book.bookcomponent.Author;
 import by.batseko.library.entity.book.bookcomponent.BookLanguage;
@@ -68,6 +69,10 @@ public abstract class BaseDAO {
 
     private static final String BOOK_INSTANCE_UUID_COLUMN_NAME = "book_instance.uuid";
     private static final String BOOK_INSTANCE_IS_AVAILABLE_COLUMN_NAME = "book_instance.is_available";
+
+    private static final String TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "total_book_instance_quantity";
+    private static final String AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "available_book_instance_quantity";
+
 
     protected final ConnectionPool pool;
 
@@ -204,6 +209,14 @@ public abstract class BaseDAO {
                 .setOrderStatus(OrderStatus.getOrderStatusById(resultSet.getInt(ORDER_ORDER_STATUS_ID_COLUMN_NAME)))
                 .setDate(resultSet.getTimestamp(ORDER_DATE_ID_COLUMN_NAME))
                 .build();
+    }
+
+    protected BookDTO constructBookDTOByResultSet(ResultSet resultSet) throws SQLException {
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setBook(constructBookByResultSet(resultSet));
+        bookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+        bookDTO.setTotalBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+        return bookDTO;
     }
 
     private static final String MIDDLE_OF_PREDICATE = " = '";

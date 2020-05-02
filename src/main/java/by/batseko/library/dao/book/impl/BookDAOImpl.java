@@ -18,9 +18,6 @@ import java.util.List;
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
 
-    private static final String TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "total_book_instance_quantity";
-    private static final String AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "available_book_instance_quantity";
-
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
         Connection connection;
@@ -95,14 +92,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             int listSize = resultSet.getRow();
             resultSet.beforeFirst();
             bookDTOList = new ArrayList<>(listSize);
-            BookDTO currentBookDTO;
+            BookDTO bookDTO;
             while (resultSet.next()) {
-                currentBookDTO = new BookDTO();
-                currentBookDTO.setBook(constructBookByResultSet(resultSet));
-                currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
-                currentBookDTO.setTotalBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
-                LOGGER.info(currentBookDTO);
-                bookDTOList.add(currentBookDTO);
+                bookDTO = constructBookDTOByResultSet(resultSet);
+                LOGGER.info(bookDTO);
+                bookDTOList.add(bookDTO);
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
