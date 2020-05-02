@@ -384,3 +384,10 @@ th:first-child, td:first-child {
     vertical-align: top;
 }
 
+.search-wrapper .search-form #book-search-form {
+    max-width: none;
+    width: 80%;
+    vertical-align: top;
+    background: rgba(245, 245, 245, 0.9);
+}
+

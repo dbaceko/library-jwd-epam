@@ -23,7 +23,7 @@
                 </p>
             </div>
         </c:if>
-        <c:if test="${empty exception_msg}">
+        <c:if test="${not empty orderList}">
             <table id="order-list">
                 <tr>
                     <th><fmt:message bundle="${locale}" key="order.date.tableHeader"/></th>
@@ -75,6 +75,11 @@
                     </tr>
                 </c:forEach>
             </table>
+        </c:if>
+        <c:if test="${empty orderList}">
+            <p class="error-message">
+                <fmt:message bundle="${locale}" key="find.BookOrderList.isEmpty"/>
+            </p>
         </c:if>
     </div>
 </main>

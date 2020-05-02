@@ -29,7 +29,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             SWITCH_LANG,
             REGISTER_USER,
             LOG_IN,
-            BOOK_CATALOG_PAGE
+            BOOK_CATALOG_PAGE,
+            FIND_BOOK
     );
 
     private static final Set<CommandStorage> userCommands = EnumSet.of(
@@ -43,7 +44,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             USER_ORDERS_PAGE,
             ADD_BOOK_ORDER,
             CANCEL_BOOK_ORDER,
-            RETURN_BOOK_ORDER
+            RETURN_BOOK_ORDER,
+            FIND_BOOK
     );
 
     private static final Set<CommandStorage> adminCommands = EnumSet.of(
@@ -69,7 +71,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             APPROVE_BOOK_ORDER,
             CANCEL_BOOK_ORDER,
             RETURN_BOOK_ORDER,
-            OPEN_ORDERS_PAGE
+            OPEN_ORDERS_PAGE,
+            FIND_BOOK
     );
 
     @Override

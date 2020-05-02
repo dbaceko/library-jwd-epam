@@ -55,6 +55,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookDTO> findByFields(Book book) throws LibraryServiceException {
+        try {
+            return bookDAO.findBooksDTOByFields(book);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<BookDTO> findAllBookDTO() throws LibraryServiceException {
         try {
             return bookDAO.findAllBooksDTO();

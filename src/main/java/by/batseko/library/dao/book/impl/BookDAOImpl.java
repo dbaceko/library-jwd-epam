@@ -91,29 +91,27 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (!resultSet.isBeforeFirst()) {
-                bookDTOList = Collections.emptyList();
-            } else {
-                resultSet.last();
-                int listSize = resultSet.getRow();
-                resultSet.beforeFirst();
-                bookDTOList = new ArrayList<>(listSize);
-                BookDTO currentBookDTO;
-                while (resultSet.next()) {
-                    currentBookDTO = new BookDTO();
-                    currentBookDTO.setBook(constructBookByResultSet(resultSet));
-                    currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
-                    currentBookDTO.setTotalBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
-                    LOGGER.info(currentBookDTO);
-                    bookDTOList.add(currentBookDTO);
-                }
+            resultSet.last();
+            int listSize = resultSet.getRow();
+            resultSet.beforeFirst();
+            bookDTOList = new ArrayList<>(listSize);
+            BookDTO currentBookDTO;
+            while (resultSet.next()) {
+                currentBookDTO = new BookDTO();
+                currentBookDTO.setBook(constructBookByResultSet(resultSet));
+                currentBookDTO.setTotalAvailableBooksQuantity(resultSet.getInt(AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                currentBookDTO.setTotalBooksQuantity(resultSet.getInt(TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME));
+                LOGGER.info(currentBookDTO);
+                bookDTOList.add(currentBookDTO);
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
         }
+        if (bookDTOList.size() == 1 && bookDTOList.get(0).getBook().getUuid() == null) {
+                bookDTOList = Collections.emptyList();
+        }
         return bookDTOList;
     }
-
 
     private String getBookUUIDFromBookFields(Book book, Connection connection) throws LibraryDAOException {
         ResultSet resultSet = null;

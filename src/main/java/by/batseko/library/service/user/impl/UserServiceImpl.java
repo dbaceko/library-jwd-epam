@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
         encryption = UtilFactory.getInstance().getEncryption();
         activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
+
     }
 
     @Override
@@ -217,9 +218,18 @@ public class UserServiceImpl implements UserService {
         return activeUserCache;
     }
 
-    private void initCacheAfterLogIn(User user) throws LibraryServiceException {
-        activeUserCache.put(user.getLogin(), user);
+    private void initCacheAfterLogIn(User user){
         BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
-        bookOrderService.getBookOrdersCache().put(user.getLogin(), bookOrderService.findAllOrdersByUserId(user.getId()));
+        try {
+            activeUserCache.put(user.getLogin(), user);
+        } catch (LibraryServiceException e) {
+            LOGGER.warn(String.format("Can't put user %s in cache", user), e);
+        }
+        try {
+            bookOrderService.getBookOrdersCache().put(user.getLogin(), bookOrderService.findAllOrdersByUserId(user.getId()));
+        } catch (LibraryServiceException e) {
+            LOGGER.warn(String.format("Can't put user's %s book orders in cache", user), e);
+        }
+
     }
 }
