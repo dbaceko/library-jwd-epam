@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> findByFields(Book book) throws LibraryServiceException {
+    public List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException {
         try {
             return bookDAO.findBooksDTOByFields(book);
         } catch (LibraryDAOException e) {
@@ -64,7 +64,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> findAllBookDTO() throws LibraryServiceException {
+    public List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException {
         try {
             return bookDAO.findAllBooksDTO();
         } catch (LibraryDAOException e) {

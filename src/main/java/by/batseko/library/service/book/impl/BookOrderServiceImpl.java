@@ -83,18 +83,36 @@ public class BookOrderServiceImpl implements BookOrderService {
     }
 
     @Override
-    public List<BookOrder> findAllOrders() throws LibraryServiceException {
+    public List<BookOrder> findOrdersByUserId(int userId, int currentPage, int recordsPerPage) throws LibraryServiceException {
         try {
-            return bookOrderDAO.findAllOrders();
+            return bookOrderDAO.findOrdersByUserId(userId, currentPage, recordsPerPage);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public List<BookOrder> findAllOpenedRequestsOrders() throws LibraryServiceException {
+    public int findOrdersQuantityByUserId(int userId) throws LibraryServiceException {
         try {
-            return bookOrderDAO.findAllOpenedRequestsOrders();
+            return bookOrderDAO.findOrdersQuantityByUserId(userId);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<BookOrder> findAllOpenOrders(int currentPage, int recordsPerPage) throws LibraryServiceException {
+        try {
+            return bookOrderDAO.findAllOpenedOrders(currentPage, recordsPerPage);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int findOpenOrdersQuantity() throws LibraryServiceException {
+        try {
+            return bookOrderDAO.findOpenOrdersQuantity();
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }

@@ -23,14 +23,15 @@ public class MyOrdersPage implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router router = new Router();
+        int currentPage = Integer.parseInt(request.getParameter(JSPAttributeStorage.PAGINATION_CURRENT_PAGE));
+        int recordsPerPage = Integer.parseInt(request.getParameter(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE));
         try {
+            int arrayOrdersShift = (currentPage - 1) * recordsPerPage;
             List<BookOrder> bookOrders = bookOrderService.getBookOrdersCache()
                     .get((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
                     .getAllValues();
-            if (bookOrders == null) {
-                LOGGER.warn(String.format("User %s orders non in cache", request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN)));
-                bookOrders = bookOrderService.findAllOrdersByUserId((Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID));
-            }
+            definePaginationContext(request, bookOrders.size()-1, currentPage, recordsPerPage);
+            bookOrders = bookOrders.subList(arrayOrdersShift, Math.min(arrayOrdersShift + recordsPerPage, bookOrders.size() - 1));
             request.setAttribute(JSPAttributeStorage.ORDER_LIST, bookOrders);
             router.setPagePath(PageStorage.USER_ORDERS_PAGE);
             router.setRouteType(Router.RouteType.FORWARD);

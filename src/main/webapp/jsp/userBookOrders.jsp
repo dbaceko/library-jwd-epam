@@ -55,6 +55,7 @@
                                 <input type="hidden" name="orderUUID" value="${order.uuid}">
                                 <input type="hidden" name="bookInstanceUUID" value="${order.bookInstance.uuid}">
                                 <input type="hidden" name="login" value="${order.user.login}">
+                                <input type="hidden" name="redirectPageCommand" value="userOrdersPage&recordsPerPage=${recordsPerPage}&currentPage=${currentPage}">
                                 <c:choose>
                                     <c:when test = "${order.orderStatus.name().equals('ISSUED_BY')}">
                                         <button name="action" value="returnBookOrder">
@@ -75,6 +76,41 @@
                     </tr>
                 </c:forEach>
             </table>
+            <nav>
+                <ul class="pagination">
+                    <c:if test="${currentPage != 1}">
+                        <li class="page-item">
+                            <a class="page-link" href="controller?action=userOrdersPage&recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">
+                                <fmt:message bundle="${locale}" key="pagination.prev"/>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <li class="page-item active">
+                                    <a class="page-link">
+                                            ${i} <span class="sr-only"><fmt:message bundle="${locale}" key="pagination.current"/></span>
+                                    </a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item">
+                                    <a class="page-link" href="controller?action=userOrdersPage&recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <c:if test="${currentPage lt pagesQuantity}">
+                        <li class="page-item">
+                            <a class="page-link" href="controller?action=userOrdersPage&recordsPerPage=${recordsPerPage}&recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">
+                                <fmt:message bundle="${locale}" key="pagination.next"/>
+                            </a>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </c:if>
         <c:if test="${empty orderList}">
             <p class="error-message">

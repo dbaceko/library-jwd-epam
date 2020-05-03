@@ -23,8 +23,11 @@ public class OpenOrdersPage  implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router router = new Router();
+        int currentPage = Integer.parseInt(request.getParameter(JSPAttributeStorage.PAGINATION_CURRENT_PAGE));
+        int recordsPerPage = Integer.parseInt(request.getParameter(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE));
         try {
-            List<BookOrder> bookOrders = bookOrderService.findAllOpenedRequestsOrders();
+            definePaginationContext(request, bookOrderService.findOpenOrdersQuantity(), currentPage, recordsPerPage);
+            List<BookOrder> bookOrders = bookOrderService.findAllOpenOrders(currentPage, recordsPerPage);
             request.setAttribute(JSPAttributeStorage.ORDER_LIST, bookOrders);
             router.setPagePath(PageStorage.OPEN_ORDERS_PAGE);
             router.setRouteType(Router.RouteType.FORWARD);

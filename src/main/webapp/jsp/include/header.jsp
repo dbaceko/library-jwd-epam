@@ -24,7 +24,7 @@
             <li><a class="active" href="${pageContext.request.contextPath}/controller?action=logOut">
                 <fmt:message key="header.logout"/>
             </a></li>
-            <li><a href="${pageContext.request.contextPath}/controller?action=userOrdersPage">
+            <li><a href="${pageContext.request.contextPath}/controller?action=userOrdersPage&recordsPerPage=10&currentPage=1">
                 <fmt:message key="header.userOrdersPage"/>
             </a></li>
         </c:if>

@@ -10,7 +10,9 @@ public interface BookOrderService {
     void addBookOrder(BookOrder bookOrder) throws LibraryServiceException;
     void updateBookOrderStatus(BookOrder bookOrder) throws LibraryServiceException;
     List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryServiceException;
-    List<BookOrder> findAllOrders() throws LibraryServiceException;
-    List<BookOrder> findAllOpenedRequestsOrders() throws LibraryServiceException;
+    List<BookOrder> findOrdersByUserId(int userId, int currentPage, int recordsPerPage) throws LibraryServiceException;
+    int findOrdersQuantityByUserId(int userId) throws LibraryServiceException;
+    List<BookOrder> findAllOpenOrders(int currentPage, int recordsPerPage) throws LibraryServiceException;
+    int findOpenOrdersQuantity() throws LibraryServiceException;
     BookOrdersCache getBookOrdersCache();
 }

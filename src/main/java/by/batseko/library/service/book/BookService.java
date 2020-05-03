@@ -10,7 +10,7 @@ import java.util.List;
 public interface BookService {
     void add(Book book, int quantity) throws LibraryServiceException;
     Book findByUUID(String uuid) throws LibraryServiceException;
-    List<BookDTO> findByFields(Book book) throws LibraryServiceException;
-    List<BookDTO> findAllBookDTO() throws LibraryServiceException;
+    List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException;
+    List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException;
     CommonBookComponentsCache getBookComponentsCache();
 }

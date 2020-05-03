@@ -75,6 +75,10 @@ public class SQLQueriesStorage {
 
     public static final String UPDATE_BOOK_ORDER_STATUS = "UPDATE book_order SET order_status_id = (?) WHERE uuid = (?)";
 
+    public static final String FIND_BOOK_ORDERS_QUANTITY_BY_USER_ID = "SELECT COUNT(uuid) FROM book_order WHERE user_id = (?)";
+
+    public static final String FIND_OPEN_BOOK_ORDERS_QUANTITY = "SELECT COUNT(uuid) FROM book_order WHERE order_status_id = 1 OR order_status_id = 3 ";
+
     public static final String FIND_BOOK_ORDER_BY_UUID = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
             "book.pages_quantity as \"book.pages_quantity\", book.description as \"book.description\", " +
@@ -111,7 +115,26 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE book_order.user_id = (?)";
+            "WHERE book_order.user_id = (?) LIMIT (?) OFFSET (?) ";
+
+    public static final String FIND_ALL_BOOK_ORDERS_BY_USER_ID = "SELECT book_order.*, " +
+            "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
+            "book.pages_quantity as \"book.pages_quantity\", book.description as \"book.description\", " +
+            "book_genre.uuid as \"book_genre.uuid\", book_genre.genre as \"book_genre.genre\", " +
+            "book_publisher.uuid as \"book_publisher.uuid\", book_publisher.title as \"book_publisher.title\", " +
+            "book_author.uuid as \"book_author.uuid\", book_author.author as \"book_author.author\", " +
+            "book_language.uuid as \"book_language.uuid\" , book_language.language as \"book_language.language\"," +
+            "user.id as \"user.id\", user.login as \"user.login\"," +
+            "book_instance.uuid as \"book_instance.uuid\", book_instance.is_available as \"book_instance.is_available\"" +
+            "FROM book_order " +
+            "LEFT JOIN book_instance ON book_order.book_instance_uuid = book_instance.uuid " +
+            "LEFT JOIN book ON book_instance.book_uuid = book.uuid " +
+            "LEFT JOIN book_genre ON book.genre_uuid = book_genre.uuid "  +
+            "LEFT JOIN book_publisher ON book.publisher_uuid = book_publisher.uuid " +
+            "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
+            "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
+            "LEFT JOIN user ON user.id = book_order.user_id " +
+            "WHERE book_order.user_id = (?) ";
 
     public static final String FIND_BOOK_ORDERS = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
@@ -148,7 +171,7 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE order_status_id = 1 OR order_status_id = 3 ";
+            "WHERE order_status_id = 1 OR order_status_id = 3 LIMIT ? OFFSET ? ";
 
     private SQLQueriesStorage() {}
 }

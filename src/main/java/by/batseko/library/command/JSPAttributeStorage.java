@@ -53,6 +53,10 @@ public class JSPAttributeStorage {
 
     public static final String ORDER_LIST = "orderList";
 
+    public static final String PAGINATION_CURRENT_PAGE = "currentPage";
+    public static final String PAGINATION_RECORDS_PER_PAGE = "recordsPerPage";
+    public static final String PAGINATION_PAGES_QUANTITY = "pagesQuantity";
+
     private JSPAttributeStorage(){}
 }
 
