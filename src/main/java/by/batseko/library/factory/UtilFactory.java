@@ -1,13 +1,15 @@
 package by.batseko.library.factory;
 
+import by.batseko.library.util.EmailDistributor;
 import by.batseko.library.util.Encryption;
-import by.batseko.library.validatior.UserValidator;
 
 public class UtilFactory {
     private final Encryption encryption;
+    private final EmailDistributor emailDistributor;
 
     private UtilFactory() {
         encryption = new Encryption();
+        emailDistributor = new EmailDistributor();
     }
 
     private static class UtilFactorySingletonHolder {
@@ -20,5 +22,9 @@ public class UtilFactory {
 
     public Encryption getEncryption() {
         return encryption;
+    }
+
+    public EmailDistributor getEmailDistributor() {
+        return emailDistributor;
     }
 }
