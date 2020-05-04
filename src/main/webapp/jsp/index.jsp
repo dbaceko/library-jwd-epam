@@ -17,7 +17,7 @@
                 </p>
             </div>
         </c:if>
-        <a href="${pageContext.request.contextPath}/controller?action=bookCatalogPage">
+        <a href="${pageContext.request.contextPath}/controller?action=bookCatalogPage&recordsPerPage=10&currentPage=1">
            temp link
         </a>
     </main>

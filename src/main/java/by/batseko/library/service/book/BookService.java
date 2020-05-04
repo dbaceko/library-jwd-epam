@@ -11,6 +11,7 @@ public interface BookService {
     void add(Book book, int quantity) throws LibraryServiceException;
     Book findByUUID(String uuid) throws LibraryServiceException;
     List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException;
+    int findBookQuantityByFields(Book book) throws LibraryServiceException;
     List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException;
     CommonBookComponentsCache getBookComponentsCache();
 }

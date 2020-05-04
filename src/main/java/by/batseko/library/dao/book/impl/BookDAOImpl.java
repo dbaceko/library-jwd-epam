@@ -18,6 +18,8 @@ import java.util.List;
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
 
+    private static final String LIMIT_OFFSET_STATEMENT = " GROUP BY uuid LIMIT ? OFFSET ? ";
+
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
         Connection connection;
@@ -74,20 +76,37 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     }
 
     @Override
-    public List<BookDTO> findBooksDTOByFields(Book book) throws LibraryDAOException {
-        return findBooksDTOByQuery(constructFindQueryFromBook(book));
+    public int findBookQuantityByFields(Book book) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(constructFindQueryFromBook(book, SQLQueriesStorage.FIND_ALL_BOOKS_QUANTITY));
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        }
     }
 
     @Override
-    public List<BookDTO> findAllBooksDTO() throws LibraryDAOException {
-        return findBooksDTOByQuery(SQLQueriesStorage.FIND_ALL_BOOKS);
+    public List<BookDTO> findBooksDTOByFields(Book book, int currentPage, int recordsPerPage) throws LibraryDAOException {
+        return findBooksDTOByQuery(constructFindQueryFromBook(book, SQLQueriesStorage.FIND_ALL_BOOKS)
+                        + LIMIT_OFFSET_STATEMENT, currentPage, recordsPerPage);
     }
 
-    private List<BookDTO> findBooksDTOByQuery(String query) throws LibraryDAOException {
+    @Override
+    public List<BookDTO> findAllBooksDTO(int currentPage, int recordsPerPage) throws LibraryDAOException {
+        return findBooksDTOByQuery(SQLQueriesStorage.FIND_ALL_BOOKS + LIMIT_OFFSET_STATEMENT, currentPage, recordsPerPage);
+    }
+
+    private List<BookDTO> findBooksDTOByQuery(String query, int currentPage, int recordsPerPage) throws LibraryDAOException {
         List<BookDTO> bookDTOList;
+        ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, recordsPerPage);
+            preparedStatement.setInt(2, (currentPage - 1) * recordsPerPage);
+            resultSet = preparedStatement.executeQuery();
             resultSet.last();
             int listSize = resultSet.getRow();
             resultSet.beforeFirst();
@@ -100,6 +119,8 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
         }
         if (bookDTOList.size() == 1 && bookDTOList.get(0).getBook().getUuid() == null) {
                 bookDTOList = Collections.emptyList();

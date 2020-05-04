@@ -21,55 +21,94 @@
     </c:if>
     <div class="search-wrapper">
         <aside class="search-form">
-            <form class="form-wrapper" method="post" action="controller"  id="book-search-form">
+            <form class="form-wrapper" method="get" action="controller"  id="book-search-form">
                 <fieldset class="fieldset">
-                    <input type="hidden" name="action" value="findBook">
+                    <input type="hidden" name="action" value="bookCatalogPage">
+                    <input type="hidden" name="recordsPerPage" value="10">
+                    <input type="hidden" name="currentPage" value="1">
                     <legend class="title">
                         <fmt:message  bundle="${locale}" key="book.btn.findBook"/>
                     </legend>
                     <label class="book-select_wrapper">
-                        <select class="book-select" name="genre" required>
-                            <option selected disabled value=""><fmt:message bundle="${locale}" key="book.genre" /></option>
+                        <select class="book-select" name="genre">
                             <option value=""><fmt:message bundle="${locale}" key="book.genre.any"/></option>
+                            <c:if test="${empty bookPreviousData}">
+                                <option selected disabled value=""><fmt:message bundle="${locale}" key="book.genre" /></option>
+                            </c:if>
                             <c:forEach var="genre" items="${genres}">
-                                <option value="${genre.uuid}">${genre.genreTitle}</option>
+                                <c:choose>
+                                    <c:when test="${not empty bookPreviousData && bookPreviousData.genre.uuid.equals(genre.uuid)}">
+                                        <option selected value="${genre.uuid}">${genre.genreTitle}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${genre.uuid}">${genre.genreTitle}</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </select>
-                        <select class="book-select" name="bookLanguage" required>
-                            <option selected disabled value=""><fmt:message bundle="${locale}" key="book.language"/></option>
+                        <select class="book-select" name="bookLanguage">
                             <option value=""><fmt:message bundle="${locale}" key="book.language.any"/></option>
+                            <c:if test="${empty bookPreviousData}">
+                                <option selected disabled value=""><fmt:message bundle="${locale}" key="book.language" /></option>
+                            </c:if>
                             <c:forEach var="bookLanguage" items="${bookLanguages}">
-                                <option value="${bookLanguage.uuid}">${bookLanguage.languageTitle}</option>
+                                <c:choose>
+                                    <c:when test="${not empty bookPreviousData && bookPreviousData.bookLanguage.uuid.equals(bookLanguage.uuid)}">
+                                        <option selected value="${bookLanguage.uuid}">${bookLanguage.languageTitle}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${bookLanguage.uuid}">${bookLanguage.languageTitle}</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </select>
-                        <select class="book-select" name="publisher" required>
-                            <option selected disabled value=""><fmt:message bundle="${locale}" key="book.publisher"/></option>
+                        <select class="book-select" name="publisher">
                             <option value=""><fmt:message bundle="${locale}" key="book.publisher.any"/></option>
+                            <c:if test="${empty bookPreviousData}">
+                                <option selected disabled value=""><fmt:message bundle="${locale}" key="book.publisher" /></option>
+                            </c:if>
                             <c:forEach var="publisher" items="${publishers}">
-                                <option value="${publisher.uuid}">${publisher.publisherTitle}</option>
+                                <c:choose>
+                                    <c:when test="${not empty bookPreviousData && bookPreviousData.publisher.uuid.equals(publisher.uuid)}">
+                                        <option selected value="${publisher.uuid}">${publisher.publisherTitle}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${publisher.uuid}">${publisher.publisherTitle}</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </select>
-                        <select class="book-select" name="author" required>
-                            <option selected disabled value=""><fmt:message bundle="${locale}" key="book.author"/></option>
+                        <select class="book-select" name="author">
                             <option value=""><fmt:message bundle="${locale}" key="book.author.any"/></option>
                             <c:forEach var="author" items="${authors}">
-                                <option value="${author.uuid}">${author.authorName}</option>
+                                <c:choose>
+                                    <c:when test="${not empty bookPreviousData && bookPreviousData.author.uuid.equals(author.uuid)}">
+                                        <option selected value="${author.uuid}">${author.authorName}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${author.uuid}">${author.authorName}</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </select>
                     </label>
                     <label>
                         <span><fmt:message  bundle="${locale}" key="book.title"/></span>
                         <input type="text"  name="bookTitle" class="input"
-                                <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.title} </c:if>
-                                />
+                           <c:if test="${not empty bookPreviousData}">value="${bookPreviousData.title}"</c:if>
+                        >
                         <span><fmt:message  bundle="${locale}" key="book.publishYear"/></span>
                         <input type="number"  name="bookPublishYear" class="input"
-                                <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.publishYear} </c:if>
-                                />
+                            <c:if test="${not empty bookPreviousData  && bookPreviousData.publishYear != 0}">
+                               value="${bookPreviousData.publishYear}"
+                            </c:if>
+                        >
                         <span><fmt:message  bundle="${locale}" key="book.pagesQuantity"/></span>
                         <input type="number"  name="bookPagesQuantity" class="input"
-                                <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.pagesQuantity} </c:if>
-                                />
+                            <c:if test="${not empty bookPreviousData && bookPreviousData.pagesQuantity != 0}">
+                               value="${bookPreviousData.pagesQuantity}"
+                            </c:if>
+                        >
                     </label>
                     <label class="inputfield">
                         <input class="btn" type="submit" value=<fmt:message  bundle="${locale}" key="book.btn.findBook"/>/>
@@ -137,6 +176,41 @@
                 </c:forEach>
             </table>
         </c:if>
+        <nav>
+            <ul class="pagination">
+                <c:if test="${currentPage != 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="controller?action=bookCatalogPage&recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">
+                            <fmt:message bundle="${locale}" key="pagination.prev"/>
+                        </a>
+                    </li>
+                </c:if>
+                <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <li class="page-item active">
+                                <a class="page-link">
+                                        ${i} <span class="sr-only"><fmt:message bundle="${locale}" key="pagination.current"/></span>
+                                </a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item">
+                                <a class="page-link" href="controller?action=bookCatalogPage&recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+
+                <c:if test="${currentPage lt pagesQuantity}">
+                    <li class="page-item">
+                        <a class="page-link" href="controller?action=bookCatalogPage&recordsPerPage=${recordsPerPage}&recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">
+                            <fmt:message bundle="${locale}" key="pagination.next"/>
+                        </a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
         <c:if test="${empty bookDTO}">
             <p class="error-message">
                 <fmt:message bundle="${locale}" key="find.bookDTO.isEmpty"/>

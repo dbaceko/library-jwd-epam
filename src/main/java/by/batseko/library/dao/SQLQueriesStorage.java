@@ -57,6 +57,7 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_publisher ON book.publisher_uuid = book_publisher.uuid " +
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid ";
+    public static final String FIND_ALL_BOOKS_QUANTITY = "SELECT COUNT(book.uuid) FROM book ";
     public static final String FIND_BOOK_UUID_BY_FIELDS = "SELECT uuid FROM book " +
             "WHERE book.genre_uuid = (?) AND book.language_uuid = (?) AND book.publisher_uuid = (?) " +
             "AND book.author_uuid = (?) AND book.title = (?) AND book.publish_year = (?) AND book.pages_quantity = (?)";

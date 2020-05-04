@@ -221,8 +221,9 @@ public abstract class BaseDAO {
 
     private static final String MIDDLE_OF_PREDICATE = " = '";
     private static final String END_OF_PREDICATE = "' AND ";
+    private static final String WHERE_STATEMENT = " WHERE ";
 
-    protected String constructFindQueryFromBook(Book book) {
+    protected String constructFindQueryFromBook(Book book, String query) {
         StringBuilder queryWhereStatement = new StringBuilder();
         String bookGenreUUID = injectionProtection(book.getGenre().getUuid());
         String bookAuthorUUID = injectionProtection(book.getAuthor().getUuid());
@@ -254,9 +255,9 @@ public abstract class BaseDAO {
             queryWhereStatement.append(BOOK_PAGES_QUANTITY_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPagesQuantity + END_OF_PREDICATE);
         }
         if (queryWhereStatement.length() == 0) {
-            return SQLQueriesStorage.FIND_ALL_BOOKS;
+            return query;
         } else {
-            return SQLQueriesStorage.FIND_ALL_BOOKS + " WHERE "
+            return query + WHERE_STATEMENT
                     + queryWhereStatement.delete(
                     queryWhereStatement.length() - END_OF_PREDICATE.length() + 1, queryWhereStatement.length());
         }

@@ -57,7 +57,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException {
         try {
-            return bookDAO.findBooksDTOByFields(book);
+            return bookDAO.findBooksDTOByFields(book, currentPage, recordsPerPage);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int findBookQuantityByFields(Book book) throws LibraryServiceException {
+        try {
+            return bookDAO.findBookQuantityByFields(book);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
@@ -66,7 +75,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException {
         try {
-            return bookDAO.findAllBooksDTO();
+            return bookDAO.findAllBooksDTO(currentPage, recordsPerPage);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }

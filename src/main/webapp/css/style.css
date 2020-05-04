@@ -391,3 +391,21 @@ th:first-child, td:first-child {
     background: rgba(245, 245, 245, 0.9);
 }
 
+nav .pagination {
+    text-align:center;
+    margin: 30px;
+}
+
+nav .pagination li {
+    display: inline;
+    margin-right: 5px;
+}
+
+nav .pagination li a{
+    text-decoration: none;
+    color: #666
+}
+
+.content {
+    margin-bottom: 30px;
+}
