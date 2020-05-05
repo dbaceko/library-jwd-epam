@@ -13,6 +13,7 @@ import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
+import by.batseko.library.util.EmailDistributor;
 import by.batseko.library.util.Encryption;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
@@ -26,18 +27,21 @@ public class UserServiceImpl implements UserService {
 
     private static final int USER_ID_COOKIE_INDEX = 0;
     private static final int TOKEN_VALUE_COOKIE_INDEX = 1;
+    private static final String UPDATING_USER_STATUS_EMAIL_SUBJECT = "Your status is updated";
+    private static final String UPDATING_USER_STATUS_EMAIL_TEXT = "Your status is: ";
 
     private final UserValidator validator;
     private final Encryption encryption;
     private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
+    private final EmailDistributor emailDistributor;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
         encryption = UtilFactory.getInstance().getEncryption();
         activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
-
+        emailDistributor = UtilFactory.getInstance().getEmailDistributor();
     }
 
     @Override
@@ -194,6 +198,9 @@ public class UserServiceImpl implements UserService {
     public void updateUserBanStatus(User user) throws LibraryServiceException {
         try {
             userDAO.updateUserBanStatus(user);
+            String status = user.getBanned() ? "banned" : "unbanned";
+            emailDistributor.addEmailToSendingQueue(
+                    UPDATING_USER_STATUS_EMAIL_SUBJECT, UPDATING_USER_STATUS_EMAIL_TEXT + status, user.getEmail());
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }

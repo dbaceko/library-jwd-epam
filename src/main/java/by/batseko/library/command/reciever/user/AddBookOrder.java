@@ -46,9 +46,10 @@ public class AddBookOrder implements Command {
             .setOrderType(OrderType.valueOf(request.getParameter(JSPAttributeStorage.ORDER_TYPE_RESULT)))
             .setBookInstance(bookInstance)
             .setUser(
-                new UserBuilder().setId((Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID))
-                    .setLogin((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
-                    .build())
+                new UserBuilder()
+                        .setId((Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID))
+                        .setLogin((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
+                        .build())
             .build();
     }
 }

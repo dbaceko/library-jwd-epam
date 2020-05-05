@@ -7,7 +7,9 @@ import by.batseko.library.entity.order.OrderStatus;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.DAOFactory;
+import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.service.book.BookOrderService;
+import by.batseko.library.util.EmailDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,14 +19,18 @@ import java.util.UUID;
 public class BookOrderServiceImpl implements BookOrderService {
     private static final Logger LOGGER = LogManager.getLogger(BookOrderServiceImpl.class);
 
+    private static final String UPDATING_ORDER_STATUS_EMAIL_SUBJECT = "Status of your order is updated";
+
     private final BookOrderDAO bookOrderDAO;
     private final BookInstanceDAO bookInstanceDAO;
     private final BookOrdersCache bookOrdersCache;
+    private final EmailDistributor emailDistributor;
 
     public BookOrderServiceImpl(){
         bookOrderDAO = DAOFactory.getInstance().getBookOrderDAO();
         bookInstanceDAO = DAOFactory.getInstance().getBookInstanceDAO();
         bookOrdersCache = BookOrdersCache.getInstance();
+        emailDistributor = UtilFactory.getInstance().getEmailDistributor();
     }
 
     @Override
@@ -67,6 +73,13 @@ public class BookOrderServiceImpl implements BookOrderService {
             } else {
                 bookOrderDAO.updateBookOrderStatus(bookOrder);
             }
+            String author = bookOrder.getBookInstance().getBook().getAuthor().getAuthorName();
+            String title = bookOrder.getBookInstance().getBook().getTitle();
+            String status = bookOrder.getOrderStatus().name().replace('_', ' ').toLowerCase();
+            emailDistributor.addEmailToSendingQueue(
+                    UPDATING_ORDER_STATUS_EMAIL_SUBJECT,
+                    String.format("Status of your order %s, %s is: %s",title, author, status),
+                    bookOrder.getUser().getEmail());
             updateBookOrderCacheOrderStatus(bookOrder);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);

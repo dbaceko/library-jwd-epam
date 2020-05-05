@@ -1,5 +1,6 @@
 package by.batseko.library.command.reciever.user;
 
+import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.Command;
@@ -29,12 +30,20 @@ public class CancelBookOrder implements Command {
         try {
             String orderUUID = request.getParameter(JSPAttributeStorage.ORDER_UUID);
             String orderUserLogin = request.getParameter(JSPAttributeStorage.USER_LOGIN);
+            String orderUserEmail = request.getParameter(JSPAttributeStorage.USER_EMAIL);
             BookInstance bookInstance = new BookInstance();
             bookInstance.setUuid(request.getParameter(JSPAttributeStorage.BOOK_INSTANCE_UUID));
+            bookInstance.setBook(new BookBuilder()
+                    .setTitle(request.getParameter(JSPAttributeStorage.BOOK_TITLE))
+                    .setAuthorName(request.getParameter(JSPAttributeStorage.BOOK_AUTHOR))
+                    .build());
             BookOrder bookOrder = new BookOrderBuilder().setUuid(orderUUID)
                     .setOrderStatus(OrderStatus.CLOSE)
                     .setBookInstance(bookInstance)
-                    .setUser(new UserBuilder().setLogin(orderUserLogin).build())
+                    .setUser(new UserBuilder()
+                            .setLogin(orderUserLogin)
+                            .setEmail(orderUserEmail)
+                            .build())
                     .build();
             bookOrderService.updateBookOrderStatus(bookOrder);
             router.setPagePath(request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND));

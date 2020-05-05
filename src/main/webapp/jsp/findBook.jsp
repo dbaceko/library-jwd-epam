@@ -150,6 +150,8 @@
                                 <form class="book_order-form" action="controller" method="post">
                                     <input type="hidden" name="action" value="addBookOrder">
                                     <input type="hidden" name="bookUUID" value="${bookDTO.book.uuid}">
+                                    <input type="hidden" name="redirectPageCommand" value="bookCatalogPage&recordsPerPage=${recordsPerPage}&currentPage=${currentPage}">
+
                                     <c:if test = "${bookDTO.totalAvailableBooksQuantity > 0}">
                                         <fieldset>
                                             <label class="book-select_wrapper">

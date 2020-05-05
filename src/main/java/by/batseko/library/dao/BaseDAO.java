@@ -202,6 +202,7 @@ public abstract class BaseDAO {
                 .setUser(new UserBuilder()
                         .setId(resultSet.getInt(USER_ID_COLUMN_NAME))
                         .setLogin(resultSet.getString(USER_LOGIN_COLUMN_NAME))
+                        .setEmail(resultSet.getString(USER_EMAIL_COLUMN_NAME))
                         .build()
                 )
                 .setBookInstance(bookInstance)

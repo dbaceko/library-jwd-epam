@@ -55,6 +55,9 @@
                                 <input type="hidden" name="orderUUID" value="${order.uuid}">
                                 <input type="hidden" name="bookInstanceUUID" value="${order.bookInstance.uuid}">
                                 <input type="hidden" name="login" value="${order.user.login}">
+                                <input type="hidden" name="email" value="${order.user.email}">
+                                <input type="hidden" name="bookTitle" value="${order.bookInstance.book.title}">
+                                <input type="hidden" name="author" value="${order.bookInstance.book.author.authorName}">
                                 <input type="hidden" name="redirectPageCommand" value="userOrdersPage&recordsPerPage=${recordsPerPage}&currentPage=${currentPage}">
                                 <c:choose>
                                     <c:when test = "${order.orderStatus.name().equals('ISSUED_BY')}">

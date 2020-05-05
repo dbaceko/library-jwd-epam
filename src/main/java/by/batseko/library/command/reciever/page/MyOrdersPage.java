@@ -30,8 +30,8 @@ public class MyOrdersPage implements Command {
             List<BookOrder> bookOrders = bookOrderService.getBookOrdersCache()
                     .get((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
                     .getAllValues();
-            definePaginationContext(request, bookOrders.size()-1, currentPage, recordsPerPage);
-            bookOrders = bookOrders.subList(arrayOrdersShift, Math.min(arrayOrdersShift + recordsPerPage, bookOrders.size() - 1));
+            definePaginationContext(request, bookOrders.size(), currentPage, recordsPerPage);
+            bookOrders = bookOrders.subList(arrayOrdersShift, Math.min(arrayOrdersShift + recordsPerPage, bookOrders.size()));
             request.setAttribute(JSPAttributeStorage.ORDER_LIST, bookOrders);
             router.setPagePath(PageStorage.USER_ORDERS_PAGE);
             router.setRouteType(Router.RouteType.FORWARD);
