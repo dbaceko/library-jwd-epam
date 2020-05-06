@@ -44,16 +44,6 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
     }
 
     @Override
-    public int findAvailableBooksQuantityByUUID(String bookUUID) throws LibraryDAOException {
-        return findBooksQuantityByUUID(bookUUID, SQLQueriesStorage.FIND_AVAILABLE_BOOKS_QUANTITY_BY_UUID);
-    }
-
-    @Override
-    public int findBooksQuantityByUUID(String bookUUID) throws LibraryDAOException {
-        return findBooksQuantityByUUID(bookUUID, SQLQueriesStorage.FIND_BOOKS_QUANTITY_BY_UUID);
-    }
-
-    @Override
     public List<String> findAllAvailableBookInstanceUUIDsByBookUUID(String bookUUID) throws LibraryDAOException {
         List<String> bookInstanceUUIDs;
         ResultSet resultSet = null;
@@ -79,25 +69,6 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
             closeResultSet(resultSet);
         }
         return bookInstanceUUIDs;
-    }
-
-    private int findBooksQuantityByUUID(String bookUUID, String sqlQuery) throws LibraryDAOException {
-        ResultSet resultSet = null;
-        try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)){
-            preparedStatement.setString(1, bookUUID);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                LOGGER.debug(String.format("Book not found by uuid %s", bookUUID));
-                throw new LibraryDAOException("query.book.read.notFound");
-            }
-        } catch (SQLException | ConnectionPoolException e) {
-            throw new LibraryDAOException("service.commonError", e);
-        } finally {
-            closeResultSet(resultSet);
-        }
     }
 }
 
