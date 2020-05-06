@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     public String generateRememberUserToken(int userId) throws LibraryServiceException {
         String token = UUID.randomUUID().toString();
         try {
-            userDAO.setRememberUserToken(userId, token);
+            userDAO.updateRememberUserToken(userId, token);
             return token + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + userId;
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);

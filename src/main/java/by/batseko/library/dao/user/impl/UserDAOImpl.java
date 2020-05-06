@@ -74,23 +74,11 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
-    public void setRememberUserToken(int userId, String userToken) throws LibraryDAOException {
+    public void updateRememberUserToken(int userId, String userToken) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN_BY_ID)) {
             preparedStatement.setString(1, userToken);
             preparedStatement.setInt(2, userId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException | ConnectionPoolException e) {
-            throw new LibraryDAOException("service.commonError", e);
-        }
-    }
-
-    @Override
-    public void setRememberUserToken(String userEmail, String userToken) throws LibraryDAOException {
-        try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN_BY_EMAIL)) {
-            preparedStatement.setString(1, userToken);
-            preparedStatement.setString(2, userEmail);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
@@ -192,17 +180,6 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             throw new LibraryDAOException("service.commonError", e);
         }
         return users;
-    }
-
-    @Override
-    public void deleteUserById(int userId) throws LibraryDAOException {
-        try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.DELETE_USER)) {
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException | ConnectionPoolException e) {
-            throw new LibraryDAOException("query.user.deleteUser.commonError");
-        }
     }
 
     private User extractFoundedUserFromResultSet(ResultSet resultSet) throws SQLException, LibraryDAOException {
