@@ -13,8 +13,8 @@ import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
-import by.batseko.library.util.EmailDistributor;
-import by.batseko.library.util.HashGenerator;
+import by.batseko.library.util.EmailDistributorUtil;
+import by.batseko.library.util.HashGeneratorUtil;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,24 +32,24 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserValidator validator;
-    private final HashGenerator hashGenerator;
+    private final HashGeneratorUtil hashGeneratorUtil;
     private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
-    private final EmailDistributor emailDistributor;
+    private final EmailDistributorUtil emailDistributorUtil;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
-        hashGenerator = UtilFactory.getInstance().getHashGenerator();
+        hashGeneratorUtil = UtilFactory.getInstance().getHashGeneratorUtil();
         activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
-        emailDistributor = UtilFactory.getInstance().getEmailDistributor();
+        emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
     }
 
     @Override
     public User logInByPassword(String login, String password) throws LibraryServiceException {
         try {
             User user = userDAO.findUserByLogin(login);
-            if (hashGenerator.validatePassword(password, user.getPassword())) {
+            if (hashGeneratorUtil.validatePassword(password, user.getPassword())) {
                 LOGGER.info(String.format("Add user %s to cache", user));
                 initCacheAfterLogIn(user);
                 return user;
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
             String token = generateRememberUserToken(user.getId());
             String userLogInLink = pageContext + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
                     + '&' + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN + '=' + token;
-            emailDistributor.addEmailToSendingQueue(
+            emailDistributorUtil.addEmailToSendingQueue(
                     FORGET_PASSWORD_EMAIL_SUBJECT,
                     String.format("Your link for log in is: %s", userLogInLink),
                     userEmail);
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(hashGenerator.generateHash(user.getPassword()));
+            user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.registerUser(user);
         } catch (EncryptionException e) {
             LOGGER.warn(e);
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(hashGenerator.generateHash(user.getPassword()));
+            user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.updateUserProfileData(user);
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
@@ -215,7 +215,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.updateUserBanStatus(user);
             String status = user.getBanned() ? "banned" : "unbanned";
-            emailDistributor.addEmailToSendingQueue(
+            emailDistributorUtil.addEmailToSendingQueue(
                     UPDATING_USER_STATUS_EMAIL_SUBJECT,
                     String.format("Your status is: %s", status),
                     user.getEmail());

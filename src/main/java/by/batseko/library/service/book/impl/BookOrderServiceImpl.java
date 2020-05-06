@@ -9,7 +9,7 @@ import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.service.book.BookOrderService;
-import by.batseko.library.util.EmailDistributor;
+import by.batseko.library.util.EmailDistributorUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,13 +24,13 @@ public class BookOrderServiceImpl implements BookOrderService {
     private final BookOrderDAO bookOrderDAO;
     private final BookInstanceDAO bookInstanceDAO;
     private final BookOrdersCache bookOrdersCache;
-    private final EmailDistributor emailDistributor;
+    private final EmailDistributorUtil emailDistributorUtil;
 
     public BookOrderServiceImpl(){
         bookOrderDAO = DAOFactory.getInstance().getBookOrderDAO();
         bookInstanceDAO = DAOFactory.getInstance().getBookInstanceDAO();
         bookOrdersCache = BookOrdersCache.getInstance();
-        emailDistributor = UtilFactory.getInstance().getEmailDistributor();
+        emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BookOrderServiceImpl implements BookOrderService {
             String author = bookOrder.getBookInstance().getBook().getAuthor().getAuthorName();
             String title = bookOrder.getBookInstance().getBook().getTitle();
             String status = bookOrder.getOrderStatus().name().replace('_', ' ').toLowerCase();
-            emailDistributor.addEmailToSendingQueue(
+            emailDistributorUtil.addEmailToSendingQueue(
                     UPDATING_ORDER_STATUS_EMAIL_SUBJECT,
                     String.format("Status of your order %s, %s is: %s",title, author, status),
                     bookOrder.getUser().getEmail());

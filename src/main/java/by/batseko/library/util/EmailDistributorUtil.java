@@ -17,8 +17,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class EmailDistributor {
-    private static final Logger LOGGER = LogManager.getLogger(EmailDistributor.class);
+public class EmailDistributorUtil {
+    private static final Logger LOGGER = LogManager.getLogger(EmailDistributorUtil.class);
 
     private static final int DEFAULT_DELAY_TO_SEND_EMAILS = 1;
     
@@ -33,10 +33,10 @@ public class EmailDistributor {
     private final Session mailSession;
     private final CopyOnWriteArrayList<Email> emailList;
      
-    public EmailDistributor (){
+    public EmailDistributorUtil(){
         Properties mailProperties = new Properties();
         try {
-            mailProperties.load(EmailDistributor.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE));
+            mailProperties.load(EmailDistributorUtil.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE));
         } catch (IOException e) {
             LOGGER.fatal("Can't initialize mail properties", e);
             throw new RuntimeException("Can't initialize mail properties", e);
