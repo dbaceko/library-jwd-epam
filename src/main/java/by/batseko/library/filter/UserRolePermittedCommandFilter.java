@@ -29,7 +29,8 @@ public class UserRolePermittedCommandFilter implements Filter {
             SWITCH_LANG,
             REGISTER_USER,
             LOG_IN,
-            BOOK_CATALOG_PAGE
+            BOOK_CATALOG_PAGE,
+            FORGET_PASSWORD_GENERATE_EMAIL
     );
 
     private static final Set<CommandStorage> userCommands = EnumSet.of(

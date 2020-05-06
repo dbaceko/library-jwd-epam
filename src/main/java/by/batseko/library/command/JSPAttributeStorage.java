@@ -3,6 +3,7 @@ package by.batseko.library.command;
 public class JSPAttributeStorage {
     public static final String COMMAND = "action";
     public static final String REDIRECT_PAGE_COMMAND = "redirectPageCommand";
+    public static final String FORGET_PASSWORD_LOG_IN = "logInByForgetPasswordLink";
 
     public static final String LANGUAGE_CURRENT_PAGE = "lang";
     public static final String LANGUAGE_SWITCH_PARAMETER = "language";

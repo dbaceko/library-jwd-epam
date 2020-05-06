@@ -401,7 +401,8 @@ nav .pagination li {
     margin-right: 5px;
 }
 
-nav .pagination li a{
+nav .pagination li a,
+.form-wrapper a {
     text-decoration: none;
     color: #666
 }

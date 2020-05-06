@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailDistributor {
     private static final Logger LOGGER = LogManager.getLogger(EmailDistributor.class);
 
-    private static final int DEFAULT_DELAY_TO_SEND_EMAILS = 5;
+    private static final int DEFAULT_DELAY_TO_SEND_EMAILS = 1;
     
     private static final String PROPERTIES_FILE = "email.properties";
     private static final String HOST_PROPERTY_NAME = "mail.smtp.host";

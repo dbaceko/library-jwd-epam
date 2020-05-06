@@ -25,10 +25,11 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
-    private static final int USER_ID_COOKIE_INDEX = 0;
-    private static final int TOKEN_VALUE_COOKIE_INDEX = 1;
+    private static final int TOKEN_VALUE_COOKIE_INDEX = 0;
+    private static final int USER_ID_COOKIE_INDEX = 1;
     private static final String UPDATING_USER_STATUS_EMAIL_SUBJECT = "Your status is updated";
-    private static final String UPDATING_USER_STATUS_EMAIL_TEXT = "Your status is: ";
+    private static final String FORGET_PASSWORD_EMAIL_SUBJECT = "Forget password";
+
 
     private final UserValidator validator;
     private final Encryption encryption;
@@ -68,7 +69,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User logInByToken(String token) throws LibraryServiceException {
         try {
-            LOGGER.warn(token);
             String[] tokenComponents = token.split(JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER);
             int userId = Integer.parseInt(tokenComponents[USER_ID_COOKIE_INDEX]);
             String tokenValue = tokenComponents[TOKEN_VALUE_COOKIE_INDEX];
@@ -139,7 +139,23 @@ public class UserServiceImpl implements UserService {
         String token = UUID.randomUUID().toString();
         try {
             userDAO.setRememberUserToken(userId, token);
-            return userId + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + token;
+            return token + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + userId;
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void sendLogInTokenIfForgetPassword(String userEmail, String pageContext) throws LibraryServiceException {
+        try {
+            User user = userDAO.findUserByEmail(userEmail);
+            String token = generateRememberUserToken(user.getId());
+            String userLogInLink = pageContext + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
+                    + '&' + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN + '=' + token;
+            emailDistributor.addEmailToSendingQueue(
+                    FORGET_PASSWORD_EMAIL_SUBJECT,
+                    String.format("Your link for log in is: %s", userLogInLink),
+                    userEmail);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
@@ -200,7 +216,9 @@ public class UserServiceImpl implements UserService {
             userDAO.updateUserBanStatus(user);
             String status = user.getBanned() ? "banned" : "unbanned";
             emailDistributor.addEmailToSendingQueue(
-                    UPDATING_USER_STATUS_EMAIL_SUBJECT, UPDATING_USER_STATUS_EMAIL_TEXT + status, user.getEmail());
+                    UPDATING_USER_STATUS_EMAIL_SUBJECT,
+                    String.format("Your status is: %s", status),
+                    user.getEmail());
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }

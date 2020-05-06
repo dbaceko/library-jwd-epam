@@ -45,6 +45,9 @@
                 <input class="btn" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
             </label>
         </fieldset>
+        <a href="${pageContext.request.contextPath}/jsp/forgetPassword.jsp">
+            <fmt:message bundle="${locale}" key="login.forgetPassword"/>
+        </a>
     </form>
 </main>
 <jsp:include page="include/footer.jsp"/>

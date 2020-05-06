@@ -81,5 +81,6 @@ public class UserRolePermittedPageFilter implements Filter {
         guestPages.add(PageStorage.HOME);
         guestPages.add(PageStorage.LOG_IN);
         guestPages.add(PageStorage.REGISTER_USER);
+        guestPages.add(PageStorage.FORGET_PASSWORD);
     }
 }

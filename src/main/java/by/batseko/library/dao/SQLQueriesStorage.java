@@ -5,6 +5,7 @@ public class SQLQueriesStorage {
             "(email, login, password, firstname, lastname, passport_serial_number, address, phone) " +
             "value (?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String FIND_USER_BY_LOGIN = "SELECT * FROM user WHERE login = (?)";
+    public static final String FIND_USER_BY_EMAIL = "SELECT * FROM user WHERE email = (?)";
     public static final String FIND_USER_BY_ID = "SELECT * FROM user WHERE id = (?)";
     public static final String FIND_USER_BY_ID_AND_TOKEN = "SELECT * FROM user WHERE id = (?) AND log_in_token = (?)";
     public static final String FIND_ALL_USERS = "SELECT * FROM user";
@@ -13,7 +14,8 @@ public class SQLQueriesStorage {
     public static final String UPDATE_USER_BAN_STATUS = "UPDATE user SET is_banned = (?) WHERE id = (?)";
     public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
     public static final String UPDATE_USER_LOG_IN_TOKEN_TO_NULL = "UPDATE user SET user.log_in_token = NULL WHERE user.id = (?)";
-    public static final String UPDATE_USER_LOG_IN_TOKEN = "UPDATE user SET user.log_in_token = (?) WHERE user.id = (?)";
+    public static final String UPDATE_USER_LOG_IN_TOKEN_BY_ID = "UPDATE user SET user.log_in_token = (?) WHERE user.id = (?)";
+    public static final String UPDATE_USER_LOG_IN_TOKEN_BY_EMAIL = "UPDATE user SET user.log_in_token = (?) WHERE user.email = (?)";
 
     public static final String INSERT_BOOK_AUTHOR = "INSERT INTO book_author (uuid, author) value (?, ?)";
     public static final String FIND_BOOK_AUTHOR_BY_UUID = "SELECT * FROM book_author WHERE uuid = (?)";

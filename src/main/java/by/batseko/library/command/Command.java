@@ -16,7 +16,6 @@ public interface Command {
         if (pagesQuantity % recordsPerPage > 0) {
             pagesQuantity++;
         }
-
         request.setAttribute(JSPAttributeStorage.PAGINATION_PAGES_QUANTITY, pagesQuantity);
         request.setAttribute(JSPAttributeStorage.PAGINATION_CURRENT_PAGE, currentPage);
         request.setAttribute(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE, recordsPerPage);

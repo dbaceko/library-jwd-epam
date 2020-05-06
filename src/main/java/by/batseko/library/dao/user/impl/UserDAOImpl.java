@@ -76,9 +76,21 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     @Override
     public void setRememberUserToken(int userId, String userToken) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN_BY_ID)) {
             preparedStatement.setString(1, userToken);
             preparedStatement.setInt(2, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        }
+    }
+
+    @Override
+    public void setRememberUserToken(String userEmail, String userToken) throws LibraryDAOException {
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_USER_LOG_IN_TOKEN_BY_EMAIL)) {
+            preparedStatement.setString(1, userToken);
+            preparedStatement.setString(2, userEmail);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
@@ -102,6 +114,21 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_LOGIN)) {
             preparedStatement.setString(1, userLogin);
+            resultSet = preparedStatement.executeQuery();
+            return extractFoundedUserFromResultSet(resultSet);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public User findUserByEmail(String userEmail) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_USER_BY_EMAIL)) {
+            preparedStatement.setString(1, userEmail);
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {

@@ -7,8 +7,6 @@ import by.batseko.library.service.user.impl.OnlineUsersCache;
 import java.util.List;
 
 public interface UserService {
-
-
     User logInByPassword(String login, String password) throws LibraryServiceException;
     User logInByToken(String token) throws LibraryServiceException;
     void logOut(String login);
@@ -17,6 +15,7 @@ public interface UserService {
     List<User> findAllUsers() throws LibraryServiceException;
 
     String generateRememberUserToken(int userId) throws LibraryServiceException;
+    void sendLogInTokenIfForgetPassword(String userEmail, String pageContext) throws LibraryServiceException;
     void deleteRememberUserToken(int userId) throws LibraryServiceException;
 
     void registerUser(User user) throws LibraryServiceException;
