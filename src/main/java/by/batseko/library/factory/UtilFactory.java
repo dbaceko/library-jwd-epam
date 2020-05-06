@@ -1,14 +1,14 @@
 package by.batseko.library.factory;
 
 import by.batseko.library.util.EmailDistributor;
-import by.batseko.library.util.Encryption;
+import by.batseko.library.util.HashGenerator;
 
 public class UtilFactory {
-    private final Encryption encryption;
+    private final HashGenerator hashGenerator;
     private final EmailDistributor emailDistributor;
 
     private UtilFactory() {
-        encryption = new Encryption();
+        hashGenerator = new HashGenerator();
         emailDistributor = new EmailDistributor();
     }
 
@@ -20,8 +20,8 @@ public class UtilFactory {
         return UtilFactorySingletonHolder.INSTANCE;
     }
 
-    public Encryption getEncryption() {
-        return encryption;
+    public HashGenerator getHashGenerator() {
+        return hashGenerator;
     }
 
     public EmailDistributor getEmailDistributor() {

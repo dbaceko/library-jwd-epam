@@ -14,7 +14,7 @@ import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
 import by.batseko.library.util.EmailDistributor;
-import by.batseko.library.util.Encryption;
+import by.batseko.library.util.HashGenerator;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserValidator validator;
-    private final Encryption encryption;
+    private final HashGenerator hashGenerator;
     private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
     private final EmailDistributor emailDistributor;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
-        encryption = UtilFactory.getInstance().getEncryption();
+        hashGenerator = UtilFactory.getInstance().getHashGenerator();
         activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
         emailDistributor = UtilFactory.getInstance().getEmailDistributor();
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public User logInByPassword(String login, String password) throws LibraryServiceException {
         try {
             User user = userDAO.findUserByLogin(login);
-            if (encryption.validatePassword(password, user.getPassword())) {
+            if (hashGenerator.validatePassword(password, user.getPassword())) {
                 LOGGER.info(String.format("Add user %s to cache", user));
                 initCacheAfterLogIn(user);
                 return user;
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(encryption.generateHash(user.getPassword()));
+            user.setPassword(hashGenerator.generateHash(user.getPassword()));
             userDAO.registerUser(user);
         } catch (EncryptionException e) {
             LOGGER.warn(e);
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(encryption.generateHash(user.getPassword()));
+            user.setPassword(hashGenerator.generateHash(user.getPassword()));
             userDAO.updateUserProfileData(user);
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);

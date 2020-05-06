@@ -13,8 +13,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 
-public class Encryption {
-    private static final Logger LOGGER = LogManager.getLogger(Encryption.class);
+public class HashGenerator {
+    private static final Logger LOGGER = LogManager.getLogger(HashGenerator.class);
 
     private static final int ENCRYPTION_ITERATIONS = 1024;
     private static final int KEY_LENGTH = 128;
@@ -30,7 +30,7 @@ public class Encryption {
     private final Base64.Decoder decoder;
     private SecretKeyFactory secretKeyFactory;
 
-    public Encryption() {
+    public HashGenerator() {
         secureRandom = new SecureRandom();
         encoder = Base64.getEncoder();
         decoder = Base64.getDecoder();
