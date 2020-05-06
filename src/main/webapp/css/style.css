@@ -42,13 +42,14 @@ header li {
     float: right;
 }
 
+footer ul li,
 .admin-bar li a,
 header li a,
 header li div {
     display: block;
     color: white;
     text-align: center;
-    padding: 15px 15px;
+    padding: 15px;
     text-decoration: none;
 }
 
