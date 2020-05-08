@@ -265,6 +265,6 @@ public abstract class BaseDAO {
     }
 
     private String injectionProtection(String value) {
-        return !StringUtils.isBlank(value) ? value.replace("'", "/'" ) : value;
+        return !StringUtils.isBlank(value) ? value.replace("'", "\\'" ) : value;
     }
 }
