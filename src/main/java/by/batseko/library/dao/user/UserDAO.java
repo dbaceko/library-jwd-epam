@@ -5,7 +5,13 @@ import by.batseko.library.exception.LibraryDAOException;
 
 import java.util.List;
 
+/**
+ * Interface describes the opportunity that data source provide to store and
+ * restore {@link User} entity
+ *
+ */
 public interface UserDAO {
+
     /**
      * Saves the <tt>user</tt> into data source. Throws LibraryDAOException
      * if an error occurs while writing a <tt>user</tt>
@@ -73,7 +79,8 @@ public interface UserDAO {
     User findUserByEmail(String userEmail) throws LibraryDAOException;
 
     /**
-     * Retrieves and returns {@link User}.
+     * Retrieves and returns {@link User} by token and id,
+     * using into log in by token functionality.
      * If no such user contains into data source throws LibraryDAOException
      *
      * @param userId {@link User}'s userId
@@ -81,10 +88,10 @@ public interface UserDAO {
      * @return an {@link User}
      * @throws LibraryDAOException if an error occurs while getting a <tt>user</tt>
      */
-    User findUserByIdAndToken(int userId,String token) throws LibraryDAOException;
+    User findUserByIdAndToken(int userId, String token) throws LibraryDAOException;
 
     /**
-     * Retrieves and returns {@link User}.
+     * Retrieves and returns {@link User}, funded by id.
      * If no such user contains into data source throws LibraryDAOException
      *
      * @param userId {@link User}'s userId
@@ -94,7 +101,7 @@ public interface UserDAO {
     User findUserById(int userId) throws LibraryDAOException;
 
     /**
-     * Retrieves and returns {@link User}.
+     * Retrieves and returns {@link List<User>}'s into data source.
      * If no such users contains into data source returns emptyList collection
      *
      * @return List of {@link User}
