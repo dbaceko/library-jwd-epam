@@ -88,7 +88,7 @@ public class BookValidator {
 
     private void validateBookComponents(BaseBookComponent... bookComponents) throws ValidatorException {
         for (BaseBookComponent component: bookComponents) {
-            if (component == null || StringUtils.isBlank(component.getUuid())) {
+            if (StringUtils.isBlank(component.getUuid())) {
                 throw new ValidatorException("validation.book.add.bookComponent");
             }
         }
