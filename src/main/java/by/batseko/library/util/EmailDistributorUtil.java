@@ -1,5 +1,7 @@
 package by.batseko.library.util;
 
+import by.batseko.library.exception.UtilException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,16 +65,12 @@ public class EmailDistributorUtil {
                 sendEmailsIfExist();
             }
         }, DEFAULT_DELAY_TO_SEND_EMAILS, DEFAULT_DELAY_TO_SEND_EMAILS, TimeUnit.MINUTES);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                sendEmailsIfExist();
-            }
-        });
     }
 
-    public void addEmailToSendingQueue(String subject, String text, String destinationEmail) {
+    public void addEmailToSendingQueue(String subject, String text, String destinationEmail) throws UtilException {
+        if (StringUtils.isAnyBlank(subject, text, destinationEmail)) {
+            throw new UtilException("Invalid email param");
+        }
         emailList.add(new Email(subject, text, destinationEmail));
     }
 
@@ -90,7 +88,7 @@ public class EmailDistributorUtil {
         }
     }
 
-    private void sendEmailsIfExist() {
+    public void sendEmailsIfExist() {
         if (!emailList.isEmpty()) {
             for (Email email : emailList) {
                 sendEmail(email);

@@ -4,6 +4,7 @@ import by.batseko.library.command.Command;
 import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.Router;
+import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.pool.ConnectionPool;
 import by.batseko.library.service.book.impl.CommonBookComponentsCache;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +41,7 @@ public class ServletController extends HttpServlet {
     @Override
     public void destroy() {
         ConnectionPool.getInstance().destroy();
+        UtilFactory.getInstance().getEmailDistributorUtil().sendEmailsIfExist();
         super.destroy();
     }
 

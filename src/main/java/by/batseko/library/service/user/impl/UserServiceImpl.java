@@ -3,7 +3,7 @@ package by.batseko.library.service.user.impl;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.dao.user.UserDAO;
 import by.batseko.library.entity.user.User;
-import by.batseko.library.exception.EncryptionException;
+import by.batseko.library.exception.UtilException;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.ValidatorException;
@@ -57,11 +57,9 @@ public class UserServiceImpl implements UserService {
                 LOGGER.info("Password dont match");
                 throw new LibraryServiceException("validation.user.login.incorrect");
             }
-        } catch (EncryptionException e) {
-            LOGGER.warn(e.getMessage(), e);
+        } catch (UtilException e) {
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -102,7 +100,6 @@ public class UserServiceImpl implements UserService {
             try {
                 user = userDAO.findUserByLogin(login);
             } catch (LibraryDAOException e) {
-                LOGGER.warn(e.getMessage(), e);
                 throw new LibraryServiceException(e.getMessage(), e);
             }
         }
@@ -114,7 +111,6 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.findUserById(id);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -158,6 +154,8 @@ public class UserServiceImpl implements UserService {
                     userEmail);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
+        } catch (UtilException e) {
+            throw new LibraryServiceException("service.commonError", e);
         }
     }
 
@@ -181,11 +179,9 @@ public class UserServiceImpl implements UserService {
         try {
             user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.registerUser(user);
-        } catch (EncryptionException e) {
-            LOGGER.warn(e);
+        } catch (UtilException e) {
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -204,8 +200,7 @@ public class UserServiceImpl implements UserService {
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }
-        } catch (EncryptionException | LibraryDAOException e) {
-            LOGGER.warn(e);
+        } catch (UtilException | LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -223,8 +218,9 @@ public class UserServiceImpl implements UserService {
                 activeUserCache.put(user.getLogin(), user);
             }
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
             throw new LibraryServiceException(e.getMessage(), e);
+        } catch (UtilException e) {
+            throw new LibraryServiceException("service.commonError", e);
         }
     }
 
@@ -233,7 +229,6 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.findUserById(userID);
         } catch (LibraryDAOException e) {
-            LOGGER.info(e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }

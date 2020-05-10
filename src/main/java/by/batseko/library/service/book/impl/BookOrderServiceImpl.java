@@ -6,6 +6,7 @@ import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.entity.order.OrderStatus;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
+import by.batseko.library.exception.UtilException;
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.service.book.BookOrderService;
@@ -83,6 +84,8 @@ public class BookOrderServiceImpl implements BookOrderService {
             updateBookOrderCacheOrderStatus(bookOrder);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
+        } catch (UtilException e) {
+            throw new LibraryServiceException("service.commonError", e);
         }
     }
 

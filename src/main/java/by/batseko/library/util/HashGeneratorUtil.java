@@ -1,6 +1,6 @@
 package by.batseko.library.util;
 
-import by.batseko.library.exception.EncryptionException;
+import by.batseko.library.exception.UtilException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,14 +41,14 @@ public class HashGeneratorUtil {
         }
     }
 
-    public String generateHash(String password) throws EncryptionException {
+    public String generateHash(String password) throws UtilException {
         byte[] dynamicSalt = getSalt();
         byte[] hash = generateTransitionalHash(password, CONSTANT_INNER_SALT);
         hash = generateTransitionalHash(getStringFromHash(hash), dynamicSalt);
         return encoder.encodeToString(dynamicSalt) + DIVIDER + encoder.encodeToString(hash);
     }
 
-    public boolean validatePassword(String inputPassword, String storedPassword) throws EncryptionException {
+    public boolean validatePassword(String inputPassword, String storedPassword) throws UtilException {
         String[] parts = storedPassword.split(DIVIDER);
         byte[] dynamicSalt = decoder.decode(parts[SALT_INDEX]);
         byte[] storedHash = decoder.decode(parts[HASH_INDEX]);
@@ -57,12 +57,12 @@ public class HashGeneratorUtil {
         return Arrays.equals(storedHash, hash);
     }
 
-    private byte[] generateTransitionalHash(String password, byte[] salt) throws EncryptionException {
+    private byte[] generateTransitionalHash(String password, byte[] salt) throws UtilException {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray(), salt, ENCRYPTION_ITERATIONS, KEY_LENGTH);
         try {
             return secretKeyFactory.generateSecret(pbeKeySpec).getEncoded();
         } catch (InvalidKeySpecException e) {
-            throw new EncryptionException(e);
+            throw new UtilException(e);
         }
     }
 
