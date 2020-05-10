@@ -14,6 +14,8 @@ import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
 import by.batseko.library.util.EmailDistributorUtil;
+import by.batseko.library.util.EmailMessageLocalizationDispatcher;
+import by.batseko.library.util.EmailMessageType;
 import by.batseko.library.util.HashGeneratorUtil;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
@@ -27,15 +29,13 @@ public class UserServiceImpl implements UserService {
 
     private static final int TOKEN_VALUE_COOKIE_INDEX = 0;
     private static final int USER_ID_COOKIE_INDEX = 1;
-    private static final String UPDATING_USER_STATUS_EMAIL_SUBJECT = "Your status is updated";
-    private static final String FORGET_PASSWORD_EMAIL_SUBJECT = "Forget password";
-
 
     private final UserValidator validator;
     private final HashGeneratorUtil hashGeneratorUtil;
     private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
     private final EmailDistributorUtil emailDistributorUtil;
+    private final EmailMessageLocalizationDispatcher emailLocalizationDispatcher;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
         emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
+        emailLocalizationDispatcher = UtilFactory.getInstance().getEmailMessageLocalizationDispatcher();
     }
 
     @Override
@@ -148,10 +149,9 @@ public class UserServiceImpl implements UserService {
             String token = generateRememberUserToken(user.getId());
             String userLogInLink = pageContext + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
                     + '&' + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN + '=' + token;
-            emailDistributorUtil.addEmailToSendingQueue(
-                    FORGET_PASSWORD_EMAIL_SUBJECT,
-                    String.format("Your link for log in is: %s", userLogInLink),
-                    userEmail);
+            String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_FORGET_PASSWORD);
+            String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_FORGET_PASSWORD, userLogInLink);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, userEmail);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         } catch (UtilException e) {
@@ -209,11 +209,10 @@ public class UserServiceImpl implements UserService {
     public void updateUserBanStatus(User user) throws LibraryServiceException {
         try {
             userDAO.updateUserBanStatus(user);
-            String status = user.getBanned() ? "banned" : "unbanned";
-            emailDistributorUtil.addEmailToSendingQueue(
-                    UPDATING_USER_STATUS_EMAIL_SUBJECT,
-                    String.format("Your status is: %s", status),
-                    user.getEmail());
+            String status = user.getBanned() ? EmailMessageType.MESSAGE_USER_BAN_STATUS_BANNED : EmailMessageType.MESSAGE_USER_BAN_STATUS_UNBANNED;
+            String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_USER_BAN_STATUS_UPDATED);
+            String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_USER_BAN_STATUS_UPDATED, status);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, user.getEmail());
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }
@@ -250,6 +249,5 @@ public class UserServiceImpl implements UserService {
         } catch (LibraryServiceException e) {
             LOGGER.warn(String.format("Can't put user's %s book orders in cache", user), e);
         }
-
     }
 }

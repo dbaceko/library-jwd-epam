@@ -23,7 +23,8 @@ public class EmailDistributorUtil {
     private static final Logger LOGGER = LogManager.getLogger(EmailDistributorUtil.class);
 
     private static final int DEFAULT_DELAY_TO_SEND_EMAILS = 1;
-    
+
+    private static final String ENCODING_UTF_8 = "utf-8";
     private static final String PROPERTIES_FILE = "email.properties";
     private static final String HOST_PROPERTY_NAME = "mail.smtp.host";
     private static final String FROM_PROPERTY_NAME = "mail.smtp.user";
@@ -79,8 +80,8 @@ public class EmailDistributorUtil {
             MimeMessage letter = new MimeMessage(mailSession);
             letter.setFrom(new InternetAddress(from));
             letter.addRecipient(Message.RecipientType.TO, new InternetAddress(email.destinationEmail));
-            letter.setSubject(email.subject);
-            letter.setText(email.message);
+            letter.setSubject(email.subject, ENCODING_UTF_8);
+            letter.setText(email.message, ENCODING_UTF_8);
             transport.connect(host, from, password);
             transport.sendMessage(letter, letter.getAllRecipients());
         } catch (MessagingException e) {

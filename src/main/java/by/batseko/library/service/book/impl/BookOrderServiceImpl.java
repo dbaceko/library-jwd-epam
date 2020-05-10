@@ -11,6 +11,8 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.util.EmailDistributorUtil;
+import by.batseko.library.util.EmailMessageLocalizationDispatcher;
+import by.batseko.library.util.EmailMessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,18 +22,19 @@ import java.util.UUID;
 public class BookOrderServiceImpl implements BookOrderService {
     private static final Logger LOGGER = LogManager.getLogger(BookOrderServiceImpl.class);
 
-    private static final String UPDATING_ORDER_STATUS_EMAIL_SUBJECT = "Status of your order is updated";
-
     private final BookOrderDAO bookOrderDAO;
     private final BookInstanceDAO bookInstanceDAO;
     private final BookOrdersCache bookOrdersCache;
     private final EmailDistributorUtil emailDistributorUtil;
+    private final EmailMessageLocalizationDispatcher emailMessageLocalizationDispatcher;
 
     public BookOrderServiceImpl(){
         bookOrderDAO = DAOFactory.getInstance().getBookOrderDAO();
         bookInstanceDAO = DAOFactory.getInstance().getBookInstanceDAO();
         bookOrdersCache = BookOrdersCache.getInstance();
         emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
+        emailMessageLocalizationDispatcher = UtilFactory.getInstance().getEmailMessageLocalizationDispatcher();
+
     }
 
     @Override
@@ -77,10 +80,9 @@ public class BookOrderServiceImpl implements BookOrderService {
             String author = bookOrder.getBookInstance().getBook().getAuthor().getAuthorName();
             String title = bookOrder.getBookInstance().getBook().getTitle();
             String status = bookOrder.getOrderStatus().name().replace('_', ' ').toLowerCase();
-            emailDistributorUtil.addEmailToSendingQueue(
-                    UPDATING_ORDER_STATUS_EMAIL_SUBJECT,
-                    String.format("Status of your order %s, %s is: %s",title, author, status),
-                    bookOrder.getUser().getEmail());
+            String messageTitle = emailMessageLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_ORDER_STATUS_UPDATED);
+            String messageText = emailMessageLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_ORDER_STATUS_UPDATED,title, author, status);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, bookOrder.getUser().getEmail());
             updateBookOrderCacheOrderStatus(bookOrder);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
