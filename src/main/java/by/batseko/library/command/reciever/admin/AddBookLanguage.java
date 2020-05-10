@@ -19,7 +19,7 @@ public class AddBookLanguage implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
         BookLanguage bookLanguage = new BookLanguage();
-        bookLanguage.setLanguageTitle(request.getParameter(JSPAttributeStorage.BOOK_LANGUAGE));
+        bookLanguage.setLanguageTitle(request.getParameter(JSPAttributeStorage.BOOK_LANGUAGE).trim());
 
         try {
             bookLanguageService.add(bookLanguage);
