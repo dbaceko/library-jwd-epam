@@ -39,6 +39,9 @@ public class BookOrderServiceImpl implements BookOrderService {
 
     @Override
     public void addBookOrder(BookOrder bookOrder) throws LibraryServiceException {
+        if (bookOrder == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         List<String> availableBookInstanceUUIDs;
         try {
             String bookUUID = bookOrder.getBookInstance().getBook().getUuid();
@@ -71,6 +74,9 @@ public class BookOrderServiceImpl implements BookOrderService {
 
     @Override
     public void updateBookOrderStatus(BookOrder bookOrder) throws LibraryServiceException {
+        if (bookOrder == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             if (bookOrder.getOrderStatus() == OrderStatus.CLOSE) {
                 bookOrderDAO.cancelBookOrder(bookOrder);
