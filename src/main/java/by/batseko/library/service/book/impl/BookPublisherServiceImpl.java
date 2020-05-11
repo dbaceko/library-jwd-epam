@@ -24,6 +24,9 @@ public class BookPublisherServiceImpl implements BookComponentService<Publisher>
 
     @Override
     public void add(Publisher publisher) throws LibraryServiceException {
+        if (publisher == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validatePublisher(publisher.getPublisherTitle());
             publisher.defineUUID();
@@ -36,6 +39,9 @@ public class BookPublisherServiceImpl implements BookComponentService<Publisher>
 
     @Override
     public Publisher findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookPublisherDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {

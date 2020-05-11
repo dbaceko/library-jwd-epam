@@ -24,6 +24,9 @@ public class BookLanguageServiceImpl implements BookComponentService<BookLanguag
 
     @Override
     public void add(BookLanguage bookLanguage) throws LibraryServiceException {
+        if (bookLanguage == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validateLanguage(bookLanguage.getLanguageTitle());
             bookLanguage.defineUUID();
@@ -36,6 +39,9 @@ public class BookLanguageServiceImpl implements BookComponentService<BookLanguag
 
     @Override
     public BookLanguage findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookLanguageDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {
