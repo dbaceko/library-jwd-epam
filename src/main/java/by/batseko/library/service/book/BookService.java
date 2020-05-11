@@ -38,14 +38,14 @@ public interface BookService {
     Book findByUUID(String uuid) throws LibraryServiceException;
 
     /**
-     * Find book list of {@link List<Book>} which follow the book fields pattern
+     * Find book list of {@link List<BookDTO>} which follow the book fields pattern
      *
      * @param book is the {@link Book} which contains non-empty fields
      *        which using to construct search query into DAO layer
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return book list {@link List<Book>} which follow the book fields pattern
-     * @throws LibraryServiceException if {@link List<Book>} in empty or if book is null
+     * @return book list {@link List<BookDTO>} which follow the book fields pattern
+     * @throws LibraryServiceException if {@link List<BookDTO>} is empty or if book is null
      *                          or occurs after searching {@link Book} into the data source
      */
     List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException;
@@ -56,7 +56,7 @@ public interface BookService {
      * @param book is the {@link Book} which contains non-empty fields
      *        which using to construct search query into DAO layer
      * @return quantity of {@link List<BookDTO>}  which follow the book fields pattern
-     * @throws LibraryServiceException if {@link List<BookDTO>} in empty or if book is null
+     * @throws LibraryServiceException if {@link List<BookDTO>} is empty or if book is null
      *                          or occurs after searching {@link Book} into the data source
      */
     int findBookQuantityByFields(Book book) throws LibraryServiceException;
