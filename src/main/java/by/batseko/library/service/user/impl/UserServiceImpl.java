@@ -11,6 +11,7 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
+import by.batseko.library.service.Cache;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
 import by.batseko.library.util.EmailDistributorUtil;
@@ -48,6 +49,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User logInByPassword(String login, String password) throws LibraryServiceException {
+        try{
+            validator.validateLogin(login);
+            validator.validatePassword(password);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
         try {
             User user = userDAO.findUserByLogin(login);
             if (hashGeneratorUtil.validatePassword(password, user.getPassword())) {
@@ -67,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User logInByToken(String token) throws LibraryServiceException {
+        if (token == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             String[] tokenComponents = token.split(JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER);
             int userId = Integer.parseInt(tokenComponents[USER_ID_COOKIE_INDEX]);
@@ -77,7 +87,7 @@ public class UserServiceImpl implements UserService {
                 return user;
             }
             LOGGER.warn(String.format("Cant use token %s for log in", token));
-            throw new LibraryServiceException(String.format("Cant use token %s for log in", token));
+            throw new LibraryServiceException("service.commonError");
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
@@ -90,6 +100,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByLogin(String login) throws LibraryServiceException {
+        try {
+            validator.validateLogin(login);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
         User user = null;
         try {
             user = activeUserCache.get(login);
@@ -132,26 +147,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String generateRememberUserToken(int userId) throws LibraryServiceException {
+    public String generateRememberUserToken(int id) throws LibraryServiceException {
         String token = UUID.randomUUID().toString();
         try {
-            userDAO.updateRememberUserToken(userId, token);
-            return token + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + userId;
+            userDAO.updateRememberUserToken(id, token);
+            return token + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + id;
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public void sendLogInTokenIfForgetPassword(String userEmail, String pageContext) throws LibraryServiceException {
+    public void sendLogInTokenIfForgetPassword(String email, String pageRootUrl) throws LibraryServiceException {
         try {
-            User user = userDAO.findUserByEmail(userEmail);
+            validator.validateEmail(email);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+        try {
+            User user = userDAO.findUserByEmail(email);
             String token = generateRememberUserToken(user.getId());
-            String userLogInLink = pageContext + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
+            String userLogInLink = pageRootUrl + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
                     + '&' + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN + '=' + token;
             String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_FORGET_PASSWORD);
             String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_FORGET_PASSWORD, userLogInLink);
-            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, userEmail);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, email);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         } catch (UtilException e) {
@@ -160,9 +180,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteRememberUserToken(int userId) throws LibraryServiceException {
+    public void deleteRememberUserToken(int id) throws LibraryServiceException {
         try {
-            userDAO.deleteRememberUserToken(userId);
+            userDAO.deleteRememberUserToken(id);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
@@ -224,16 +244,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(int userID) throws LibraryServiceException {
-        try {
-            userDAO.findUserById(userID);
-        } catch (LibraryDAOException e) {
-            throw new LibraryServiceException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public OnlineUsersCache getOnlineUsersCache() {
+    public Cache<String, User> getOnlineUsersCache() {
         return activeUserCache;
     }
 

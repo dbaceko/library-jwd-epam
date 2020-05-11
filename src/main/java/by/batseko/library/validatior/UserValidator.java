@@ -29,7 +29,7 @@ public class UserValidator {
         validateFieldLength(user.getAddress());
     }
 
-    private void validateLogin(String login) throws ValidatorException {
+    public void validateLogin(String login) throws ValidatorException {
         if (StringUtils.isBlank(login) || !login.matches(LOGIN_REGEX)) {
             throw new ValidatorException("validation.user.registration.login");
         }
@@ -41,13 +41,13 @@ public class UserValidator {
         }
     }
 
-    private void validatePassword(String password) throws ValidatorException {
+    public void validatePassword(String password) throws ValidatorException {
         if (StringUtils.isBlank(password) || !password.matches(PASSWORD_REGEX)) {
             throw new ValidatorException("validation.user.registration.password");
         }
     }
 
-    private void validateEmail(String email) throws ValidatorException {
+    public void validateEmail(String email) throws ValidatorException {
         if (StringUtils.isBlank(email) || email.length() > MAX_EMAIL_FIELD_LENGTH || !email.matches(EMAIL_REGEX)) {
             throw new ValidatorException("validation.user.registration.email");
         }
