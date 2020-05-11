@@ -118,7 +118,7 @@ public interface UserService {
      * @param user {@link User} is filled user instance
      * @throws LibraryServiceException if <tt>user</tt>'s fields not accords to specify pattern
      *                          {@see by.batseko.library.validator.UserValidator}
-     *                          or if user with <tt>email</tt> or <tt>login</tt> has already
+     *                          or if user with <tt>email</tt> or <tt>login</tt> has already exist
      *                          or if an error occurs while writing new {@link User} into
      *                          data source
      */
@@ -130,7 +130,7 @@ public interface UserService {
      * @param user {@link User} is filled user instance
      * @throws LibraryServiceException if <tt>user</tt>'s fields not accords to specify pattern
      *                          {@see by.batseko.library.validator.UserValidator}
-     *                          or if user with <tt>email</tt>  has already
+     *                          or if user with <tt>email</tt> has already exist
      *                          or if an error occurs while writing new {@link User} into
      *                          data source
      */
