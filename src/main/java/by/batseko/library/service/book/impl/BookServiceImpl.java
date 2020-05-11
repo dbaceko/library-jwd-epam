@@ -30,6 +30,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void add(Book book, int quantity) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validateNewBook(book);
             bookValidator.validateBookQuantity(quantity);
@@ -47,6 +50,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookDAO.findBookByUUID(uuid);
         } catch (LibraryDAOException e) {
@@ -56,6 +62,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookDAO.findBooksDTOByFields(book, currentPage, recordsPerPage);
         } catch (LibraryDAOException e) {
@@ -65,6 +74,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int findBookQuantityByFields(Book book) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookDAO.findBookQuantityByFields(book);
         } catch (LibraryDAOException e) {
