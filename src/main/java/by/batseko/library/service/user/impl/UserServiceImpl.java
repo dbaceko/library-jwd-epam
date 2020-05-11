@@ -190,6 +190,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             validator.validateNewUser(user);
         } catch (ValidatorException e) {
@@ -208,6 +211,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserProfileData(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             validator.validateUpdatedUser(user);
         } catch (ValidatorException e) {
@@ -227,6 +233,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserBanStatus(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             userDAO.updateUserBanStatus(user);
             String status = user.getBanned() ? EmailMessageType.MESSAGE_USER_BAN_STATUS_BANNED : EmailMessageType.MESSAGE_USER_BAN_STATUS_UNBANNED;
