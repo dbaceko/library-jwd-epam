@@ -4,10 +4,11 @@ import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.entity.book.BookInstance;
 import by.batseko.library.entity.user.User;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class BookOrder {
+public class BookOrder implements Serializable, Comparable<BookOrder> {
     private String uuid;
     private User user;
     private BookInstance bookInstance;
@@ -102,5 +103,10 @@ public class BookOrder {
                 ", orderStatus=" + orderStatus +
                 ", data=" + date +
                 '}';
+    }
+
+    @Override
+    public int compareTo(BookOrder o) {
+        return date.compareTo(o.date);
     }
 }

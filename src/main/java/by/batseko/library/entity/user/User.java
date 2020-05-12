@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User>{
     private int id;
     private UserRole userRole;
     private String login;
@@ -173,5 +173,10 @@ public class User implements Serializable {
                 ", registrationDate=" + registrationDate +
                 ", address='" + address + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return login.compareTo(o.login);
     }
 }

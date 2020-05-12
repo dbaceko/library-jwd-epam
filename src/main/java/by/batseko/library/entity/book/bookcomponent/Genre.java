@@ -35,4 +35,9 @@ public class Genre extends BaseBookComponent implements Serializable {
                 ", genre='" + genreTitle + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(BaseBookComponent o) {
+        return genreTitle.compareTo(((Genre) o).genreTitle);
+    }
 }

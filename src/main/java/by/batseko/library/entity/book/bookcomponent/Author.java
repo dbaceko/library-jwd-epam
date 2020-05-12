@@ -35,4 +35,9 @@ public class Author extends BaseBookComponent implements Serializable {
                 ", author='" + authorName + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(BaseBookComponent o) {
+        return authorName.compareTo(((Author) o).authorName);
+    }
 }

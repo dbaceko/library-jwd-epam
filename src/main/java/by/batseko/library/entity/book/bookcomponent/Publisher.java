@@ -35,4 +35,9 @@ public class Publisher extends BaseBookComponent implements Serializable {
                 ", publisher='" + publisherTitle + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(BaseBookComponent o) {
+        return publisherTitle.compareTo(((Publisher) o).publisherTitle);
+    }
 }

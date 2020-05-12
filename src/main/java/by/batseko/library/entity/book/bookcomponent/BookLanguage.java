@@ -35,4 +35,9 @@ public class BookLanguage extends BaseBookComponent implements Serializable {
                 ", language='" + languageTitle + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(BaseBookComponent o) {
+        return languageTitle.compareTo(((BookLanguage) o).languageTitle);
+    }
 }
