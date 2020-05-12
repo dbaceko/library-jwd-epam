@@ -233,7 +233,6 @@ body {
 .form-wrapper fieldset .terms span {
     font-size: 14px;
     color: #757575;
-
 }
 
 .form-wrapper fieldset .terms .check {
@@ -295,9 +294,17 @@ td form .btn,
     margin: 10px 0;
 }
 
-.form-wrapper fieldset .book-select_wrapper button {
-    width: 30%;
-    padding: 8px 10px;
+.form-wrapper .fieldset .book-select_wrapper input {
+}
+
+.form-wrapper .fieldset .book-select_wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.form-wrapper .fieldset .book-select_wrapper button {
+    padding: 5px 5px;
     font-size: 15px;
     border: 0;
     background: #1bbc9b;
@@ -305,7 +312,6 @@ td form .btn,
     cursor: pointer;
     border-radius: 3px;
     outline: none;
-    margin: 10px 0;
 }
 
 .form-wrapper fieldset .inputfield .btn:hover {

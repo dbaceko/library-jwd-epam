@@ -31,10 +31,12 @@
                 <input type="text" name="email" class="input" required>
             </label>
             <label class="inputfield">
-                <input class="btn" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
+                <input class="btn submit" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
             </label>
         </fieldset>
     </form>
 </main>
 <jsp:include page="include/footer.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/xxsProtectionScript.js"></script>
+</body>
 </html>

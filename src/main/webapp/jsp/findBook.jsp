@@ -111,7 +111,7 @@
                         >
                     </label>
                     <label class="inputfield">
-                        <input class="btn" type="submit" value=<fmt:message  bundle="${locale}" key="book.btn.findBook"/>/>
+                        <input class="btn submit" type="submit" value=<fmt:message  bundle="${locale}" key="book.btn.findBook"/>/>
                     </label>
                 </fieldset>
             </form>
@@ -221,5 +221,6 @@
     </div>
 </main>
 <jsp:include page="include/footer.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/xxsProtectionScript.js"></script>
 </body>
 </html>

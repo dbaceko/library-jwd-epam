@@ -93,37 +93,56 @@
             <label>
                 <span><fmt:message  bundle="${locale}" key="book.title"/></span>
                 <input type="text"  name="bookTitle" class="input" required
+                    pattern="^[^!@#$%^&*()_|+~\d]{3,45}$"
+                    oninvalid="this.setCustomValidity('<fmt:message bundle="${exc_msg}" key="validation.book.add.title" />')"
+                    onchange="this.setAttribute('value', this.value);
+                    this.setCustomValidity(this.validity.patternMismatch ? '<fmt:message bundle="${exc_msg}" key="validation.book.add.title" />' : '');"
                     <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.title} </c:if>
                 >
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="book.publishYear"/></span>
-                <input type="number"  name="bookPublishYear" class="input" required
+                <input type="number"  name="bookPublishYear" class="input" required min="1000"
+                    oninvalid="this.setCustomValidity('<fmt:message bundle="${exc_msg}" key="validation.book.add.publishYear" />')"
+                    onchange="this.setAttribute('value', this.value);
+                    this.setCustomValidity(this.validity.patternMismatch ? '<fmt:message bundle="${exc_msg}" key="validation.book.add.publishYear" />' : '');"
                     <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.publishYear} </c:if>
                 >
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="book.pagesQuantity"/></span>
-                <input type="number"  name="bookPagesQuantity" class="input" required
-                    <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.pagesQuantity} </c:if>
+                <input type="number"  name="bookPagesQuantity" class="input" required min="10" max="32767"
+                    oninvalid="this.setCustomValidity('<fmt:message bundle="${exc_msg}" key="validation.book.add.pagesQuantity" />')"
+                    onchange="this.setAttribute('value', this.value);
+                    this.setCustomValidity(this.validity.patternMismatch ? '<fmt:message bundle="${exc_msg}" key="validation.book.add.pagesQuantity" />' : '');"
+                <c:if test="${not empty bookPreviousData}"> value=${bookPreviousData.pagesQuantity} </c:if>
                 >
             </label>
             <label>
                 <span><fmt:message  bundle="${locale}" key="book.quantity"/></span>
-                <input type="number"  name="bookQuantity" class="input" required>
+                <input type="number"  name="bookQuantity" class="input" required min="1"
+                    oninvalid="this.setCustomValidity('<fmt:message bundle="${exc_msg}" key="validation.book.add.bookQuantity" />')"
+                    onchange="this.setAttribute('value', this.value);
+                    this.setCustomValidity(this.validity.patternMismatch ? '<fmt:message bundle="${exc_msg}" key="validation.book.add.bookQuantity" />' : '');"
+                >
             </label>
             <label>
-                <textarea name="bookDescription" rows="10" cols="45" class="input" maxlength="500" required>
-<c:if test="${empty bookPreviousData}"> <fmt:message  bundle="${locale}" key="book.description"/> </c:if>
-<c:if test="${not empty bookPreviousData}"> ${bookPreviousData.description} </c:if>
+                <textarea name="bookDescription" rows="10" cols="45" class="input" maxlength="500" required
+                    oninvalid="this.setCustomValidity('<fmt:message bundle="${exc_msg}" key="validation.book.add.description" />')"
+                    onchange="this.setAttribute('value', this.value);
+                    this.setCustomValidity(this.validity.patternMismatch ? '<fmt:message bundle="${exc_msg}" key="validation.book.add.description" />' : '');"
+                >
+                <c:if test="${empty bookPreviousData}"> <fmt:message  bundle="${locale}" key="book.description"/> </c:if>
+                <c:if test="${not empty bookPreviousData}"> ${bookPreviousData.description} </c:if>
                 </textarea>
             </label>
             <label class="inputfield">
-                <input class="btn" type="submit" value=<fmt:message  bundle="${locale}" key="book.btn.addBook"/>>
+                <input class="btn submit" type="submit" value=<fmt:message  bundle="${locale}" key="book.btn.addBook"/>>
             </label>
         </fieldset>
     </form>
 </main>
 <jsp:include page="../include/footer.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/xxsProtectionScript.js"></script>
 </body>
 </html>
