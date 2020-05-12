@@ -16,6 +16,7 @@ public class LogInCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LogInCommand.class);
 
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static final int COOKIE_MAX_AGE_21_DAY = 60*60*24*21;
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -36,6 +37,7 @@ public class LogInCommand implements Command {
                         JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN, userService.generateRememberUserToken(user.getId())
                 );
                 rememberTokenCookie.setPath(request.getContextPath());
+                rememberTokenCookie.setMaxAge(COOKIE_MAX_AGE_21_DAY);
                 response.addCookie(rememberTokenCookie);
                 LOGGER.info(String.format("RememberToken is add, %s", rememberTokenCookie));
             }
