@@ -116,8 +116,8 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE book_order.user_id = (?) LIMIT (?) OFFSET (?) " +
-            "ORDER BY book_order.date ";
+            "WHERE book_order.user_id = (?) " +
+            "ORDER BY book_order.date LIMIT (?) OFFSET (?)" ;
 
     public static final String FIND_ALL_BOOK_ORDERS_BY_USER_ID = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
@@ -156,8 +156,8 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE order_status_id = 1 OR order_status_id = 3 LIMIT ? OFFSET ? " +
-            "ORDER BY book_order.date ";
+            "WHERE order_status_id = 1 OR order_status_id = 3 " +
+            "ORDER BY book_order.date LIMIT ? OFFSET ? ";
 
     private SQLQueriesStorage() {}
 }

@@ -18,7 +18,9 @@ import java.util.List;
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
 
-    private static final String LIMIT_OFFSET_STATEMENT = " GROUP BY uuid LIMIT ? OFFSET ? ";
+    private static final String LIMIT_OFFSET_STATEMENT = " LIMIT ? OFFSET ? ";
+    private static final String GROUP_BY_UUID_STATEMENT = " GROUP BY uuid ";
+    private static final String ORDER_BY_STATEMENT = " ORDER BY  ";
 
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
@@ -91,7 +93,8 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     @Override
     public List<BookDTO> findBooksDTOByFields(Book book, int currentPage, int recordsPerPage) throws LibraryDAOException {
         return findBooksDTOByQuery(constructFindQueryFromBook(book, SQLQueriesStorage.FIND_ALL_BOOKS)
-                        + LIMIT_OFFSET_STATEMENT, currentPage, recordsPerPage);
+                + GROUP_BY_UUID_STATEMENT + ORDER_BY_STATEMENT + BOOK_AUTHOR_COLUMN_NAME + LIMIT_OFFSET_STATEMENT
+                , currentPage, recordsPerPage);
     }
 
     @Override

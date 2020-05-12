@@ -27,51 +27,51 @@ import java.sql.SQLException;
 public abstract class BaseDAO {
     private static final Logger LOGGER = LogManager.getLogger(BaseDAO.class);
 
-    private static final String USER_ID_COLUMN_NAME = "user.id";
-    private static final String USER_ROLE_ID_COLUMN_NAME = "user.role_id";
-    private static final String USER_EMAIL_COLUMN_NAME = "user.email";
-    private static final String USER_LOGIN_COLUMN_NAME = "user.login";
-    private static final String USER_PASSWORD_COLUMN_NAME = "user.password";
-    private static final String USER_FIRSTNAME_COLUMN_NAME = "user.firstname";
-    private static final String USER_LASTNAME_COLUMN_NAME = "user.lastname";
-    private static final String USER_PASSPORT_SN_COLUMN_NAME = "user.passport_serial_number";
-    private static final String USER_ADDRESS_COLUMN_NAME = "user.address";
-    private static final String USER_PHONE_COLUMN_NAME = "user.phone";
-    private static final String USER_BAN_STATUS_COLUMN_NAME = "user.is_banned";
-    private static final String USER_REGISTRATION_DATE_COLUMN_NAME = "user.registration_date";
+    protected static final String USER_ID_COLUMN_NAME = "user.id";
+    protected static final String USER_ROLE_ID_COLUMN_NAME = "user.role_id";
+    protected static final String USER_EMAIL_COLUMN_NAME = "user.email";
+    protected static final String USER_LOGIN_COLUMN_NAME = "user.login";
+    protected static final String USER_PASSWORD_COLUMN_NAME = "user.password";
+    protected static final String USER_FIRSTNAME_COLUMN_NAME = "user.firstname";
+    protected static final String USER_LASTNAME_COLUMN_NAME = "user.lastname";
+    protected static final String USER_PASSPORT_SN_COLUMN_NAME = "user.passport_serial_number";
+    protected static final String USER_ADDRESS_COLUMN_NAME = "user.address";
+    protected static final String USER_PHONE_COLUMN_NAME = "user.phone";
+    protected static final String USER_BAN_STATUS_COLUMN_NAME = "user.is_banned";
+    protected static final String USER_REGISTRATION_DATE_COLUMN_NAME = "user.registration_date";
 
-    private static final String BOOK_AUTHOR_UUID_COLUMN_NAME = "book_author.uuid";
-    private static final String BOOK_AUTHOR_COLUMN_NAME = "book_author.author";
+    protected static final String BOOK_AUTHOR_UUID_COLUMN_NAME = "book_author.uuid";
+    protected static final String BOOK_AUTHOR_COLUMN_NAME = "book_author.author";
 
-    private static final String BOOK_GENRE_UUID_COLUMN_NAME = "book_genre.uuid";
-    private static final String BOOK_GENRE_GENRE_COLUMN_NAME = "book_genre.genre";
+    protected static final String BOOK_GENRE_UUID_COLUMN_NAME = "book_genre.uuid";
+    protected static final String BOOK_GENRE_GENRE_COLUMN_NAME = "book_genre.genre";
 
-    private static final String BOOK_LANGUAGE_UUID_COLUMN_NAME = "book_language.uuid";
-    private static final String BOOK_LANGUAGE_COLUMN_NAME = "book_language.language";
+    protected static final String BOOK_LANGUAGE_UUID_COLUMN_NAME = "book_language.uuid";
+    protected static final String BOOK_LANGUAGE_COLUMN_NAME = "book_language.language";
 
-    private static final String BOOK_PUBLISHER_UUID_COLUMN_NAME = "book_publisher.uuid";
-    private static final String BOOK_PUBLISHER_COLUMN_NAME = "book_publisher.title";
+    protected static final String BOOK_PUBLISHER_UUID_COLUMN_NAME = "book_publisher.uuid";
+    protected static final String BOOK_PUBLISHER_COLUMN_NAME = "book_publisher.title";
 
-    private static final String BOOK_UUID_COLUMN_NAME = "book.uuid";
-    private static final String BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME = "book.author_uuid";
-    private static final String BOOK_BOOK_GENRE_UUID_COLUMN_NAME = "book.genre_uuid";
-    private static final String BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME = "book.language_uuid";
-    private static final String BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME = "book.publisher_uuid";
-    private static final String BOOK_TITLE_COLUMN_NAME = "book.title";
-    private static final String BOOK_PUBLISH_YEAR_COLUMN_NAME = "book.publish_year";
-    private static final String BOOK_PAGES_QUANTITY_COLUMN_NAME = "book.pages_quantity";
-    private static final String BOOK_PAGES_DESCRIPTION_COLUMN_NAME = "book.description";
+    protected static final String BOOK_UUID_COLUMN_NAME = "book.uuid";
+    protected static final String BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME = "book.author_uuid";
+    protected static final String BOOK_BOOK_GENRE_UUID_COLUMN_NAME = "book.genre_uuid";
+    protected static final String BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME = "book.language_uuid";
+    protected static final String BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME = "book.publisher_uuid";
+    protected static final String BOOK_TITLE_COLUMN_NAME = "book.title";
+    protected static final String BOOK_PUBLISH_YEAR_COLUMN_NAME = "book.publish_year";
+    protected static final String BOOK_PAGES_QUANTITY_COLUMN_NAME = "book.pages_quantity";
+    protected static final String BOOK_PAGES_DESCRIPTION_COLUMN_NAME = "book.description";
 
-    private static final String ORDER_UUID_COLUMN_NAME = "book_order.uuid";
-    private static final String ORDER_ORDER_TYPE_ID_COLUMN_NAME = "book_order.order_type_id";
-    private static final String ORDER_ORDER_STATUS_ID_COLUMN_NAME = "book_order.order_status_id";
-    private static final String ORDER_DATE_ID_COLUMN_NAME = "book_order.date";
+    protected static final String ORDER_UUID_COLUMN_NAME = "book_order.uuid";
+    protected static final String ORDER_ORDER_TYPE_ID_COLUMN_NAME = "book_order.order_type_id";
+    protected static final String ORDER_ORDER_STATUS_ID_COLUMN_NAME = "book_order.order_status_id";
+    protected static final String ORDER_DATE_ID_COLUMN_NAME = "book_order.date";
 
-    private static final String BOOK_INSTANCE_UUID_COLUMN_NAME = "book_instance.uuid";
-    private static final String BOOK_INSTANCE_IS_AVAILABLE_COLUMN_NAME = "book_instance.is_available";
+    protected static final String BOOK_INSTANCE_UUID_COLUMN_NAME = "book_instance.uuid";
+    protected static final String BOOK_INSTANCE_IS_AVAILABLE_COLUMN_NAME = "book_instance.is_available";
 
-    private static final String TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "total_book_instance_quantity";
-    private static final String AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "available_book_instance_quantity";
+    protected static final String TOTAL_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "total_book_instance_quantity";
+    protected static final String AVAILABLE_BOOK_INSTANCE_QUANTITY_COLUMN_NAME = "available_book_instance_quantity";
 
 
     protected final ConnectionPool pool;
@@ -220,9 +220,9 @@ public abstract class BaseDAO {
         return bookDTO;
     }
 
-    private static final String MIDDLE_OF_PREDICATE = " = '";
-    private static final String END_OF_PREDICATE = "' AND ";
-    private static final String WHERE_STATEMENT = " WHERE ";
+    protected static final String MIDDLE_OF_PREDICATE = " = '";
+    protected static final String END_OF_PREDICATE = "' AND ";
+    protected static final String WHERE_STATEMENT = " WHERE ";
 
     protected String constructFindQueryFromBook(Book book, String query) {
         StringBuilder queryWhereStatement = new StringBuilder();
