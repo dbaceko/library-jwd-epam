@@ -12,10 +12,8 @@ public class SQLQueriesStorage {
     public static final String UPDATE_USER_PROFILE_DATA = "UPDATE user SET email = (?), password = (?), address = (?)," +
             "  phone = (?) WHERE id = (?)";
     public static final String UPDATE_USER_BAN_STATUS = "UPDATE user SET is_banned = (?) WHERE id = (?)";
-    public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
     public static final String UPDATE_USER_LOG_IN_TOKEN_TO_NULL = "UPDATE user SET user.log_in_token = NULL WHERE user.id = (?)";
     public static final String UPDATE_USER_LOG_IN_TOKEN_BY_ID = "UPDATE user SET user.log_in_token = (?) WHERE user.id = (?)";
-    public static final String UPDATE_USER_LOG_IN_TOKEN_BY_EMAIL = "UPDATE user SET user.log_in_token = (?) WHERE user.email = (?)";
 
     public static final String INSERT_BOOK_AUTHOR = "INSERT INTO book_author (uuid, author) value (?, ?)";
     public static final String FIND_BOOK_AUTHOR_BY_UUID = "SELECT * FROM book_author WHERE uuid = (?)";
@@ -118,7 +116,8 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE book_order.user_id = (?) LIMIT (?) OFFSET (?) ";
+            "WHERE book_order.user_id = (?) LIMIT (?) OFFSET (?) " +
+            "ORDER BY book_order.date ";
 
     public static final String FIND_ALL_BOOK_ORDERS_BY_USER_ID = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
@@ -137,7 +136,8 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE book_order.user_id = (?) ";
+            "WHERE book_order.user_id = (?) " +
+            "ORDER BY book_order.date ";
 
     public static final String FIND_BOOK_ORDERS_WITH_OPEN_REQUEST = "SELECT book_order.*, " +
             "book.uuid as \"book.uuid\", book.title as \"book.title\", book.publish_year as \"book.publish_year\", " +
@@ -156,7 +156,8 @@ public class SQLQueriesStorage {
             "LEFT JOIN book_author ON book.author_uuid = book_author.uuid " +
             "LEFT JOIN book_language ON book.language_uuid = book_language.uuid " +
             "LEFT JOIN user ON user.id = book_order.user_id " +
-            "WHERE order_status_id = 1 OR order_status_id = 3 LIMIT ? OFFSET ? ";
+            "WHERE order_status_id = 1 OR order_status_id = 3 LIMIT ? OFFSET ? " +
+            "ORDER BY book_order.date ";
 
     private SQLQueriesStorage() {}
 }

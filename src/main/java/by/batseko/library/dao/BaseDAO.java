@@ -234,26 +234,47 @@ public abstract class BaseDAO {
         int bookPublishYear = book.getPublishYear();
         int bookPagesQuantity = book.getPagesQuantity();
 
-        if (!StringUtils.isBlank(bookGenreUUID)) {
-            queryWhereStatement.append(BOOK_BOOK_GENRE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookGenreUUID + END_OF_PREDICATE);
-        }
         if (!StringUtils.isBlank(bookAuthorUUID)) {
-            queryWhereStatement.append(BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookAuthorUUID + END_OF_PREDICATE);
-        }
-        if (!StringUtils.isBlank(bookPublisherUUID)) {
-            queryWhereStatement.append(BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPublisherUUID + END_OF_PREDICATE);
+            queryWhereStatement
+                    .append(BOOK_BOOK_AUTHOR_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookAuthorUUID)
+                    .append(END_OF_PREDICATE);
         }
         if (!StringUtils.isBlank(bookLanguageUUID)) {
-            queryWhereStatement.append(BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookLanguageUUID + END_OF_PREDICATE);
+            queryWhereStatement
+                    .append(BOOK_BOOK_LANGUAGE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookLanguageUUID)
+                    .append(END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookGenreUUID)) {
+            queryWhereStatement
+                    .append(BOOK_BOOK_GENRE_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookGenreUUID)
+                    .append(END_OF_PREDICATE);
+        }
+        if (!StringUtils.isBlank(bookPublisherUUID)) {
+            queryWhereStatement
+                    .append(BOOK_BOOK_PUBLISHER_UUID_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookPublisherUUID)
+                    .append(END_OF_PREDICATE);
         }
         if (!StringUtils.isBlank(bookTitle)) {
-            queryWhereStatement.append(BOOK_TITLE_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookTitle + END_OF_PREDICATE);
+            queryWhereStatement
+                    .append(BOOK_TITLE_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookTitle)
+                    .append(END_OF_PREDICATE);
         }
         if (bookPublishYear != 0) {
-            queryWhereStatement.append(BOOK_PUBLISH_YEAR_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPublishYear + END_OF_PREDICATE);
+            queryWhereStatement
+                    .append(BOOK_PUBLISH_YEAR_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookPublishYear)
+                    .append(END_OF_PREDICATE);
         }
         if (bookPagesQuantity != 0) {
-            queryWhereStatement.append(BOOK_PAGES_QUANTITY_COLUMN_NAME + MIDDLE_OF_PREDICATE + bookPagesQuantity + END_OF_PREDICATE);
+            queryWhereStatement
+                    .append(BOOK_PAGES_QUANTITY_COLUMN_NAME + MIDDLE_OF_PREDICATE)
+                    .append(bookPagesQuantity)
+                    .append(END_OF_PREDICATE);
         }
         if (queryWhereStatement.length() == 0) {
             return query;
