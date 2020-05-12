@@ -29,7 +29,7 @@ public class MyOrdersPage implements Command {
             int arrayOrdersShift = (currentPage - 1) * recordsPerPage;
             List<BookOrder> bookOrders = bookOrderService.getBookOrdersCache()
                     .get((String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN))
-                    .getAllValues();
+                    .getAllSortedValues();
             definePaginationContext(request, bookOrders.size(), currentPage, recordsPerPage);
             bookOrders = bookOrders.subList(arrayOrdersShift, Math.min(arrayOrdersShift + recordsPerPage, bookOrders.size()));
             request.setAttribute(JSPAttributeStorage.ORDER_LIST, bookOrders);

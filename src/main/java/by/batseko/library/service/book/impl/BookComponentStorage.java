@@ -2,7 +2,10 @@ package by.batseko.library.service.book.impl;
 
 import by.batseko.library.entity.book.bookcomponent.BaseBookComponent;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BookComponentStorage<T extends BaseBookComponent> {
@@ -30,6 +33,12 @@ public class BookComponentStorage<T extends BaseBookComponent> {
 
     public Collection<T> getAllValues() {
         return component.values();
+    }
+
+    public List<T> getAllSortedValues() {
+        List<T> list = new ArrayList<>(component.values());
+        Collections.sort(list);
+        return list;
     }
 
     void putAllElements(Collection<T> collection) {

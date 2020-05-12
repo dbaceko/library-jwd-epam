@@ -30,7 +30,14 @@ public interface Cache<K, V> {
     V get(K key) throws LibraryServiceException;
 
     /**
-     * Getting all list of values from cache
+     * Getting list of all sorted values from cache
+     *
+     * @return {@link List<V>} list of values into cache
+     */
+    List<V> getAllSortedValues();
+
+    /**
+     * Getting list of all values from cache
      *
      * @return {@link List<V>} list of values into cache
      */

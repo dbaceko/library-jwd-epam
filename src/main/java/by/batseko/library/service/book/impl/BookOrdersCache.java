@@ -6,13 +6,10 @@ import by.batseko.library.service.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BookOrdersCache  implements Cache<String, BookOrdersCache.UserBookOrdersMap> {
+public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOrdersMap> {
     private static final Logger LOGGER = LogManager.getLogger(BookOrdersCache.class);
 
     private final Map<String, UserBookOrdersMap> userOrdersCache;
@@ -55,6 +52,11 @@ public class BookOrdersCache  implements Cache<String, BookOrdersCache.UserBookO
     }
 
     @Override
+    public List<UserBookOrdersMap> getAllSortedValues() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<UserBookOrdersMap> getAllValues() {
         return new ArrayList<>(userOrdersCache.values());
     }
@@ -90,6 +92,13 @@ public class BookOrdersCache  implements Cache<String, BookOrdersCache.UserBookO
                 throw new LibraryServiceException("service.commonError");
             }
             return bookOrderMap.get(key);
+        }
+
+        @Override
+        public List<BookOrder> getAllSortedValues() {
+            List<BookOrder> list = getAllValues();
+            Collections.sort(list);
+            return list;
         }
 
         @Override
