@@ -21,7 +21,7 @@
     </c:if>
     <div class="search-wrapper">
         <aside class="search-form">
-            <form class="form-wrapper" method="get" action="controller"  id="book-search-form">
+            <form class="form-wrapper-search" method="get" action="controller"  id="book-search-form">
                 <fieldset class="fieldset">
                     <input type="hidden" name="action" value="bookCatalogPage">
                     <input type="hidden" name="recordsPerPage" value="10">

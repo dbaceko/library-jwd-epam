@@ -154,7 +154,7 @@ body {
     background: rgba(245, 245, 245, 0.9);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.125);
     padding: 30px;
-    margin: 30px;
+    margin: 120px;
 }
 
 .error-message {
@@ -410,4 +410,44 @@ nav .pagination li a,
 
 .content {
     margin-bottom: 30px;
+}
+
+#grid {
+    display: grid;
+    font-weight: 500;
+}
+
+#grid {
+    grid-template-columns: 250px 250px 250px;  /* three columns */
+    grid-template-rows: 250px 250px 250px; /* three rows  */
+}
+
+.content .grid-item {
+    padding: .3em;
+    background: rgba(245, 245, 245, 0.9);;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    color: black;
+    margin: 5px
+}
+
+.content .grid-item h4 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.content .book-search {
+    margin: 20px;
+    border:1px solid #ccc;
+    background: #1bbc9b;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+table, .form-wrapper-search {
+    width: 90%;
+    margin: 60px auto;
+    min-width: 1024px;
+
 }
