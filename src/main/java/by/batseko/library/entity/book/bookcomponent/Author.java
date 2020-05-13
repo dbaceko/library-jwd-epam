@@ -1,9 +1,14 @@
 package by.batseko.library.entity.book.bookcomponent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Author extends BaseBookComponent implements Serializable {
+    private static final Logger LOGGER = LogManager.getLogger(Author.class);
+
     private String authorName;
 
     public String getAuthorName() {
@@ -38,6 +43,10 @@ public class Author extends BaseBookComponent implements Serializable {
 
     @Override
     public int compareTo(BaseBookComponent o) {
-        return authorName.compareTo(((Author) o).authorName);
+        if (o instanceof Author) {
+            return authorName.compareTo(((Author) o).authorName);
+        }
+        LOGGER.warn(String.format("Try to compareTo incomparable types %s and %s", o.getClass(), Author.class));
+        return 0;
     }
 }

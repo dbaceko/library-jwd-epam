@@ -1,9 +1,14 @@
 package by.batseko.library.entity.book.bookcomponent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class BookLanguage extends BaseBookComponent implements Serializable {
+    private static final Logger LOGGER = LogManager.getLogger(BookLanguage.class);
+
     private String languageTitle;
 
     public String getLanguageTitle() {
@@ -38,6 +43,10 @@ public class BookLanguage extends BaseBookComponent implements Serializable {
 
     @Override
     public int compareTo(BaseBookComponent o) {
-        return languageTitle.compareTo(((BookLanguage) o).languageTitle);
+        if (o instanceof BookLanguage) {
+            return languageTitle.compareTo(((BookLanguage) o).languageTitle);
+        }
+        LOGGER.warn(String.format("Try to compareTo incomparable types %s and %s", o.getClass(), BookLanguage.class));
+        return 0;
     }
 }
