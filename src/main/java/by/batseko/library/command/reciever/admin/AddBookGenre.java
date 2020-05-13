@@ -19,7 +19,7 @@ public class AddBookGenre implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
         Genre author = new Genre();
-        author.setGenreTitle(request.getParameter(JSPAttributeStorage.BOOK_GENRE));
+        author.setGenreTitle(request.getParameter(JSPAttributeStorage.BOOK_GENRE).trim());
 
         try {
             genreService.add(author);

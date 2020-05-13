@@ -18,4 +18,11 @@
     <listener-class>by.batseko.library.listener.SessionListener</listener-class>
   </listener>
 
+  <jsp-config>
+    <taglib>
+      <taglib-uri>customtags</taglib-uri>
+      <taglib-location>/tld/copyright.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+
 </web-app>

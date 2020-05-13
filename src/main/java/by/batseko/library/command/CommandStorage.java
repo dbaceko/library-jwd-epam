@@ -2,10 +2,7 @@ package by.batseko.library.command;
 
 import by.batseko.library.command.reciever.admin.*;
 import by.batseko.library.command.reciever.page.*;
-import by.batseko.library.command.reciever.user.LogInCommand;
-import by.batseko.library.command.reciever.user.LogOutCommand;
-import by.batseko.library.command.reciever.user.RegisterUserCommand;
-import by.batseko.library.command.reciever.user.UpdateUserInfoCommand;
+import by.batseko.library.command.reciever.user.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +14,14 @@ public enum CommandStorage {
     PROFILE_PAGE(new ProfilePage(), "profilePage"),
     ADMIN_PAGE(new UsersOnlinePage(), "adminPage"),
     USERS_LIST_PAGE(new AllUsersPage(), "allUsersList"),
+    USER_ORDERS_PAGE(new MyOrdersPage(),"userOrdersPage"),
+    BOOK_CATALOG_PAGE(new FindBookPage(),"bookCatalogPage"),
+
+    ADD_BOOK_ORDER(new AddBookOrder(), "addBookOrder"),
+    APPROVE_BOOK_ORDER(new ApproveBookOrder(), "approveBookOrder"),
+    CANCEL_BOOK_ORDER(new CancelBookOrder(), "cancelBookOrder"),
+    RETURN_BOOK_ORDER(new ReturnBookOrder(), "returnBookOrder"),
+
     ADD_BOOK_PAGE(new AddBookPage(), "addBookPage"),
     ADD_BOOK(new AddBook(), "addBook"),
     ADD_BOOK_COMPONENT_PAGE(new AddBookComponentPage(), "addBookComponentPage"),
@@ -24,11 +29,15 @@ public enum CommandStorage {
     ADD_BOOK_PUBLISHER(new AddBookPublisher(), "addBookPublisher"),
     ADD_BOOK_GENRE(new AddBookGenre(), "addBookGenre"),
     ADD_BOOK_LANGUAGE(new AddBookLanguage(), "addBookLanguage"),
+    OPEN_ORDERS_PAGE(new OpenOrdersPage(), "openOrdersPage"),
 
     SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
+    FORGET_PASSWORD_GENERATE_EMAIL(new ForgetPasswordEmailSendingCommand(), "sendForgetPasswordData"),
+    FORGET_PASSWORD_LOG_IN(new LogInByForgetPasswordLink(), "logInByForgetPasswordLink"),
+
     LOG_OUT(new LogOutCommand(), "logOut"),
     TOGGLE_USER_BAN(new ToggleUserBan(),"banUser");
 

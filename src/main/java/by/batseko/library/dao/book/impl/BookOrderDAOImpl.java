@@ -33,6 +33,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.setInt(4, bookOrder.getOrderType().getId());
             preparedStatement.executeUpdate();
             BookInstanceDAOImpl.updateBookInstanceAvailableStatus(bookOrder.getBookInstance().getUuid(), false, connection);
+            connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
             throw new LibraryDAOException("query.bookOrder.creation.commonError", e);
@@ -68,6 +69,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.setString(2, bookOrder.getUuid());
             preparedStatement.executeUpdate();
             BookInstanceDAOImpl.updateBookInstanceAvailableStatus(bookOrder.getBookInstance().getUuid(), true, connection);
+            connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
             throw new LibraryDAOException("query.bookOrder.update.status", e);
@@ -78,10 +80,47 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
     }
 
     @Override
-    public List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException {
+    public BookOrder findOrderByUUID(String uuid) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_ORDER_BY_UUID)) {
+            preparedStatement.setString(1, uuid);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return constructOrderByResultSet(resultSet);
+            } else {
+                LOGGER.debug(String.format("Book order not found by uuid %s", uuid));
+                throw new LibraryDAOException("query.order.read.notFound");
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public List<BookOrder> findOrdersByUserId(int userId, int currentPage, int recordsPerPage) throws LibraryDAOException {
         ResultSet resultSet = null;
         try(Connection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_ORDERS_BY_USER_ID)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, recordsPerPage);
+            preparedStatement.setInt(3, (currentPage - 1) * recordsPerPage);
+            resultSet = preparedStatement.executeQuery();
+            return getAllOrdersFromResultSet(resultSet);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOK_ORDERS_BY_USER_ID)) {
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
             return getAllOrdersFromResultSet(resultSet);
@@ -93,13 +132,50 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
     }
 
     @Override
-    public List<BookOrder> findAllOrders() throws LibraryDAOException {
-        return findAllOrdersByQuery(SQLQueriesStorage.FIND_BOOK_ORDERS);
+    public int findOrdersQuantityByUserId(int userId) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_ORDERS_QUANTITY_BY_USER_ID)) {
+            preparedStatement.setInt(1, userId);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
     }
 
     @Override
-    public List<BookOrder> findAllOpenedRequestsOrders() throws LibraryDAOException {
-        return findAllOrdersByQuery(SQLQueriesStorage.FIND_BOOK_ORDERS_WITH_OPEN_REQUEST);
+    public int findOpenOrdersQuantity() throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_OPEN_BOOK_ORDERS_QUANTITY)) {
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+    }
+
+    @Override
+    public List<BookOrder> findAllOpenedOrders(int currentPage, int recordsPerPage) throws LibraryDAOException {
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_BOOK_ORDERS_WITH_OPEN_REQUEST)) {
+            preparedStatement.setInt(1, recordsPerPage);
+            preparedStatement.setInt(2, (currentPage - 1) * recordsPerPage);
+            resultSet = preparedStatement.executeQuery();
+            return getAllOrdersFromResultSet(resultSet);
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
     }
 
     private List<BookOrder> getAllOrdersFromResultSet(ResultSet resultSet) throws SQLException {
@@ -118,15 +194,5 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             }
         }
         return bookOrders;
-    }
-
-    private List<BookOrder> findAllOrdersByQuery(String sqlQuery) throws LibraryDAOException{
-        try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            ResultSet resultSet = preparedStatement.executeQuery()) {
-            return getAllOrdersFromResultSet(resultSet);
-        } catch (SQLException | ConnectionPoolException e) {
-            throw new LibraryDAOException("service.commonError", e);
-        }
     }
 }

@@ -134,6 +134,7 @@ public class ConnectionPool {
         for (int i = 0; i < connectionsCount; i++) {
             try {
                 ProxyConnection proxyConnection = new ProxyConnection(DriverManager.getConnection(url, jdbcMysqlConfigProperties));
+                proxyConnection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
                 availableConnections.add(proxyConnection);
             } catch (SQLException e) {
                 LOGGER.warn("Connection not created", e);

@@ -2,7 +2,7 @@ package by.batseko.library.entity.book.bookcomponent;
 
 import java.util.UUID;
 
-public class BaseBookComponent {
+public abstract class BaseBookComponent implements Comparable<BaseBookComponent> {
     protected String uuid;
 
     public String getUuid() {

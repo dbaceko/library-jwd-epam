@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum OrderType {
-    INVALID(0, ""),
-    SUBSCRIPTION(1, ""),
-    READING_HOLE(2, "");
+    INVALID(0, "orderType.invalid"),
+    SUBSCRIPTION(1, "orderType.subscription"),
+    READING_HOLE(2, "orderType.readingHole");
 
     private static final Logger LOGGER = LogManager.getLogger(OrderType.class);
 

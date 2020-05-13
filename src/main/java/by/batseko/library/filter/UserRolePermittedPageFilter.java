@@ -63,7 +63,6 @@ public class UserRolePermittedPageFilter implements Filter {
 
     private void fillPermittedAdminPages() {
         adminPages.add(PageStorage.ROOT);
-        adminPages.add(PageStorage.ROOT_HOME);
         adminPages.add(PageStorage.HOME);
         adminPages.add(PageStorage.ONLINE_USERS_LIST);
         adminPages.add(PageStorage.ERROR);
@@ -72,7 +71,6 @@ public class UserRolePermittedPageFilter implements Filter {
 
     private void fillPermittedUserPages() {
         userPages.add(PageStorage.ROOT);
-        userPages.add(PageStorage.ROOT_HOME);
         userPages.add(PageStorage.HOME);
         userPages.add(PageStorage.ERROR);
         userPages.add(PageStorage.PROFILE_USER);
@@ -80,9 +78,9 @@ public class UserRolePermittedPageFilter implements Filter {
 
     private void fillPermittedGuestPages() {
         guestPages.add(PageStorage.ROOT);
-        guestPages.add(PageStorage.ROOT_HOME);
         guestPages.add(PageStorage.HOME);
         guestPages.add(PageStorage.LOG_IN);
         guestPages.add(PageStorage.REGISTER_USER);
+        guestPages.add(PageStorage.FORGET_PASSWORD);
     }
 }

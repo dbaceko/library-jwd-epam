@@ -1,54 +1,94 @@
 package by.batseko.library.service.user.impl;
 
+import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.dao.user.UserDAO;
 import by.batseko.library.entity.user.User;
-import by.batseko.library.exception.EncryptionException;
+import by.batseko.library.exception.UtilException;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.ValidatorException;
 import by.batseko.library.factory.DAOFactory;
+import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
+import by.batseko.library.service.Cache;
+import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
-import by.batseko.library.util.Encryption;
+import by.batseko.library.util.EmailDistributorUtil;
+import by.batseko.library.util.EmailMessageLocalizationDispatcher;
+import by.batseko.library.util.EmailMessageType;
+import by.batseko.library.util.HashGeneratorUtil;
 import by.batseko.library.validatior.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
+    private static final int TOKEN_VALUE_COOKIE_INDEX = 0;
+    private static final int USER_ID_COOKIE_INDEX = 1;
+
     private final UserValidator validator;
-    private final Encryption encryption;
-    private final by.batseko.library.service.user.impl.OnlineUsersCache activeUserCache;
+    private final HashGeneratorUtil hashGeneratorUtil;
+    private final OnlineUsersCache activeUserCache;
     private final UserDAO userDAO;
+    private final EmailDistributorUtil emailDistributorUtil;
+    private final EmailMessageLocalizationDispatcher emailLocalizationDispatcher;
 
     public UserServiceImpl(){
         validator = ValidatorFactory.getInstance().getUserValidator();
-        encryption = UtilFactory.getInstance().getEncryption();
-        activeUserCache = by.batseko.library.service.user.impl.OnlineUsersCache.getInstance();
+        hashGeneratorUtil = UtilFactory.getInstance().getHashGeneratorUtil();
+        activeUserCache = OnlineUsersCache.getInstance();
         userDAO = DAOFactory.getInstance().getUserDAO();
+        emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
+        emailLocalizationDispatcher = UtilFactory.getInstance().getEmailMessageLocalizationDispatcher();
     }
 
     @Override
-    public User logIn(String login, String password) throws LibraryServiceException {
+    public User logInByPassword(String login, String password) throws LibraryServiceException {
+        try{
+            validator.validateLogin(login);
+            validator.validatePassword(password);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
         try {
             User user = userDAO.findUserByLogin(login);
-            if (encryption.validatePassword(password, user.getPassword())) {
-                activeUserCache.put(user.getLogin(), user);
+            if (hashGeneratorUtil.validatePassword(password, user.getPassword())) {
                 LOGGER.info(String.format("Add user %s to cache", user));
+                initCacheAfterLogIn(user);
                 return user;
             } else {
                 LOGGER.info("Password dont match");
                 throw new LibraryServiceException("validation.user.login.incorrect");
             }
-        } catch (EncryptionException e) {
-            LOGGER.warn(e);
+        } catch (UtilException e) {
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public User logInByToken(String token) throws LibraryServiceException {
+        if (token == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
+        try {
+            String[] tokenComponents = token.split(JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER);
+            int userId = Integer.parseInt(tokenComponents[USER_ID_COOKIE_INDEX]);
+            String tokenValue = tokenComponents[TOKEN_VALUE_COOKIE_INDEX];
+            User user = userDAO.findUserByIdAndToken(userId, tokenValue);
+            if (user != null) {
+                initCacheAfterLogIn(user);
+                return user;
+            }
+            LOGGER.warn(String.format("Cant use token %s for log in", token));
+            throw new LibraryServiceException("service.commonError");
+        } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -60,18 +100,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByLogin(String login) throws LibraryServiceException {
+        try {
+            validator.validateLogin(login);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
         User user = null;
         try {
             user = activeUserCache.get(login);
         } catch (LibraryServiceException e) {
-            LOGGER.warn(e);
+            LOGGER.warn(e.getMessage(), e);
         }
         if (user == null) {
             LOGGER.info("User is not in cache");
             try {
                 user = userDAO.findUserByLogin(login);
             } catch (LibraryDAOException e) {
-                LOGGER.warn(e);
                 throw new LibraryServiceException(e.getMessage(), e);
             }
         }
@@ -81,9 +125,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(int id) throws LibraryServiceException {
         try {
-            return userDAO.findUserByID(id);
+            return userDAO.findUserById(id);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -98,13 +141,58 @@ public class UserServiceImpl implements UserService {
                 return userList;
             }
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
+            LOGGER.warn(e.getMessage(), e);
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String generateRememberUserToken(int id) throws LibraryServiceException {
+        String token = UUID.randomUUID().toString();
+        try {
+            userDAO.updateRememberUserToken(id, token);
+            return token + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN_DIVIDER + id;
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void sendLogInTokenIfForgetPassword(String email, String pageRootUrl) throws LibraryServiceException {
+        try {
+            validator.validateEmail(email);
+        } catch (ValidatorException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+        try {
+            User user = userDAO.findUserByEmail(email);
+            String token = generateRememberUserToken(user.getId());
+            String userLogInLink = pageRootUrl + '?' +JSPAttributeStorage.COMMAND + '=' + JSPAttributeStorage.FORGET_PASSWORD_LOG_IN
+                    + '&' + JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN + '=' + token;
+            String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_FORGET_PASSWORD);
+            String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_FORGET_PASSWORD, userLogInLink);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, email);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        } catch (UtilException e) {
+            throw new LibraryServiceException("service.commonError", e);
+        }
+    }
+
+    @Override
+    public void deleteRememberUserToken(int id) throws LibraryServiceException {
+        try {
+            userDAO.deleteRememberUserToken(id);
+        } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
     public void registerUser(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             validator.validateNewUser(user);
         } catch (ValidatorException e) {
@@ -112,19 +200,20 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(encryption.generateHash(user.getPassword()));
+            user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.registerUser(user);
-        } catch (EncryptionException e) {
-            LOGGER.warn(e);
+        } catch (UtilException e) {
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
     public void updateUserProfileData(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             validator.validateUpdatedUser(user);
         } catch (ValidatorException e) {
@@ -132,42 +221,53 @@ public class UserServiceImpl implements UserService {
             throw new LibraryServiceException(e.getMessage(), e);
         }
         try {
-            user.setPassword(encryption.generateHash(user.getPassword()));
+            user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.updateUserProfileData(user);
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }
-        } catch (EncryptionException | LibraryDAOException e) {
-            LOGGER.warn(e);
+        } catch (UtilException | LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
     public void updateUserBanStatus(User user) throws LibraryServiceException {
+        if (user == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             userDAO.updateUserBanStatus(user);
+            String status = user.getBanned() ? EmailMessageType.MESSAGE_USER_BAN_STATUS_BANNED : EmailMessageType.MESSAGE_USER_BAN_STATUS_UNBANNED;
+            String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_USER_BAN_STATUS_UPDATED);
+            String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_USER_BAN_STATUS_UPDATED, status);
+            emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, user.getEmail());
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e);
             throw new LibraryServiceException(e.getMessage(), e);
+        } catch (UtilException e) {
+            throw new LibraryServiceException("service.commonError", e);
         }
     }
 
     @Override
-    public void deleteUserById(int userID) throws LibraryServiceException {
-        try {
-            userDAO.findUserByID(userID);
-        } catch (LibraryDAOException e) {
-            LOGGER.info(e);
-            throw new LibraryServiceException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public by.batseko.library.service.user.impl.OnlineUsersCache getOnlineUsersCache() {
+    public Cache<String, User> getOnlineUsersCache() {
         return activeUserCache;
+    }
+
+    private void initCacheAfterLogIn(User user){
+        BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
+        try {
+            activeUserCache.put(user.getLogin(), user);
+        } catch (LibraryServiceException e) {
+            LOGGER.warn(String.format("Can't put user %s in cache", user), e);
+        }
+        try {
+            bookOrderService.getBookOrdersCache().put(user.getLogin(), bookOrderService.findAllOrdersByUserId(user.getId()));
+        } catch (LibraryServiceException e) {
+            LOGGER.warn(String.format("Can't put user's %s book orders in cache", user), e);
+        }
     }
 }

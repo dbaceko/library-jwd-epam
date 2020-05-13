@@ -1,9 +1,11 @@
 package by.batseko.library.listener;
 
 import by.batseko.library.command.JSPAttributeStorage;
+import by.batseko.library.entity.user.User;
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.user.impl.OnlineUsersCache;
+import by.batseko.library.service.Cache;
+import by.batseko.library.service.book.BookOrderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +27,11 @@ public class SessionListener implements HttpSessionListener  {
     public void sessionDestroyed(HttpSessionEvent se) {
         String userLogin = (String) se.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
         LOGGER.info(String.format("Session is destroyed for %s", userLogin));
-        OnlineUsersCache usersCache = ServiceFactory.getInstance().getUserService().getOnlineUsersCache();
-        usersCache.remove(userLogin);
+        if (userLogin != null) {
+            Cache<String , User> usersCache = ServiceFactory.getInstance().getUserService().getOnlineUsersCache();
+            usersCache.remove(userLogin);
+            BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
+            bookOrderService.getBookOrdersCache().remove(userLogin);
+        }
     }
 }

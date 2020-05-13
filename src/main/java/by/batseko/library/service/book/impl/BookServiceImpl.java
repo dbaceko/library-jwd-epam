@@ -1,6 +1,7 @@
 package by.batseko.library.service.book.impl;
 
 import by.batseko.library.dao.book.BookDAO;
+import by.batseko.library.dto.BookDTO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
@@ -29,6 +30,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void add(Book book, int quantity) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validateNewBook(book);
             bookValidator.validateBookQuantity(quantity);
@@ -46,6 +50,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookDAO.findBookByUUID(uuid);
         } catch (LibraryDAOException e) {
@@ -54,9 +61,33 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() throws LibraryServiceException {
+    public List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
-            return bookDAO.findAllBooks();
+            return bookDAO.findBooksDTOByFields(book, currentPage, recordsPerPage);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int findBookQuantityByFields(Book book) throws LibraryServiceException {
+        if (book == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
+        try {
+            return bookDAO.findBookQuantityByFields(book);
+        } catch (LibraryDAOException e) {
+            throw new LibraryServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException {
+        try {
+            return bookDAO.findAllBooksDTO(currentPage, recordsPerPage);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }

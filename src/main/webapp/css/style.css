@@ -42,13 +42,14 @@ header li {
     float: right;
 }
 
+footer ul li,
 .admin-bar li a,
 header li a,
 header li div {
     display: block;
     color: white;
     text-align: center;
-    padding: 15px 15px;
+    padding: 15px;
     text-decoration: none;
 }
 
@@ -146,6 +147,7 @@ body {
     min-height: calc(100vh - 92px);
 }
 
+.form-wrapper-search,
 .form-wrapper,
 .error-message {
     max-width: 500px;
@@ -153,13 +155,14 @@ body {
     background: rgba(245, 245, 245, 0.9);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.125);
     padding: 30px;
-    margin: 30px;
+    margin: 120px;
 }
 
 .error-message {
     margin: 60px auto 0 auto;
 }
 
+.form-wrapper-search .title,
 .form-wrapper .title {
     font-size: 24px;
     font-weight: 700;
@@ -169,17 +172,20 @@ body {
     text-align: center;
 }
 
+.form-wrapper-search fieldset,
 .form-wrapper fieldset {
     width: 100%;
     border: none;
 }
 
+.form-wrapper-search fieldset label,
 .form-wrapper fieldset label {
     margin-bottom: 15px;
     display: flex;
     align-items: center;
 }
 
+.form-wrapper-search fieldset label span,
 .form-wrapper fieldset label span {
     width: 200px;
     color: #757575;
@@ -187,6 +193,7 @@ body {
     font-size: 14px;
 }
 
+.form-wrapper-search fieldset label .input,
 .form-wrapper fieldset label .input {
     width: 100%;
     outline: none;
@@ -224,15 +231,15 @@ body {
     border-radius: 3px;
 }
 
+.form-wrapper-search fieldset label .input:focus,
 .form-wrapper fieldset label .input:focus,
 .form-wrapper fieldset .inputfield .custom_select select:focus {
     border: 1px solid #1bbc9b;
 }
-
+.form-wrapper-search fieldset span,
 .form-wrapper fieldset .terms span {
     font-size: 14px;
     color: #757575;
-
 }
 
 .form-wrapper fieldset .terms .check {
@@ -281,6 +288,7 @@ body {
 }
 
 td form .btn,
+.form-wrapper-search fieldset .inputfield .btn,
 .form-wrapper fieldset .inputfield .btn {
     width: 100%;
     padding: 8px 10px;
@@ -294,9 +302,15 @@ td form .btn,
     margin: 10px 0;
 }
 
-.form-wrapper fieldset .book-select_wrapper button {
-    width: 30%;
-    padding: 8px 10px;
+.form-wrapper-search fieldset .book-select_wrapper ,
+.form-wrapper .fieldset .book-select_wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.form-wrapper .fieldset .book-select_wrapper button {
+    padding: 5px 5px;
     font-size: 15px;
     border: 0;
     background: #1bbc9b;
@@ -304,7 +318,6 @@ td form .btn,
     cursor: pointer;
     border-radius: 3px;
     outline: none;
-    margin: 10px 0;
 }
 
 .form-wrapper fieldset .inputfield .btn:hover {
@@ -384,3 +397,69 @@ th:first-child, td:first-child {
     vertical-align: top;
 }
 
+.search-wrapper .search-form #book-search-form {
+    max-width: none;
+    width: 80%;
+    vertical-align: top;
+    background: rgba(245, 245, 245, 0.9);
+}
+
+nav .pagination {
+    text-align:center;
+    margin: 30px;
+}
+
+nav .pagination li {
+    display: inline;
+    margin-right: 5px;
+}
+
+nav .pagination li a,
+.form-wrapper a {
+    text-decoration: none;
+    color: #666
+}
+
+.content {
+    margin-bottom: 30px;
+}
+
+#grid {
+    display: grid;
+    font-weight: 500;
+}
+
+#grid {
+    grid-template-columns: 250px 250px 250px;  /* three columns */
+    grid-template-rows: 250px 250px 250px; /* three rows  */
+}
+
+.content .grid-item {
+    padding: .3em;
+    background: rgba(245, 245, 245, 0.9);;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    color: black;
+    margin: 5px
+}
+
+.content .grid-item h4 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.content .book-search {
+    margin: 20px;
+    border:1px solid #ccc;
+    background: #1bbc9b;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+table, .form-wrapper-search {
+    width: 90%;
+    margin: 60px auto;
+    min-width: 1024px;
+
+}

@@ -1,8 +1,9 @@
 package by.batseko.library.entity.book;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class BookInstance {
+public class BookInstance implements Serializable {
     private String uuid;
     private Book book;
     private boolean isAvailable;

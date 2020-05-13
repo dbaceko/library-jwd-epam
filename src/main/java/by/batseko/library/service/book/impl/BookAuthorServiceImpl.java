@@ -23,6 +23,9 @@ public class BookAuthorServiceImpl implements BookComponentService<Author> {
 
     @Override
     public void add(Author author) throws LibraryServiceException {
+        if (author == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validateAuthor(author.getAuthorName());
             author.defineUUID();
@@ -35,6 +38,9 @@ public class BookAuthorServiceImpl implements BookComponentService<Author> {
 
     @Override
     public Author findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookAuthorDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {

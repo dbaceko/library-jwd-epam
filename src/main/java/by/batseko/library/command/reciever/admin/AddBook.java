@@ -33,14 +33,15 @@ public class AddBook implements Command {
     }
 
     private Book constructBookFromRequest(HttpServletRequest request) {
-        return new BookBuilder().setGenreUUID(request.getParameter(JSPAttributeStorage.BOOK_GENRE))
+        return new BookBuilder()
+                .setGenreUUID(request.getParameter(JSPAttributeStorage.BOOK_GENRE))
                 .setBookLanguageUUID(request.getParameter(JSPAttributeStorage.BOOK_LANGUAGE))
                 .setPublisherUUID(request.getParameter(JSPAttributeStorage.BOOK_PUBLISHER))
                 .setAuthorUUID(request.getParameter(JSPAttributeStorage.BOOK_AUTHOR))
-                .setTitle(request.getParameter(JSPAttributeStorage.BOOK_TITLE))
+                .setTitle(request.getParameter(JSPAttributeStorage.BOOK_TITLE).trim())
                 .setPublishYear(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PUBLISH_YEAR)))
                 .setPagesQuantity(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PAGES_QUANTITY)))
-                .setDescription(request.getParameter(JSPAttributeStorage.BOOK_DESCRIPTION))
+                .setDescription(request.getParameter(JSPAttributeStorage.BOOK_DESCRIPTION).trim())
                 .build();
     }
 }

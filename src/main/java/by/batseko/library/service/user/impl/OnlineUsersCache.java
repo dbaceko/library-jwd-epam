@@ -1,15 +1,18 @@
 package by.batseko.library.service.user.impl;
+
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
+import by.batseko.library.service.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-public class OnlineUsersCache {
+public class OnlineUsersCache implements Cache<String, User> {
     private static final Logger LOGGER = LogManager.getLogger(OnlineUsersCache.class);
 
     private final Map<String, User> userCache;
@@ -43,7 +46,14 @@ public class OnlineUsersCache {
 
     }
 
-    public List<User> getAllOnlineUsers() {
+    @Override
+    public List<User> getAllSortedValues() {
+        List<User> list = getAllValues();
+        Collections.sort(list);
+        return list;
+    }
+
+    public List<User> getAllValues() {
         return new ArrayList<>(userCache.values());
     }
 
@@ -58,6 +68,5 @@ public class OnlineUsersCache {
     public void removeAll() {
         userCache.clear();
     }
-
 }
 

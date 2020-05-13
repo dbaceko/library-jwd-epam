@@ -19,7 +19,7 @@ public class AddBookPublisher  implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
         Publisher publisher = new Publisher();
-        publisher.setPublisherTitle(request.getParameter(JSPAttributeStorage.BOOK_PUBLISHER));
+        publisher.setPublisherTitle(request.getParameter(JSPAttributeStorage.BOOK_PUBLISHER).trim());
 
         try {
             publisherService.add(publisher);

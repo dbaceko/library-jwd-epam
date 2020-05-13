@@ -20,6 +20,7 @@
     <servlet.version>4.0.1</servlet.version>
     <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
     <apache-utills.version>3.10</apache-utills.version>
+    <javax.mail.version>1.6.2</javax.mail.version>
   </properties>
 
   <dependencies>
@@ -54,6 +55,11 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${apache-utills.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <version>${javax.mail.version}</version>
     </dependency>
   </dependencies>
 

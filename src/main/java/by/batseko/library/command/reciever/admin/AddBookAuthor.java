@@ -19,7 +19,7 @@ public class AddBookAuthor implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
         Author author = new Author();
-        author.setAuthorName(request.getParameter(JSPAttributeStorage.BOOK_AUTHOR));
+        author.setAuthorName(request.getParameter(JSPAttributeStorage.BOOK_AUTHOR).trim());
 
         try {
             authorService.add(author);

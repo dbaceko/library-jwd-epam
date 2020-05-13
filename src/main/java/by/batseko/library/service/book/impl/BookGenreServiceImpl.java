@@ -24,6 +24,9 @@ public class BookGenreServiceImpl implements BookComponentService<Genre> {
 
     @Override
     public void add(Genre genre) throws LibraryServiceException {
+        if (genre == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             bookValidator.validateGenre(genre.getGenreTitle());
             genre.defineUUID();
@@ -36,6 +39,9 @@ public class BookGenreServiceImpl implements BookComponentService<Genre> {
 
     @Override
     public Genre findByUUID(String uuid) throws LibraryServiceException {
+        if (uuid == null) {
+            throw new LibraryServiceException("service.commonError");
+        }
         try {
             return bookGenreDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {

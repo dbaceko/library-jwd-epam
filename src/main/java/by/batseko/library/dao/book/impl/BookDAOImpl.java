@@ -3,6 +3,7 @@ package by.batseko.library.dao.book.impl;
 import by.batseko.library.dao.BaseDAO;
 import by.batseko.library.dao.SQLQueriesStorage;
 import by.batseko.library.dao.book.BookDAO;
+import by.batseko.library.dto.BookDTO;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.exception.LibraryDAOException;
@@ -16,6 +17,10 @@ import java.util.List;
 
 public class BookDAOImpl extends BaseDAO implements BookDAO {
     private static final Logger LOGGER = LogManager.getLogger(BookDAOImpl.class);
+
+    private static final String LIMIT_OFFSET_STATEMENT = " LIMIT ? OFFSET ? ";
+    private static final String GROUP_BY_UUID_STATEMENT = " GROUP BY uuid ";
+    private static final String ORDER_BY_STATEMENT = " ORDER BY  ";
 
     @Override
     public void addBook(Book book, int quantity) throws LibraryDAOException {
@@ -73,30 +78,58 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> findAllBooks() throws LibraryDAOException {
-        List<Book> books;
+    public int findBookQuantityByFields(Book book) throws LibraryDAOException {
         try(Connection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.FIND_ALL_BOOKS);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(constructFindQueryFromBook(book, SQLQueriesStorage.FIND_ALL_BOOKS_QUANTITY));
             ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (!resultSet.isBeforeFirst()) {
-                books = Collections.emptyList();
-            } else {
-                resultSet.last();
-                int listSize = resultSet.getRow();
-                resultSet.beforeFirst();
-                books = new ArrayList<>(listSize);
-                while (resultSet.next()) {
-                    Book book = constructBookByResultSet(resultSet);
-                    LOGGER.info(book);
-                    books.add(book);
-                }
-            }
+            resultSet.next();
+            return resultSet.getInt(1);
         } catch (SQLException | ConnectionPoolException e) {
             throw new LibraryDAOException("service.commonError", e);
         }
-        return books;
     }
 
+    @Override
+    public List<BookDTO> findBooksDTOByFields(Book book, int currentPage, int recordsPerPage) throws LibraryDAOException {
+        return findBooksDTOByQuery(constructFindQueryFromBook(book, SQLQueriesStorage.FIND_ALL_BOOKS)
+                + GROUP_BY_UUID_STATEMENT + ORDER_BY_STATEMENT + BOOK_AUTHOR_COLUMN_NAME + LIMIT_OFFSET_STATEMENT
+                , currentPage, recordsPerPage);
+    }
+
+    @Override
+    public List<BookDTO> findAllBooksDTO(int currentPage, int recordsPerPage) throws LibraryDAOException {
+        return findBooksDTOByQuery(SQLQueriesStorage.FIND_ALL_BOOKS + LIMIT_OFFSET_STATEMENT, currentPage, recordsPerPage);
+    }
+
+    private List<BookDTO> findBooksDTOByQuery(String query, int currentPage, int recordsPerPage) throws LibraryDAOException {
+        List<BookDTO> bookDTOList;
+        ResultSet resultSet = null;
+        try(Connection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, recordsPerPage);
+            preparedStatement.setInt(2, (currentPage - 1) * recordsPerPage);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.last();
+            int listSize = resultSet.getRow();
+            resultSet.beforeFirst();
+            bookDTOList = new ArrayList<>(listSize);
+            BookDTO bookDTO;
+            while (resultSet.next()) {
+                bookDTO = constructBookDTOByResultSet(resultSet);
+                LOGGER.info(bookDTO);
+                bookDTOList.add(bookDTO);
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new LibraryDAOException("service.commonError", e);
+        } finally {
+            closeResultSet(resultSet);
+        }
+        if (bookDTOList.size() == 1 && bookDTOList.get(0).getBook().getUuid() == null) {
+                bookDTOList = Collections.emptyList();
+        }
+        return bookDTOList;
+    }
 
     private String getBookUUIDFromBookFields(Book book, Connection connection) throws LibraryDAOException {
         ResultSet resultSet = null;

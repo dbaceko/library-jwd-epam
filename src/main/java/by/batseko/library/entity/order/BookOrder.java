@@ -4,16 +4,17 @@ import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.entity.book.BookInstance;
 import by.batseko.library.entity.user.User;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class BookOrder {
+public class BookOrder implements Serializable, Comparable<BookOrder> {
     private String uuid;
     private User user;
     private BookInstance bookInstance;
     private OrderType orderType;
     private OrderStatus orderStatus;
-    private Timestamp data;
+    private Timestamp date;
 
     public BookOrder(){}
 
@@ -23,7 +24,7 @@ public class BookOrder {
         this.bookInstance = bookOrderBuilder.getBookInstance();
         this.orderType = bookOrderBuilder.getOrderType();
         this.orderStatus = bookOrderBuilder.getOrderStatus();
-        this.data = bookOrderBuilder.getData();
+        this.date = bookOrderBuilder.getDate();
     }
 
     public String getUuid() {
@@ -66,12 +67,12 @@ public class BookOrder {
         this.orderStatus = orderStatus;
     }
 
-    public Timestamp getData() {
-        return data;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setData(Timestamp data) {
-        this.data = data;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
     @Override
@@ -84,12 +85,12 @@ public class BookOrder {
                 Objects.equals(bookInstance, bookOrder.bookInstance) &&
                 orderType == bookOrder.orderType &&
                 orderStatus == bookOrder.orderStatus &&
-                Objects.equals(data, bookOrder.data);
+                Objects.equals(date, bookOrder.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, user, bookInstance, orderType, orderStatus, data);
+        return Objects.hash(uuid, user, bookInstance, orderType, orderStatus, date);
     }
 
     @Override
@@ -100,7 +101,12 @@ public class BookOrder {
                 ", bookInstance=" + bookInstance +
                 ", orderType=" + orderType +
                 ", orderStatus=" + orderStatus +
-                ", data=" + data +
+                ", data=" + date +
                 '}';
+    }
+
+    @Override
+    public int compareTo(BookOrder o) {
+        return date.compareTo(o.date);
     }
 }

@@ -9,4 +9,15 @@ public interface Command {
     default void setErrorMessage(HttpServletRequest request, String message) {
         request.setAttribute(JSPAttributeStorage.EXCEPTION_MESSAGE, message);
     }
+
+    default void definePaginationContext(HttpServletRequest request, int fullRecordsQuantity, int currentPage, int recordsPerPage) {
+        int pagesQuantity = fullRecordsQuantity / recordsPerPage;
+
+        if (pagesQuantity % recordsPerPage > 0) {
+            pagesQuantity++;
+        }
+        request.setAttribute(JSPAttributeStorage.PAGINATION_PAGES_QUANTITY, pagesQuantity);
+        request.setAttribute(JSPAttributeStorage.PAGINATION_CURRENT_PAGE, currentPage);
+        request.setAttribute(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE, recordsPerPage);
+    }
 }

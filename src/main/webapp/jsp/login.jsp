@@ -36,16 +36,21 @@
             </label>
             <div class="terms">
                 <label class="check">
-                    <input type="checkbox">
+                    <input type="checkbox" name="generateRememberUserToken">
                     <span class="checkmark"></span>
                 </label>
                 <span><fmt:message bundle="${locale}" key="login.remember"/></span>
             </div>
             <label class="inputfield">
-                <input class="btn" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
+                <input class="btn submit" type="submit" value=<fmt:message bundle="${locale}" key="login.enter"/> >
             </label>
         </fieldset>
+        <a href="${pageContext.request.contextPath}/jsp/forgetPassword.jsp">
+            <fmt:message bundle="${locale}" key="login.forgetPassword"/>
+        </a>
     </form>
 </main>
 <jsp:include page="include/footer.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/xxsProtectionScript.js"></script>
+</body>
 </html>
