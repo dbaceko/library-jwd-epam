@@ -1,17 +1,4 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<fmt:setLocale value="${lang}" />
-<fmt:setBundle basename="localization" var="locale"/>
-<fmt:setBundle basename="exceptionMessages" var="exc_msg"/>
-
-<!DOCTYPE html>
-<html lang=${lang}>
-<head>
-    <jsp:include page="include/meta.jsp"/>
-</head>
-<body>
-<jsp:include page="include/header.jsp"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <c:if test="${not empty exception_msg}">
     <div class="error-message">
         <p>
@@ -50,7 +37,4 @@
         </a>
     </form>
 </main>
-<jsp:include page="include/footer.jsp"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/xxsProtectionScript.js"></script>
-</body>
-</html>

@@ -1,19 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<fmt:setLocale value="${lang}" />
-<fmt:setBundle basename="localization" var="locale"/>
-<fmt:setBundle basename="exceptionMessages" var="exc_msg"/>
-
-<!DOCTYPE html>
-<html lang=${lang}>
-<head>
-    <jsp:include page="include/meta.jsp"/>
-</head>
-<body>
-
-<jsp:include page="include/header.jsp"/>
 <main class="content">
     <div class="table_content-wrapper">
         <c:if test="${not empty exception_msg}">
@@ -122,6 +107,4 @@
         </c:if>
     </div>
 </main>
-<jsp:include page="include/footer.jsp"/>
-</body>
-</html>
+
