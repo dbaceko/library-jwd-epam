@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <main class="content">
-    <jsp:include page="../include/adminBar.jsp"/>
     <c:if test="${not empty exception_msg}">
         <div class="error-message">
             <p>

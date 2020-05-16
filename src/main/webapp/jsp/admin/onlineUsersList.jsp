@@ -8,7 +8,6 @@
         </div>
     </c:if>
     <div class="table_content-wrapper">
-        <jsp:include page="../include/adminBar.jsp"/>
         <c:if test="${not empty onlineUsers}">
             <table id="users-list">
                 <tr>
