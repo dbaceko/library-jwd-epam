@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/controller", "*.jsp"})
+@WebFilter(filterName = "UserAutoLogInByTokenFilter")
 public class UserAutoLogInByTokenFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(UserAutoLogInByTokenFilter.class);
 

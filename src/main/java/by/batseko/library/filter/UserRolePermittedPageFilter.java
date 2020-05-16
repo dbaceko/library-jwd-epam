@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@WebFilter(urlPatterns = "*.jsp")
+@WebFilter(filterName = "UserRolePermittedPageFilter")
 public class UserRolePermittedPageFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(UserRolePermittedPageFilter.class);
 

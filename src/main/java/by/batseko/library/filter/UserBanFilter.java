@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/*")
+@WebFilter(filterName = "UserBanFilter")
 public class UserBanFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(UserBanFilter.class);
 
