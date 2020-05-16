@@ -15,7 +15,7 @@ public class ToggleUserBan implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
-        String redirectCommand = request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND);
+
         int userId = Integer.parseInt(request.getParameter(JSPAttributeStorage.USER_ID));
         User user;
         try {
@@ -29,7 +29,9 @@ public class ToggleUserBan implements Command {
         try {
             user.setBanned(getReversedUserBannedStatus(user.getBanned()));
             userService.updateUserBanStatus(user);
-            currentRouter.setPagePath(redirectCommand);
+            String redirectCommand = request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND);
+            String redirectURL = getRedirectURL(request, redirectCommand);
+            currentRouter.setPagePath(redirectURL);
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             user.setBanned(getReversedUserBannedStatus(user.getBanned()));

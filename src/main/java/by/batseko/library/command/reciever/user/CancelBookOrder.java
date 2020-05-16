@@ -26,7 +26,7 @@ public class CancelBookOrder implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
+        Router currentRouter = new Router();
         try {
             String orderUUID = request.getParameter(JSPAttributeStorage.ORDER_UUID);
             String orderUserLogin = request.getParameter(JSPAttributeStorage.USER_LOGIN);
@@ -46,9 +46,11 @@ public class CancelBookOrder implements Command {
                             .build())
                     .build();
             bookOrderService.updateBookOrderStatus(bookOrder);
-            router.setPagePath(request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND));
-            router.setRouteType(Router.RouteType.REDIRECT);
-            return router;
+            String redirectCommand = request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND);
+            String redirectURL = getRedirectURL(request, redirectCommand);
+            currentRouter.setPagePath(redirectURL);
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
+            return currentRouter;
         } catch (LibraryServiceException e) {
             LOGGER.info(e.getMessage(), e);
             setErrorMessage(request, e.getMessage());

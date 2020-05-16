@@ -41,7 +41,8 @@ public class LogInCommand implements Command {
                 response.addCookie(rememberTokenCookie);
                 LOGGER.info(String.format("RememberToken is add, %s", rememberTokenCookie));
             }
-            currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
+            String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setPagePath(redirectURL);
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             LOGGER.warn(e, e);

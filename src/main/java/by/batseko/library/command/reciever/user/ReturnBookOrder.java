@@ -4,6 +4,7 @@ import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.Command;
+import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.command.reciever.page.FindBookPage;
@@ -26,7 +27,7 @@ public class ReturnBookOrder implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
+        Router currentRouter = new Router();
         try {
             String orderUUID = request.getParameter(JSPAttributeStorage.ORDER_UUID);
             String orderUserLogin = request.getParameter(JSPAttributeStorage.USER_LOGIN);
@@ -46,9 +47,11 @@ public class ReturnBookOrder implements Command {
                             .build())
                     .build();
             bookOrderService.updateBookOrderStatus(bookOrder);
-            router.setPagePath(request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND));
-            router.setRouteType(Router.RouteType.REDIRECT);
-            return router;
+            String redirectCommand = request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND);
+            String redirectURL = getRedirectURL(request, redirectCommand);
+            currentRouter.setPagePath(redirectURL);
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
+            return currentRouter;
         } catch (LibraryServiceException e) {
             LOGGER.info(e.getMessage(), e);
             setErrorMessage(request, e.getMessage());

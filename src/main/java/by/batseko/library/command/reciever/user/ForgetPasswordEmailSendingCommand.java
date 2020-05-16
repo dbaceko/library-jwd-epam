@@ -17,18 +17,19 @@ public class ForgetPasswordEmailSendingCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
+        Router currentRouter = new Router();
         String email = request.getParameter(JSPAttributeStorage.USER_EMAIL);
         try {
             userService.sendLogInTokenIfForgetPassword(email, request.getRequestURL().toString());
-            router.setRouteType(Router.RouteType.REDIRECT);
-            router.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
+            String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setPagePath(redirectURL);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
             LOGGER.info(e.getMessage(), e);
-            router.setRouteType(Router.RouteType.FORWARD);
-            router.setPagePath(PageStorage.LOG_IN);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
+            currentRouter.setPagePath(PageStorage.LOG_IN);
         }
-        return router;
+        return currentRouter;
     }
 }

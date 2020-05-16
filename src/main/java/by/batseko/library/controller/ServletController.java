@@ -60,8 +60,7 @@ public class ServletController extends HttpServlet {
         if (router.getRouteType().equals(Router.RouteType.FORWARD)) {
             request.getRequestDispatcher(router.getPagePath()).forward(request,response);
         } else {
-            String page = router.getPagePath();
-            response.sendRedirect(request.getContextPath() + "/" + getServletName() +"?" + JSPAttributeStorage.COMMAND + "=" + page);
+            response.sendRedirect(router.getPagePath());
         }
     }
 }

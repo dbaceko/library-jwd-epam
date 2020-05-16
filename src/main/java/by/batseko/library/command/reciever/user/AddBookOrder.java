@@ -4,6 +4,7 @@ import by.batseko.library.builder.BookBuilder;
 import by.batseko.library.builder.BookOrderBuilder;
 import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.Command;
+import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.command.reciever.page.FindBookPage;
@@ -26,17 +27,19 @@ public class AddBookOrder implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
+        Router currentRouter = new Router();
         try {
             bookOrderService.addBookOrder(constructBookOrder(request));
-            router.setPagePath(request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND));
-            router.setRouteType(Router.RouteType.REDIRECT);
+            String redirectCommand = request.getParameter(JSPAttributeStorage.REDIRECT_PAGE_COMMAND);
+            String redirectURL = getRedirectURL(request, redirectCommand);
+            currentRouter.setPagePath(redirectURL);
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             LOGGER.info(e.getMessage(), e);
             setErrorMessage(request, e.getMessage());
             return new FindBookPage().execute(request, response);
         }
-        return router;
+        return currentRouter;
     }
 
     private BookOrder constructBookOrder(HttpServletRequest request) {

@@ -42,7 +42,8 @@ public class LogOutCommand implements Command {
         }
 
         request.getSession().invalidate();
-        currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
+        String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+        currentRouter.setPagePath(redirectURL);
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
         return currentRouter;
     }
