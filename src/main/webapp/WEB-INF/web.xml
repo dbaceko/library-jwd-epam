@@ -42,5 +42,10 @@
             <taglib-uri>customtags</taglib-uri>
             <taglib-location>/tld/copyright.tld</taglib-location>
         </taglib>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <include-prelude>/jsp/include/metaInfoAndHeader.jsp</include-prelude>
+            <include-coda>/jsp/include/footer.jsp</include-coda>
+        </jsp-property-group>
     </jsp-config>
 </web-app>

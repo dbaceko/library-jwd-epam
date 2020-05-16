@@ -1,14 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<!DOCTYPE html>
-<html lang=${lang}>
-<head>
-    <jsp:include page="include/meta.jsp"/>
-</head>
-<body>
-<jsp:include page="include/header.jsp"/>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <main class="content">
-    <h1>ERROR</h1>
+    <c:if test="${not empty exception_msg}">
+        <div class="error-message">
+            <p>
+                <fmt:message bundle="${exc_msg}"  key="${exception_msg}"/>
+            </p>
+        </div>
+    </c:if>
 </main>
-<jsp:include page="include/footer.jsp"/>
-</body>
-</html>
