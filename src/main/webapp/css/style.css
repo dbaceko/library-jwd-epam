@@ -17,7 +17,7 @@ header {
     background-color: #333333;
 }
 
-.content .admin-bar {
+header .admin-bar {
     position: absolute;
     top: 46px;
     left: 0;
@@ -26,7 +26,7 @@ header {
     background-color: #333333;
 }
 
-.admin-bar div {
+.admin-bar.div {
     margin: 0 10%;
 }
 
@@ -55,7 +55,8 @@ header li div {
 
 .admin-bar li a:hover,
 header li a:hover:not(.active),
-header li .dropdown:hover {
+header li .dropdown:hover,
+.admin-bar li .dropdown:hover {
     background-color: #444444;
 }
 
@@ -79,11 +80,13 @@ header li .dropbtn {
     cursor: pointer;
 }
 
+.admin-bar li .dropdown,
 header li .dropdown {
     display: inline-block;
     height: 100%;
 }
 
+.admin-bar  li .dropdown-content,
 header li .dropdown-content {
     display: none;
     position: absolute;
@@ -106,6 +109,7 @@ header li .dropbtn::after {
     width: 16px;
 }
 
+.admin-bar li .dropdown-content button,
 header li .dropdown-content button {
     border: none;
     outline: none;
@@ -117,10 +121,12 @@ header li .dropdown-content button {
     display: block;
 }
 
+.admin-bar li .dropdown-content button:hover,
 header li .dropdown-content button:hover {
-    color: #1bbc9b;
+    color: #0934ea;
 }
 
+.admin-bar li .dropdown:hover .dropdown-content,
 header li .dropdown:hover .dropdown-content {
     display: block;
 }
@@ -145,6 +151,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 92px);
+    padding-top: 46px;
 }
 
 .form-wrapper-search,
@@ -435,6 +442,7 @@ nav .pagination li a,
 }
 
 .content .grid-item {
+    overflow: auto;
     padding: .3em;
     background: rgba(245, 245, 245, 0.9);;
     border-radius: 3px;
@@ -461,5 +469,4 @@ table, .form-wrapper-search {
     width: 90%;
     margin: 60px auto;
     min-width: 1024px;
-
 }
