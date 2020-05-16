@@ -18,7 +18,7 @@ import java.util.Set;
 
 import static by.batseko.library.command.CommandStorage.*;
 
-@WebFilter(urlPatterns = "/controller")
+@WebFilter(filterName = "UserRolePermittedCommandFilter")
 public class UserRolePermittedCommandFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(UserRolePermittedCommandFilter.class);
 

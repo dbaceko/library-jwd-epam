@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-@WebFilter(urlPatterns = {"/controller", "*.jsp"})
+@WebFilter(filterName = "LocalizationFilter")
 public class LocalizationFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(LocalizationFilter.class);
 
