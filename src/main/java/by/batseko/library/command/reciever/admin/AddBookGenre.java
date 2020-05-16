@@ -18,17 +18,17 @@ public class AddBookGenre implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router currentRouter = new Router();
-        Genre author = new Genre();
-        author.setGenreTitle(request.getParameter(JSPAttributeStorage.BOOK_GENRE).trim());
+        Genre genre = new Genre();
+        genre.setGenreTitle(request.getParameter(JSPAttributeStorage.BOOK_GENRE).trim());
 
         try {
-            genreService.add(author);
+            genreService.add(genre);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
         }
-
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
-        currentRouter.setPagePath(CommandStorage.ADD_BOOK_COMPONENT_PAGE.getCommandName());
+        String redirectURL = getRedirectURL(request, CommandStorage.ADD_BOOK_COMPONENT_PAGE.getCommandName());
+        currentRouter.setPagePath(redirectURL);
         return currentRouter;
     }
 }

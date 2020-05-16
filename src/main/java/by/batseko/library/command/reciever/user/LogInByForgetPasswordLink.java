@@ -18,7 +18,7 @@ public class LogInByForgetPasswordLink implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
+        Router currentRouter = new Router();
         String token = request.getParameter(JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN);
         try {
             User user = userService.logInByToken(token);
@@ -27,14 +27,15 @@ public class LogInByForgetPasswordLink implements Command {
             request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getUserRole().name());
             request.getSession().setAttribute(JSPAttributeStorage.USER_ID, user.getId());
             userService.deleteRememberUserToken(user.getId());
-            router.setRouteType(Router.RouteType.REDIRECT);
-            router.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
+            String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setPagePath(redirectURL);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
             LOGGER.info(e.getMessage(), e);
-            router.setRouteType(Router.RouteType.FORWARD);
-            router.setPagePath(PageStorage.HOME);
+            currentRouter.setRouteType(Router.RouteType.FORWARD);
+            currentRouter.setPagePath(PageStorage.HOME);
         }
-        return router;
+        return currentRouter;
     }
 }

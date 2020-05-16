@@ -26,9 +26,9 @@ public class AddBookAuthor implements Command {
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
         }
-
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
-        currentRouter.setPagePath(CommandStorage.ADD_BOOK_COMPONENT_PAGE.getCommandName());
+        String redirectURL = getRedirectURL(request, CommandStorage.ADD_BOOK_COMPONENT_PAGE.getCommandName());
+        currentRouter.setPagePath(redirectURL);
         return currentRouter;
     }
 }

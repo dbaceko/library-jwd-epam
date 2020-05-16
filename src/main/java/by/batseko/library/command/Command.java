@@ -20,4 +20,8 @@ public interface Command {
         request.setAttribute(JSPAttributeStorage.PAGINATION_CURRENT_PAGE, currentPage);
         request.setAttribute(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE, recordsPerPage);
     }
+
+    default String getRedirectURL(HttpServletRequest request, String page) {
+        return request.getContextPath() + request.getServletPath() +"?" + JSPAttributeStorage.COMMAND + "=" + page;
+    }
 }

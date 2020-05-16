@@ -29,7 +29,8 @@ public class UpdateUserInfoCommand implements Command {
         try {
             updateUserInfo(request, updatedUser);
             userService.updateUserProfileData(updatedUser);
-            currentRouter.setPagePath(CommandStorage.PROFILE_PAGE.getCommandName());
+            String redirectURL = getRedirectURL(request, CommandStorage.PROFILE_PAGE.getCommandName());
+            currentRouter.setPagePath(redirectURL);
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             setUserInfoToRequest(request, updatedUser);

@@ -20,8 +20,9 @@ public class SwitchLanguageCommand implements Command {
         langCookie.setPath(request.getContextPath());
         response.addCookie(langCookie);
         request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, resultLang);
+        String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+        currentRouter.setPagePath(redirectURL);
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
-        currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
         return currentRouter;
     }
 }

@@ -28,7 +28,8 @@ public class AddBook implements Command {
             return new AddBookPage().execute(request, response);
         }
         currentRouter.setRouteType(Router.RouteType.REDIRECT);
-        currentRouter.setPagePath(CommandStorage.HOME_PAGE.getCommandName());
+        String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+        currentRouter.setPagePath(redirectURL);
         return currentRouter;
     }
 
