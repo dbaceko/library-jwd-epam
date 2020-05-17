@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
-    private static final String DB_CONNECTION_POOL_PROPERTIES = "ConnectionPool.properties";
+    private static final String DB_CONNECTION_POOL_PROPERTIES = "connectionPool.properties";
     private static final String URL_PROPERTY_NAME = "url";
     private static final int DEFAULT_POOL_SIZE = 10;
     private static final int DEFAULT_CONNECTION_AWAITING_TIMEOUT = 30;

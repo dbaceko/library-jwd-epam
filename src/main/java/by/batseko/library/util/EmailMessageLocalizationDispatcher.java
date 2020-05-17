@@ -6,7 +6,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class EmailMessageLocalizationDispatcher {
-    private static final String RESOURCE_NAME = "EmailMessages";
+    private static final String RESOURCE_NAME = "emailMessages";
 
     public String getLocalizedMessage(String key, String... messageArgs) {
         StringBuilder message = new StringBuilder();
