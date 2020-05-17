@@ -31,7 +31,7 @@ public enum CommandStorage {
     ADD_BOOK_LANGUAGE(new AddBookLanguage(), "addBookLanguage"),
     OPEN_ORDERS_PAGE(new OpenOrdersPage(), "openOrdersPage"),
 
-    SWITCH_LANG(new SwitchLanguageCommand(), "switch-lang"),
+    SWITCH_LANG(new SwitchLanguageCommand(), "switchLang"),
     REGISTER_USER(new RegisterUserCommand(), "registerUser"),
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
