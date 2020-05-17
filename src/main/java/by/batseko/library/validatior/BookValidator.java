@@ -25,6 +25,9 @@ public class BookValidator {
     }
 
     public void validateNewBook(Book book) throws ValidatorException {
+        if (book == null) {
+            throw new ValidatorException("service.commonError");
+        }
         validateTitle(book.getTitle());
         validateDescription(book.getDescription());
         validatePagesQuantity(book.getPagesQuantity());
@@ -88,7 +91,7 @@ public class BookValidator {
 
     private void validateBookComponents(BaseBookComponent... bookComponents) throws ValidatorException {
         for (BaseBookComponent component: bookComponents) {
-            if (StringUtils.isBlank(component.getUuid())) {
+            if (component == null || StringUtils.isBlank(component.getUuid())) {
                 throw new ValidatorException("validation.book.add.bookComponent");
             }
         }
