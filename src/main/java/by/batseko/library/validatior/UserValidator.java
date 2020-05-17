@@ -14,6 +14,9 @@ public class UserValidator {
     private static final int MAX_FIELD_LENGTH = 25;
 
     public void validateNewUser(User user) throws ValidatorException {
+        if (user == null) {
+            throw new ValidatorException("service.commonError");
+        }
         validateLogin(user.getLogin());
         validatePassword(user.getPassword());
         validateEmail(user.getEmail());
@@ -23,6 +26,9 @@ public class UserValidator {
     }
 
     public void validateUpdatedUser(User user) throws ValidatorException {
+        if (user == null) {
+            throw new ValidatorException("service.commonError");
+        }
         validatePassword(user.getPassword());
         validateEmail(user.getEmail());
         validatePhone(user.getPhoneNumber());
