@@ -42,6 +42,9 @@ public class HashGeneratorUtil {
     }
 
     public String generateHash(String password) throws UtilException {
+        if (password == null) {
+            throw new UtilException("Password is null");
+        }
         byte[] dynamicSalt = getSalt();
         byte[] hash = generateTransitionalHash(password, CONSTANT_INNER_SALT);
         hash = generateTransitionalHash(getStringFromHash(hash), dynamicSalt);
@@ -49,6 +52,9 @@ public class HashGeneratorUtil {
     }
 
     public boolean validatePassword(String inputPassword, String storedPassword) throws UtilException {
+        if (inputPassword == null || storedPassword == null) {
+            throw new UtilException("Password is null");
+        }
         String[] parts = storedPassword.split(DIVIDER);
         byte[] dynamicSalt = decoder.decode(parts[SALT_INDEX]);
         byte[] storedHash = decoder.decode(parts[HASH_INDEX]);
