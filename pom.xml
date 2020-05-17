@@ -21,6 +21,7 @@
     <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
     <apache-utills.version>3.10</apache-utills.version>
     <javax.mail.version>1.6.2</javax.mail.version>
+    <javax.servlet.jsp.version>2.3.3</javax.servlet.jsp.version>
   </properties>
 
   <dependencies>
@@ -44,6 +45,12 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>${servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>${javax.servlet.jsp.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
