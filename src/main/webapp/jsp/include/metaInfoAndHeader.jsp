@@ -45,7 +45,9 @@
             <li>
                 <div class="dropdown">
                     <form action="controller" method="post">
-                        <input type="hidden" name="action" value="switch-lang">
+                        <input type="hidden" name="action" value="switchLang">
+                        <input type="hidden" name="currentPageAbsoluteURL" value="${pageContext.request.requestURL}">
+                        <input type="hidden" name="currentParameters" value="${pageContext.request.getQueryString()}">
                         <div class="dropbtn"><fmt:message bundle="${locale}" key="header.lang"/></div>
                         <div class="dropdown-content">
                             <button type="submit" name="language" value="ru">
@@ -67,7 +69,9 @@
                     <li>
                         <div class="dropdown">
                             <form action="controller" method="post">
-                                <input type="hidden" name="action" value="switch-lang">
+                                <input type="hidden" name="action" value="switchLang">
+                                <input type="hidden" name="currentPageAbsoluteURL" value="${pageContext.request.requestURL}">
+                                <input type="hidden" name="currentParameters" value="${pageContext.request.getQueryString()}">
                                 <div class="dropbtn"><fmt:message bundle="${locale}" key="header.lang"/></div>
                                 <div class="dropdown-content">
                                     <button type="submit" name="language" value="ru">

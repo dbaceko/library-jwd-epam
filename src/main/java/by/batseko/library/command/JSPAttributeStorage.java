@@ -7,6 +7,8 @@ public class JSPAttributeStorage {
 
     public static final String LANGUAGE_CURRENT_PAGE = "lang";
     public static final String LANGUAGE_SWITCH_PARAMETER = "language";
+    public static final String LANGUAGE_PRE_SWITCH_PAGE_PARAMETERS = "currentParameters";
+    public static final String LANGUAGE_PRE_SWITCH_PAGE_ABSOLUTE_URL = "currentPageAbsoluteURL";
     public static final String EXCEPTION_MESSAGE = "exception_msg";
 
     public static final String ONLINE_USERS_LIST = "onlineUsers";
