@@ -31,11 +31,10 @@ public class LogOutCommand implements Command {
                     cookie.setPath(request.getContextPath());
                     cookie.setValue("");
                     response.addCookie(cookie);
-                    LOGGER.info(String.format("RememberToken is deleted, %s", cookie));
                     try {
                         userService.deleteRememberUserToken(userId);
                     } catch (LibraryServiceException e) {
-                        LOGGER.warn(String.format("RememberToken is not deleted, %s", cookie), e);
+                        LOGGER.warn(String.format("RememberToken is not deleted for user %s", login), e);
                     }
                 }
             }

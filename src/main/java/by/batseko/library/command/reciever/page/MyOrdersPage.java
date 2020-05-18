@@ -8,16 +8,12 @@ import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.book.BookOrderService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class MyOrdersPage implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(MyOrdersPage.class);
-
     private static final BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
 
     @Override
@@ -36,7 +32,6 @@ public class MyOrdersPage implements Command {
             router.setPagePath(PageStorage.USER_ORDERS_PAGE);
             router.setRouteType(Router.RouteType.FORWARD);
         } catch (LibraryServiceException e) {
-            LOGGER.info(e.getMessage(), e);
             setErrorMessage(request, e.getMessage());
             router.setPagePath(PageStorage.HOME);
             router.setRouteType(Router.RouteType.FORWARD);

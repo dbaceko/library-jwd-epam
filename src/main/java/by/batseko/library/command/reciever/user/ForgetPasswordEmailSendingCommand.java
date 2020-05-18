@@ -4,15 +4,11 @@ import by.batseko.library.command.*;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.user.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ForgetPasswordEmailSendingCommand implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(ForgetPasswordEmailSendingCommand.class);
-
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
@@ -26,7 +22,6 @@ public class ForgetPasswordEmailSendingCommand implements Command {
             currentRouter.setPagePath(redirectURL);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
-            LOGGER.info(e.getMessage(), e);
             currentRouter.setRouteType(Router.RouteType.FORWARD);
             currentRouter.setPagePath(PageStorage.LOG_IN);
         }

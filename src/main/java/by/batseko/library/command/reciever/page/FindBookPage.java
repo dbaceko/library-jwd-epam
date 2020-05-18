@@ -13,16 +13,12 @@ import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.book.BookService;
 import by.batseko.library.service.book.impl.CommonBookComponentsCache;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class FindBookPage implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(FindBookPage.class);
-
     private static final BookService bookService = ServiceFactory.getInstance().getBookService();
 
     @Override
@@ -41,14 +37,11 @@ public class FindBookPage implements Command {
         int recordsPerPage = Integer.parseInt(request.getParameter(JSPAttributeStorage.PAGINATION_RECORDS_PER_PAGE));
         try {
             Book resultBook = constructBookFromRequest(request);
-            LOGGER.info(resultBook);
             request.setAttribute(JSPAttributeStorage.BOOK_PREVIOUS_DATA, resultBook);
             List<BookDTO> bookDTOList = bookService.findByFields(resultBook, currentPage, recordsPerPage);
             definePaginationContext(request, bookService.findBookQuantityByFields(resultBook), currentPage, recordsPerPage);
             request.setAttribute(JSPAttributeStorage.BOOK_DATA_TRANSFER_OBJECT, bookDTOList);
-            LOGGER.info(bookDTOList);
         } catch (LibraryServiceException e) {
-            LOGGER.info(e.getMessage(), e);
             setErrorMessage(request, e.getMessage());
         }
 
