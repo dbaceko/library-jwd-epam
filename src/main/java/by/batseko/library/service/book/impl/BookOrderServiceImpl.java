@@ -40,6 +40,7 @@ public class BookOrderServiceImpl implements BookOrderService {
     @Override
     public void addBookOrder(BookOrder bookOrder) throws LibraryServiceException {
         if (bookOrder == null) {
+            LOGGER.warn("bookOrder is null");
             throw new LibraryServiceException("service.commonError");
         }
         List<String> availableBookInstanceUUIDs;
@@ -62,7 +63,7 @@ public class BookOrderServiceImpl implements BookOrderService {
                 return;
             } catch (LibraryDAOException e) {
                 if (i == availableBookInstanceUUIDs.size() - 1) {
-                    LOGGER.warn(String.format("All books %s is already booked", bookOrder.getBookInstance().getBook()));
+                    LOGGER.info(String.format("All books %s is already booked", bookOrder.getBookInstance().getBook()));
                     bookIsUnavailableException = new LibraryServiceException(e.getMessage(), e);
                 } else {
                     LOGGER.info(String.format("Book instance %s is already booked", bookOrder.getBookInstance()));
@@ -75,6 +76,7 @@ public class BookOrderServiceImpl implements BookOrderService {
     @Override
     public void updateBookOrderStatus(BookOrder bookOrder) throws LibraryServiceException {
         if (bookOrder == null) {
+            LOGGER.warn("bookOrder is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -93,6 +95,7 @@ public class BookOrderServiceImpl implements BookOrderService {
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         } catch (UtilException e) {
+            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException("service.commonError", e);
         }
     }

@@ -31,12 +31,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public void add(Book book, int quantity) throws LibraryServiceException {
         if (book == null) {
+            LOGGER.warn("book is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
             bookValidator.validateNewBook(book);
             bookValidator.validateBookQuantity(quantity);
-            LOGGER.info(String.format("Try to add book: %s", book));
             book.setGenre(bookComponentsCache.getGenres().get(book.getGenre().getUuid()));
             book.setAuthor(bookComponentsCache.getAuthors().get(book.getAuthor().getUuid()));
             book.setBookLanguage(bookComponentsCache.getBookLanguages().get(book.getBookLanguage().getUuid()));
@@ -51,6 +51,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findByUUID(String uuid) throws LibraryServiceException {
         if (uuid == null) {
+            LOGGER.warn("uuid is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -63,6 +64,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException {
         if (book == null) {
+            LOGGER.warn("book is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -75,6 +77,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public int findBookQuantityByFields(Book book) throws LibraryServiceException {
         if (book == null) {
+            LOGGER.warn("book is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
