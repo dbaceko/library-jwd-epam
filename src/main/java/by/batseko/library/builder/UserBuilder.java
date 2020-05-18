@@ -18,6 +18,7 @@ public class UserBuilder {
     private String phoneNumber;
     private Timestamp registrationDate;
     private String address;
+    private String logInToken;
 
     public int getId() {
         return id;
@@ -124,6 +125,15 @@ public class UserBuilder {
 
     public UserBuilder setAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public String getLogInToken() {
+        return logInToken;
+    }
+
+    public UserBuilder setLogInToken(String logInToken) {
+        this.logInToken = logInToken;
         return this;
     }
 
