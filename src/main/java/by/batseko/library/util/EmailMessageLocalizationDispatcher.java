@@ -1,6 +1,8 @@
 package by.batseko.library.util;
 
 import by.batseko.library.command.SupportedLocaleStorage;
+import by.batseko.library.exception.UtilException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -8,7 +10,10 @@ import java.util.ResourceBundle;
 public class EmailMessageLocalizationDispatcher {
     private static final String RESOURCE_NAME = "emailMessages";
 
-    public String getLocalizedMessage(String key, String... messageArgs) {
+    public String getLocalizedMessage(String key, String... messageArgs) throws UtilException {
+        if (StringUtils.isBlank(key) || StringUtils.isAnyEmpty(messageArgs)) {
+            throw new UtilException("Invalid message arguments");
+        }
         StringBuilder message = new StringBuilder();
         for (SupportedLocaleStorage locale : SupportedLocaleStorage.values()) {
             ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_NAME, locale.getLocale());
