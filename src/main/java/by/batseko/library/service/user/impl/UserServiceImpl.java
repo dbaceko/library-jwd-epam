@@ -58,14 +58,13 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userDAO.findUserByLogin(login);
             if (hashGeneratorUtil.validatePassword(password, user.getPassword())) {
-                LOGGER.info(String.format("Add user %s to cache", user));
                 initCacheAfterLogIn(user);
                 return user;
             } else {
-                LOGGER.info("Password dont match");
                 throw new LibraryServiceException("validation.user.login.incorrect");
             }
         } catch (UtilException e) {
+            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
@@ -75,6 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User logInByToken(String token) throws LibraryServiceException {
         if (token == null) {
+            LOGGER.warn("token is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn(e.getMessage(), e);
         }
         if (user == null) {
-            LOGGER.info("User is not in cache");
+            LOGGER.warn("User is not in cache");
             try {
                 user = userDAO.findUserByLogin(login);
             } catch (LibraryDAOException e) {
@@ -141,7 +141,6 @@ public class UserServiceImpl implements UserService {
                 return userList;
             }
         } catch (LibraryDAOException e) {
-            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -203,6 +202,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.registerUser(user);
         } catch (UtilException e) {
+            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException("service.commonError", e);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
@@ -226,7 +226,10 @@ public class UserServiceImpl implements UserService {
             if(activeUserCache.get(user.getLogin()) != null) {
                 activeUserCache.put(user.getLogin(), user);
             }
-        } catch (UtilException | LibraryDAOException e) {
+        } catch (UtilException e) {
+            LOGGER.warn(e.getMessage(), e);
+            throw new LibraryServiceException("service.commonError", e);
+        } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
@@ -234,6 +237,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserBanStatus(User user) throws LibraryServiceException {
         if (user == null) {
+            LOGGER.warn("User is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -248,6 +252,7 @@ public class UserServiceImpl implements UserService {
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         } catch (UtilException e) {
+            LOGGER.warn(e.getMessage(), e);
             throw new LibraryServiceException("service.commonError", e);
         }
     }

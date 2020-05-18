@@ -9,9 +9,13 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookComponentService;
 import by.batseko.library.validatior.BookValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class BookGenreServiceImpl implements BookComponentService<Genre> {
+    private static final Logger LOGGER = LogManager.getLogger(BookGenreServiceImpl.class);
+
     private final BookComponentDAO<Genre> bookGenreDAO;
     private final BookValidator bookValidator;
     private final CommonBookComponentsCache bookComponentsCache;
@@ -25,6 +29,7 @@ public class BookGenreServiceImpl implements BookComponentService<Genre> {
     @Override
     public void add(Genre genre) throws LibraryServiceException {
         if (genre == null) {
+            LOGGER.warn("genre is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -40,6 +45,7 @@ public class BookGenreServiceImpl implements BookComponentService<Genre> {
     @Override
     public Genre findByUUID(String uuid) throws LibraryServiceException {
         if (uuid == null) {
+            LOGGER.warn("uuid is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {

@@ -9,8 +9,12 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ValidatorFactory;
 import by.batseko.library.service.book.BookComponentService;
 import by.batseko.library.validatior.BookValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BookAuthorServiceImpl implements BookComponentService<Author> {
+    private static final Logger LOGGER = LogManager.getLogger(BookAuthorServiceImpl.class);
+
     private final BookComponentDAO<Author> bookAuthorDAO;
     private final BookValidator bookValidator;
     private final CommonBookComponentsCache bookComponentsCache;
@@ -24,6 +28,7 @@ public class BookAuthorServiceImpl implements BookComponentService<Author> {
     @Override
     public void add(Author author) throws LibraryServiceException {
         if (author == null) {
+            LOGGER.warn("author is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
@@ -39,6 +44,7 @@ public class BookAuthorServiceImpl implements BookComponentService<Author> {
     @Override
     public Author findByUUID(String uuid) throws LibraryServiceException {
         if (uuid == null) {
+            LOGGER.warn("uuid is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
