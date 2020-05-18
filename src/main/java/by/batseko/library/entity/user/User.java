@@ -19,6 +19,7 @@ public class User implements Serializable, Comparable<User>{
     private String phoneNumber;
     private Timestamp registrationDate;
     private String address;
+    private String logInToken;
 
     public User(UserBuilder builder) {
         id = builder.getId();
@@ -33,6 +34,7 @@ public class User implements Serializable, Comparable<User>{
         phoneNumber = builder.getPhoneNumber();
         registrationDate = builder.getRegistrationDate();
         address = builder.getAddress();
+        logInToken = builder.getLogInToken();
     }
 
     public User() {}
@@ -133,6 +135,14 @@ public class User implements Serializable, Comparable<User>{
         this.address = address;
     }
 
+    public String getLogInToken() {
+        return logInToken;
+    }
+
+    public void setLogInToken(String logInToken) {
+        this.logInToken = logInToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,7 +171,7 @@ public class User implements Serializable, Comparable<User>{
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", role=" + userRole +
+                ", userRole=" + userRole +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", isBanned=" + isBanned +
@@ -172,6 +182,7 @@ public class User implements Serializable, Comparable<User>{
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", address='" + address + '\'' +
+                ", logInToken='" + logInToken + '\'' +
                 '}';
     }
 
