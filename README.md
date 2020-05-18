@@ -1,4 +1,4 @@
-# Library final task for epam jwd
+# Library final task for EPAM JWD
 ###### Website visitors are provided with the following services:
 ***
 ### *Guest:*
@@ -32,7 +32,7 @@
 - Java 8
 - Maven
 - Git
-- JavaEE: Servlet, JSP
+- JavaEE: Servlet, JSP, JSTL, JavaMail
 - Server / Servlet container: Tomcat 9
 - HTTPS by SSL certificate
 - Database: MySQL
