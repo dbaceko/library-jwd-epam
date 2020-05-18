@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UsersOnlinePage implements Command {
-
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override

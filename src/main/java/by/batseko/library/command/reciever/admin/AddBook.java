@@ -34,15 +34,24 @@ public class AddBook implements Command {
     }
 
     private Book constructBookFromRequest(HttpServletRequest request) {
+        String genreUUID = request.getParameter(JSPAttributeStorage.BOOK_GENRE).trim();
+        String bookLanguageUUID = request.getParameter(JSPAttributeStorage.BOOK_LANGUAGE).trim();
+        String publisherUUID = request.getParameter(JSPAttributeStorage.BOOK_PUBLISHER).trim();
+        String authorUUID = request.getParameter(JSPAttributeStorage.BOOK_AUTHOR).trim();
+        String title = request.getParameter(JSPAttributeStorage.BOOK_TITLE).trim();
+        String description = request.getParameter(JSPAttributeStorage.BOOK_DESCRIPTION).trim();
+        int publishYear = Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PUBLISH_YEAR));
+        int pagesQuantity = Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PAGES_QUANTITY));
+
         return new BookBuilder()
-                .setGenreUUID(request.getParameter(JSPAttributeStorage.BOOK_GENRE))
-                .setBookLanguageUUID(request.getParameter(JSPAttributeStorage.BOOK_LANGUAGE))
-                .setPublisherUUID(request.getParameter(JSPAttributeStorage.BOOK_PUBLISHER))
-                .setAuthorUUID(request.getParameter(JSPAttributeStorage.BOOK_AUTHOR))
-                .setTitle(request.getParameter(JSPAttributeStorage.BOOK_TITLE).trim())
-                .setPublishYear(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PUBLISH_YEAR)))
-                .setPagesQuantity(Integer.parseInt(request.getParameter(JSPAttributeStorage.BOOK_PAGES_QUANTITY)))
-                .setDescription(request.getParameter(JSPAttributeStorage.BOOK_DESCRIPTION).trim())
+                .setGenreUUID(genreUUID)
+                .setBookLanguageUUID(bookLanguageUUID)
+                .setPublisherUUID(publisherUUID)
+                .setAuthorUUID(authorUUID)
+                .setTitle(title)
+                .setPublishYear(publishYear)
+                .setPagesQuantity(pagesQuantity)
+                .setDescription(description)
                 .build();
     }
 }

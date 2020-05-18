@@ -6,15 +6,11 @@ import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.user.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RegisterUserCommand implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(RegisterUserCommand.class);
-
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
@@ -25,7 +21,6 @@ public class RegisterUserCommand implements Command {
             userService.registerUser(newUser);
             return new LogInCommand().execute(request, response);
         } catch (LibraryServiceException e) {
-            LOGGER.info(e, e);
             setErrorMessage(request, e.getMessage());
             setUserInfoToRequest(request, newUser);
             currentRouter.setPagePath(PageStorage.REGISTER_USER);

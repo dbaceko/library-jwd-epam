@@ -5,16 +5,12 @@ import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.user.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class LogInCommand implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(LogInCommand.class);
-
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
     private static final int COOKIE_MAX_AGE_21_DAY = 60*60*24*21;
 
@@ -27,7 +23,6 @@ public class LogInCommand implements Command {
         Router currentRouter = new Router();
         try {
             User user = userService.logInByPassword(login, password);
-            LOGGER.info(user);
             request.getSession().setAttribute(JSPAttributeStorage.USER_LOGIN, login);
             request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getUserRole().name());
             request.getSession().setAttribute(JSPAttributeStorage.USER_ID, user.getId());
@@ -39,13 +34,11 @@ public class LogInCommand implements Command {
                 rememberTokenCookie.setPath(request.getContextPath());
                 rememberTokenCookie.setMaxAge(COOKIE_MAX_AGE_21_DAY);
                 response.addCookie(rememberTokenCookie);
-                LOGGER.info(String.format("RememberToken is add, %s", rememberTokenCookie));
             }
             String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
             currentRouter.setPagePath(redirectURL);
             currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
-            LOGGER.warn(e, e);
             setErrorMessage(request, e.getMessage());
             currentRouter.setPagePath(PageStorage.LOG_IN);
             currentRouter.setRouteType(Router.RouteType.FORWARD);
