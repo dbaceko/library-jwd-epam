@@ -27,6 +27,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookComponentDAO<Genre>
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.genre.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Genre %s, add error", genre), e);
             throw new LibraryDAOException("query.genre.creation.commonError", e);
         }
     }
@@ -41,10 +42,11 @@ public class BookGenreDAOImpl extends BaseDAO implements BookComponentDAO<Genre>
             if (resultSet.next()) {
                 return constructGenreByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Genre not found by uuid %s", bookGenreUUID));
+                LOGGER.info(String.format("Genre not found by uuid %s", bookGenreUUID));
                 throw new LibraryDAOException("query.genre.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Genre finding by uuid %s error", bookGenreUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -71,6 +73,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookComponentDAO<Genre>
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("Genres List finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return genres;

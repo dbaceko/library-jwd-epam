@@ -27,6 +27,7 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookComponentDAO<Autho
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.author.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Author %s, add error", author), e);
             throw new LibraryDAOException("query.author.creation.commonError", e);
         }
     }
@@ -41,10 +42,11 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookComponentDAO<Autho
             if (resultSet.next()) {
                 return constructAuthorByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Author not found by uuid %s", bookAuthorUUID));
+                LOGGER.info(String.format("Author not found by uuid %s", bookAuthorUUID));
                 throw new LibraryDAOException("query.author.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Author finding by uuid %s error", bookAuthorUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -72,6 +74,7 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookComponentDAO<Autho
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("Authors List finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return authors;

@@ -28,6 +28,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
         try {
             connection = pool.getConnection();
         } catch (ConnectionPoolException e) {
+            LOGGER.warn(String.format("Book: %s, quantity: %d add error. get connection exception", book, quantity), e);
             throw new LibraryDAOException("query.book.creation.commonError", e);
         }
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK)) {
@@ -50,6 +51,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             connectionCommitChanges(connection);
         } catch (SQLException e) {
             connectionsRollback(connection);
+            LOGGER.warn(String.format("Book: %s, quantity: %d add error", book, quantity), e);
             throw new LibraryDAOException("query.book.creation.commonError", e);
         } finally {
             connectionSetAutoCommit(connection, true);
@@ -67,10 +69,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             if (resultSet.next()) {
                 return constructBookByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Book not found by uuid %s", bookUUID));
+                LOGGER.info(String.format("Book not found by uuid %s", bookUUID));
                 throw new LibraryDAOException("query.book.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Book finding by uuid: %s error", bookUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -86,6 +89,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             resultSet.next();
             return resultSet.getInt(1);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Book finding: %s error", book), e);
             throw new LibraryDAOException("service.commonError", e);
         }
     }
@@ -121,6 +125,7 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
                 bookDTOList.add(bookDTO);
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("Book list finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -145,10 +150,11 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             if (resultSet.next()) {
                 return resultSet.getString(1);
             } else {
-                LOGGER.debug(String.format("Book %s not found by ", book));
+                LOGGER.info(String.format("Book %s not found by ", book));
                 throw new LibraryDAOException("query.book.read.notFound");
             }
         } catch (SQLException | LibraryDAOException e) {
+            LOGGER.warn(String.format("Book uuid by fields finding: %s error", book), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
