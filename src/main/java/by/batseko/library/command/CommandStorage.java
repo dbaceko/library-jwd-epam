@@ -36,7 +36,8 @@ public enum CommandStorage {
     UPDATE_PROFILE_USER(new UpdateUserInfoCommand(), "updateUserInfo"),
     LOG_IN(new LogInCommand(), "logIn"),
     FORGET_PASSWORD_GENERATE_EMAIL(new ForgetPasswordEmailSendingCommand(), "sendForgetPasswordData"),
-    FORGET_PASSWORD_LOG_IN(new LogInByForgetPasswordLink(), "logInByForgetPasswordLink"),
+    FORGET_PASSWORD_LOG_IN(new LogInByTokenLink(), "logInByForgetPasswordLink"),
+    POST_REGISTRATION_ACCOUNT_APPROVAL(new PostRegistrationAccountApproval(), "postRegistrationAccountApproval"),
 
     LOG_OUT(new LogOutCommand(), "logOut"),
     TOGGLE_USER_BAN(new ToggleUserBan(),"banUser");

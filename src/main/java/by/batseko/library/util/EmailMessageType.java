@@ -1,6 +1,9 @@
 package by.batseko.library.util;
 
 public class EmailMessageType {
+    public static final String TITLE_USER_REGISTRATION_LINK = "title.user.registration.link";
+    public static final String MESSAGE_USER_REGISTRATION_LINK = "message.user.registration.link";
+
     public static final String TITLE_FORGET_PASSWORD = "title.user.login.byToken";
     public static final String MESSAGE_FORGET_PASSWORD = "message.user.login.byToken";
 

@@ -32,6 +32,8 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.setString(6, user.getPassportSerialNumber());
             preparedStatement.setString(7, user.getAddress());
             preparedStatement.setString(8, user.getPhoneNumber());
+            preparedStatement.setBoolean(9, user.getBanned());
+            preparedStatement.setString(10, user.getLogInToken());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             if(e.getMessage().contains(UNIQUE_LOGIN_MESSAGE)) {

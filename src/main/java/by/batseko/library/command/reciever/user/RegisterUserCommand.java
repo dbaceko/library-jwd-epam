@@ -18,8 +18,10 @@ public class RegisterUserCommand implements Command {
         User newUser = constructUser(request);
         Router currentRouter = new Router();
         try {
-            userService.registerUser(newUser);
-            return new LogInCommand().execute(request, response);
+            userService.registerUser(newUser, request.getRequestURL().toString());
+            String redirectURL = getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName());
+            currentRouter.setPagePath(redirectURL);
+            currentRouter.setRouteType(Router.RouteType.REDIRECT);
         } catch (LibraryServiceException e) {
             setErrorMessage(request, e.getMessage());
             setUserInfoToRequest(request, newUser);

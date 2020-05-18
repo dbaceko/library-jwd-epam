@@ -44,7 +44,7 @@ public interface UserService {
      *
      * @param login {@link User}'s login
      */
-    void logOut(String login);
+    void logOut(String login) throws LibraryServiceException;
 
     /**
      * Find user {@link User} instance by <tt>login</tt>
@@ -89,7 +89,7 @@ public interface UserService {
      *                          data source or if an error occurs while searching {@link User}
      *                          into the data source
      */
-    String generateRememberUserToken(int id) throws LibraryServiceException;
+    String generateAndUpdateRememberUserToken(int id) throws LibraryServiceException;
 
     /**
      * Sending access token with link to <tt>email</tt>
@@ -113,16 +113,28 @@ public interface UserService {
     void deleteRememberUserToken(int id) throws LibraryServiceException;
 
     /**
-     * Registers {@link User} with filled fields
+     * Registers {@link User} with filled fields, allow access to service after using
+     *                        single-use auth-token, which sent to email
      *
      * @param user {@link User} is filled user instance
+     * @param pageRootUrl is page url which sends by email with single-use auth-token
+     *
      * @throws LibraryServiceException if <tt>user</tt>'s fields not accords to specify pattern
      *                          {@see by.batseko.library.validator.UserValidator}
      *                          or if user with <tt>email</tt> or <tt>login</tt> has already exist
      *                          or if an error occurs while writing new {@link User} into
      *                          data source
      */
-    void registerUser(User user) throws LibraryServiceException;
+    void registerUser(User user, String pageRootUrl) throws LibraryServiceException;
+
+    /**
+     * Ends registration of {@link User} by single-use auth-token and changing user ban status to false
+     *
+     * @param token {@link User}'s log in single-use auth-token
+     * @throws LibraryServiceException if <tt>token</tt> in null or if an error occurs while
+     *                          writing {@link User}'s ban status into data source
+     */
+    void postRegistrationApprovalByToken(String token) throws LibraryServiceException;
 
     /**
      * Update {@link User} with filled fields
@@ -138,7 +150,6 @@ public interface UserService {
 
     /**
      * Update {@link User}'s ban status
-     *
      * @param user {@link User} is filled user instance
      * @throws LibraryServiceException if an error occurs while writing new
      *                          {@link User} into data source
