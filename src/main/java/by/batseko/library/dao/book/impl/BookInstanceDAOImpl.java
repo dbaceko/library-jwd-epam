@@ -22,12 +22,12 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
 
     static void addBookInstance(String bookUUID, int quantity, Connection connection) throws LibraryDAOException {
         for (int i = 0; i < quantity; i++) {
-            LOGGER.info(String.format("Try to add %d book instance", i));
             try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_INSTANCE)) {
                 preparedStatement.setString(1, UUID.randomUUID().toString());
                 preparedStatement.setString(2, bookUUID);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
+                LOGGER.warn(String.format("Book uuid: %s, quantity: %d add instance error", bookUUID, quantity), e);
                 throw new LibraryDAOException("query.bookInstance.creation.commonError", e);
             }
         }
@@ -39,6 +39,7 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
             preparedStatement.setString(2, bookInstanceUUID);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.warn(String.format("Book uuid: %s, isAvailable status: %b update isAvailable status error", bookInstanceUUID, isAvailable), e);
             throw new LibraryDAOException("query.bookInstance.update.status", e);
         }
     }
@@ -64,6 +65,7 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
                 LOGGER.info(bookInstanceUUIDs);
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Book instance finding by book uuid: %s error", bookUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);

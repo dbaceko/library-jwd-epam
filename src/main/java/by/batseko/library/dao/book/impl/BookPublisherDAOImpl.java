@@ -27,6 +27,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.publisher.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Publisher %s, add error", publisher), e);
             throw new LibraryDAOException("query.publisher.creation.commonError", e);
         }
     }
@@ -41,10 +42,11 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
             if (resultSet.next()) {
                 return constructPublisherByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Publisher not found by uuid %s", bookPublisherUUID));
+                LOGGER.info(String.format("Publisher not found by uuid %s", bookPublisherUUID));
                 throw new LibraryDAOException("query.publisher.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("Publisher finding by uuid %s error", bookPublisherUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -73,6 +75,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("Publisher List finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return publishers;

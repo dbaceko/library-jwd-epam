@@ -39,7 +39,10 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             } else if (e.getMessage().contains(UNIQUE_EMAIL_MESSAGE)) {
                 throw new LibraryDAOException("query.user.registration.loginAlreadyExist", e);
             }
+            LOGGER.warn(String.format("User %s registration common error", user), e);
+            throw new LibraryDAOException("query.user.registration.commonError", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User %s registration error", user), e);
             throw new LibraryDAOException("query.user.registration.commonError", e);
         }
     }
@@ -57,6 +60,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.user.registration.emailAlreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User %s profile update error", user), e);
             throw new LibraryDAOException("service.commonError", e);
         }
     }
@@ -69,6 +73,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.setInt(2, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User %s ban status update error", user), e);
             throw new LibraryDAOException("service.commonError", e);
         }
     }
@@ -81,6 +86,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.setInt(2, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User id: %d, token %s update error", userId, userToken), e);
             throw new LibraryDAOException("service.commonError", e);
         }
     }
@@ -92,6 +98,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User id: %d, token delete error", userId), e);
             throw new LibraryDAOException("service.commonError", e);
         }
     }
@@ -105,6 +112,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User login: %s, finding error", userLogin), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -120,6 +128,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User email: %s, finding error", userEmail), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -136,6 +145,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User userId: %d, token %s finding error", userId, token), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -151,6 +161,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
             return extractFoundedUserFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("User userId: %d finding error", userId), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -177,6 +188,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("User list finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return users;

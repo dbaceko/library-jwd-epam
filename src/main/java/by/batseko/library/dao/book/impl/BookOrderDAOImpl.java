@@ -23,6 +23,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
         try {
             connection = pool.getConnection();
         } catch (ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder: %s add error. get connection exception", bookOrder), e);
             throw new LibraryDAOException("query.bookOrder.creation.commonError", e);
         }
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.INSERT_BOOK_ORDER)) {
@@ -36,6 +37,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
+            LOGGER.warn(String.format("BookOrder: %s add error", bookOrder), e);
             throw new LibraryDAOException("query.bookOrder.creation.commonError", e);
         } finally {
             connectionSetAutoCommit(connection, true);
@@ -51,6 +53,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             preparedStatement.setString(2, bookOrder.getUuid());
             preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder: %s update error", bookOrder), e);
             throw new LibraryDAOException("query.bookOrder.update.status", e);
         }
     }
@@ -61,6 +64,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
         try {
             connection = pool.getConnection();
         } catch (ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder: %s update error. get connection exception", bookOrder), e);
             throw new LibraryDAOException("query.bookOrder.update.status", e);
         }
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQLQueriesStorage.UPDATE_BOOK_ORDER_STATUS)) {
@@ -72,6 +76,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             connection.commit();
         } catch (SQLException e) {
             connectionsRollback(connection);
+            LOGGER.warn(String.format("BookOrder: %s update error", bookOrder), e);
             throw new LibraryDAOException("query.bookOrder.update.status", e);
         } finally {
             connectionSetAutoCommit(connection, true);
@@ -89,10 +94,11 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             if (resultSet.next()) {
                 return constructOrderByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Book order not found by uuid %s", uuid));
+                LOGGER.info(String.format("Book order not found by uuid %s", uuid));
                 throw new LibraryDAOException("query.order.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder finding by uuid: %s  error", uuid), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -110,6 +116,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             resultSet = preparedStatement.executeQuery();
             return getAllOrdersFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder list finding by userId: %d  error", userId), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -125,6 +132,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             resultSet = preparedStatement.executeQuery();
             return getAllOrdersFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookOrder list finding by userId: %d  error", userId), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -156,6 +164,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             resultSet.next();
             return resultSet.getInt(1);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("BookOrder list with opes status finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -172,6 +181,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             resultSet = preparedStatement.executeQuery();
             return getAllOrdersFromResultSet(resultSet);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("BookOrder list with opes status finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);

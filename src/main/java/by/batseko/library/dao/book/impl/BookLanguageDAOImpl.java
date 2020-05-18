@@ -27,6 +27,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookComponentDAO<Boo
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new LibraryDAOException("query.bookLanguage.creation.alreadyExist", e);
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookLanguage %s, add error", bookLanguage), e);
             throw new LibraryDAOException("query.bookLanguage.creation.commonError", e);
         }
     }
@@ -41,10 +42,11 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookComponentDAO<Boo
             if (resultSet.next()) {
                 return constructBookLanguageByResultSet(resultSet);
             } else {
-                LOGGER.debug(String.format("Book language not found by uuid %s", bookLanguageUUID));
+                LOGGER.info(String.format("Book language not found by uuid %s", bookLanguageUUID));
                 throw new LibraryDAOException("query.bookLanguage.read.notFound");
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn(String.format("BookLanguage finding by uuid %s error", bookLanguageUUID), e);
             throw new LibraryDAOException("service.commonError", e);
         } finally {
             closeResultSet(resultSet);
@@ -71,6 +73,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookComponentDAO<Boo
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
+            LOGGER.warn("BookLanguage List finding error", e);
             throw new LibraryDAOException("service.commonError", e);
         }
         return bookLanguages;
