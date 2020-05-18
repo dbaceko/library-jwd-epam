@@ -1,8 +1,8 @@
 package by.batseko.library.filter;
 
 
+import by.batseko.library.command.CommandStorage;
 import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.command.PageStorage;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.entity.user.UserRole;
 import by.batseko.library.exception.LibraryServiceException;
@@ -37,14 +37,13 @@ public class UserAutoLogInByTokenFilter implements Filter {
                         String token = cookie.getValue();
                         try {
                             User user = userService.logInByToken(token);
-                            LOGGER.info(user);
                             request.getSession().setAttribute(JSPAttributeStorage.USER_LOGIN, user.getLogin());
                             request.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, user.getUserRole().name());
                             request.getSession().setAttribute(JSPAttributeStorage.USER_ID, user.getId());
-                            request.getRequestDispatcher(PageStorage.HOME).forward(servletRequest, servletResponse);
+                            response.sendRedirect(getRedirectURL(request, CommandStorage.HOME_PAGE.getCommandName()));
                             return;
                         } catch (LibraryServiceException e) {
-                            LOGGER.warn(String.format("RememberToken is invalid, %s", token), e);
+                            LOGGER.info(String.format("RememberToken is invalid, %s", token), e);
                             cookie.setMaxAge(0);
                             cookie.setPath(request.getContextPath());
                             cookie.setValue("");
@@ -57,4 +56,7 @@ public class UserAutoLogInByTokenFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    private String getRedirectURL(HttpServletRequest request, String page) {
+        return request.getContextPath() + request.getServletPath() + "?" + JSPAttributeStorage.COMMAND + "=" + page;
+    }
 }

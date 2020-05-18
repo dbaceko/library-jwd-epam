@@ -2,8 +2,8 @@ package by.batseko.library.dao;
 
 public class SQLQueriesStorage {
     public static final String REGISTER_USER = "INSERT INTO user " +
-            "(email, login, password, firstname, lastname, passport_serial_number, address, phone) " +
-            "value (?, ?, ?, ?, ?, ?, ?, ?)";
+            "(email, login, password, firstname, lastname, passport_serial_number, address, phone, is_banned, log_in_token) " +
+            "value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String FIND_USER_BY_LOGIN = "SELECT * FROM user WHERE login = (?)";
     public static final String FIND_USER_BY_EMAIL = "SELECT * FROM user WHERE email = (?)";
     public static final String FIND_USER_BY_ID = "SELECT * FROM user WHERE id = (?)";

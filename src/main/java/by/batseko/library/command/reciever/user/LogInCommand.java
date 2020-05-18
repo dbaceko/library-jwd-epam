@@ -29,7 +29,7 @@ public class LogInCommand implements Command {
 
             if (rememberToken != null) {
                 Cookie rememberTokenCookie = new Cookie(
-                        JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN, userService.generateRememberUserToken(user.getId())
+                        JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN, userService.generateAndUpdateRememberUserToken(user.getId())
                 );
                 rememberTokenCookie.setPath(request.getContextPath());
                 rememberTokenCookie.setMaxAge(COOKIE_MAX_AGE_21_DAY);

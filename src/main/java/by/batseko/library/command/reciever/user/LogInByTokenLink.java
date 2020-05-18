@@ -9,7 +9,7 @@ import by.batseko.library.service.user.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LogInByForgetPasswordLink implements Command {
+public class LogInByTokenLink implements Command {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
