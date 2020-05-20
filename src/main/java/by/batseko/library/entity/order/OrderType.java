@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum OrderType {
-    INVALID(0, "orderType.invalid"),
     SUBSCRIPTION(1, "orderType.subscription"),
     READING_HOLE(2, "orderType.readingHole");
 
@@ -32,7 +31,7 @@ public enum OrderType {
                 return orderType;
             }
         }
-        LOGGER.warn(String.format("OrderType with id: %d is not found, default OrderType is %s", id, INVALID));
-        return INVALID;
+        LOGGER.warn(String.format("OrderType with id: %d is not found", id));
+        throw new EnumConstantNotPresentException(OrderType.class, String.format("OrderType with id: %d is not found", id));
     }
 }

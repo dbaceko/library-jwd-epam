@@ -26,7 +26,7 @@ public enum UserRole {
                 return userRole;
             }
         }
-        LOGGER.warn(String.format("Role with id: %d is not found, default role is %s", id, GUEST));
-        return GUEST;
+        LOGGER.warn(String.format("Role with id: %d is not found", id));
+        throw new EnumConstantNotPresentException(UserRole.class, String.format("Role with id: %d is not found", id));
     }
 }
