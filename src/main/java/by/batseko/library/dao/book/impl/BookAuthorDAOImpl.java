@@ -65,7 +65,6 @@ public class BookAuthorDAOImpl extends BaseDAO implements BookComponentDAO<Autho
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
-                LOGGER.info(listSize);
                 authors = new ArrayList<>(listSize);
                 while (resultSet.next()) {
                     authors.add(constructAuthorByResultSet(resultSet));
