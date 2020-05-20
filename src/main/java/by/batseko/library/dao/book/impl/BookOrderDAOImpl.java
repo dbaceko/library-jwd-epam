@@ -198,9 +198,7 @@ public class BookOrderDAOImpl extends BaseDAO implements BookOrderDAO {
             resultSet.beforeFirst();
             bookOrders = new ArrayList<>(listSize);
             while (resultSet.next()) {
-                BookOrder bookOrder = constructOrderByResultSet(resultSet);
-                LOGGER.info(bookOrder);
-                bookOrders.add(bookOrder);
+                bookOrders.add(constructOrderByResultSet(resultSet));
             }
         }
         return bookOrders;

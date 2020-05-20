@@ -67,9 +67,7 @@ public class BookLanguageDAOImpl extends BaseDAO implements BookComponentDAO<Boo
                 resultSet.beforeFirst();
                 bookLanguages = new ArrayList<>(listSize);
                 while (resultSet.next()) {
-                    BookLanguage bookLanguage = constructBookLanguageByResultSet(resultSet);
-                    LOGGER.info(bookLanguage);
-                    bookLanguages.add(bookLanguage);
+                    bookLanguages.add(constructBookLanguageByResultSet(resultSet));
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
