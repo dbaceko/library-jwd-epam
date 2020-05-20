@@ -56,7 +56,6 @@ public class ServletController extends HttpServlet {
         String commandName = request.getParameter(JSPAttributeStorage.COMMAND);
         Command command = CommandStorage.getCommandByName(commandName);
         Router router = command.execute(request, response);
-        LOGGER.info(String.format("%s <- page", router.getPagePath()));
         if (router.getRouteType().equals(Router.RouteType.FORWARD)) {
             request.getRequestDispatcher(router.getPagePath()).forward(request,response);
         } else {
