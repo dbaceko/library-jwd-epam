@@ -62,7 +62,6 @@ public class BookInstanceDAOImpl  extends BaseDAO implements BookInstanceDAO {
                 while (resultSet.next()) {
                     bookInstanceUUIDs.add(resultSet.getString(1));
                 }
-                LOGGER.info(bookInstanceUUIDs);
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn(String.format("Book instance finding by book uuid: %s error", bookUUID), e);
