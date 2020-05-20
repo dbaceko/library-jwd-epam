@@ -2,7 +2,7 @@
 ###### Website visitors are provided with the following services:
 ***
 ### *Guest:*
-- registration
+- registration (with sending email, which contains single-use auth-token for first log in)
 - view book catalog list
 - search catalog books 
 - switch language (with saving chosen lang into the cookies) 
