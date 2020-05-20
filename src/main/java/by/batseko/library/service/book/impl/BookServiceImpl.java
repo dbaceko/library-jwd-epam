@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BookServiceImpl implements BookService {
     private static final Logger LOGGER = LogManager.getLogger(BookServiceImpl.class);
@@ -37,11 +38,7 @@ public class BookServiceImpl implements BookService {
         try {
             bookValidator.validateNewBook(book);
             bookValidator.validateBookQuantity(quantity);
-            book.setGenre(bookComponentsCache.getGenres().get(book.getGenre().getUuid()));
-            book.setAuthor(bookComponentsCache.getAuthors().get(book.getAuthor().getUuid()));
-            book.setBookLanguage(bookComponentsCache.getBookLanguages().get(book.getBookLanguage().getUuid()));
-            book.setPublisher(bookComponentsCache.getPublishers().get(book.getPublisher().getUuid()));
-            book.defineUUID();
+            book.setUuid(UUID.randomUUID().toString());
             bookDAO.addBook(book, quantity);
         } catch (LibraryDAOException | ValidatorException e) {
             throw new LibraryServiceException(e.getMessage(), e);

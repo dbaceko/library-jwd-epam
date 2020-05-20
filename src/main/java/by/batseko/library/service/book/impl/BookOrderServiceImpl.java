@@ -55,7 +55,7 @@ public class BookOrderServiceImpl implements BookOrderService {
                 bookOrder.setUuid(UUID.randomUUID().toString());
                 bookOrder.getBookInstance().setUuid(availableBookInstanceUUIDs.get(i));
                 bookOrderDAO.addBookOrder(bookOrder);
-                BookOrdersCache.UserBookOrdersMap currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
+                BookOrdersCache.SortedUserBookOrdersCache currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
                 if (currentUserCachedOrders != null) {
                     currentUserCachedOrders.put(bookOrderDAO.findOrderByUUID(bookOrder.getUuid()));
                 }
@@ -149,9 +149,9 @@ public class BookOrderServiceImpl implements BookOrderService {
     }
 
     private void updateBookOrderCacheOrderStatus(BookOrder bookOrder) throws LibraryServiceException {
-        BookOrdersCache.UserBookOrdersMap currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
+        BookOrdersCache.SortedUserBookOrdersCache currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
         if (currentUserCachedOrders != null) {
-            currentUserCachedOrders.get(bookOrder.getUuid()).setOrderStatus(bookOrder.getOrderStatus());
+            currentUserCachedOrders.getBookOrderByUUID(bookOrder.getUuid()).setOrderStatus(bookOrder.getOrderStatus());
         }
     }
 }

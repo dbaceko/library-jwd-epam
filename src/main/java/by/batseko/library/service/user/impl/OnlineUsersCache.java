@@ -46,7 +46,6 @@ public class OnlineUsersCache implements Cache<String, User> {
 
     }
 
-    @Override
     public List<User> getAllSortedValues() {
         List<User> list = getAllValues();
         Collections.sort(list);
