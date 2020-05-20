@@ -66,7 +66,6 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
                 resultSet.last();
                 int listSize = resultSet.getRow();
                 resultSet.beforeFirst();
-                LOGGER.info(listSize);
                 publishers = new ArrayList<>(listSize);
                 while (resultSet.next()) {
                     publishers.add(constructPublisherByResultSet(resultSet));
