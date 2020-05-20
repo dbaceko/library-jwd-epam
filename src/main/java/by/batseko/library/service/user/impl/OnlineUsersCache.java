@@ -29,12 +29,12 @@ public class OnlineUsersCache implements Cache<String, User> {
         return ActiveUsersCacheSingletonHolder.INSTANCE;
     }
 
-    public void put(String login, User user) throws LibraryServiceException {
-        if (login == null || user == null) {
+    public void put(User user) throws LibraryServiceException {
+        if (user == null) {
             LOGGER.warn("Can't put null value to cache");
             throw new LibraryServiceException("service.commonError");
         }
-        userCache.put(login, user);
+        userCache.put(user.getLogin(), user);
     }
 
     public User get(String login) throws LibraryServiceException {

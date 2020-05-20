@@ -38,7 +38,7 @@ public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOr
     }
 
     @Override
-    public void put(String key, UserBookOrdersMap value) {
+    public void put(UserBookOrdersMap value) {
         throw new UnsupportedOperationException();
     }
 
@@ -77,12 +77,12 @@ public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOr
         Map<String, BookOrder> bookOrderMap = new ConcurrentHashMap<>();
 
         @Override
-        public void put(String key, BookOrder value) throws LibraryServiceException {
-            if (key == null || value == null) {
+        public void put(BookOrder value) throws LibraryServiceException {
+            if (value == null) {
                 LOGGER.warn("Can't put null value to cache");
                 throw new LibraryServiceException("service.commonError");
             }
-            bookOrderMap.put(key, value);
+            bookOrderMap.put(value.getUuid(), value);
         }
 
         @Override
@@ -124,7 +124,7 @@ public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOr
         void putAllElements(Collection<BookOrder> collection) throws LibraryServiceException {
             if (collection != null) {
                 for (BookOrder element: collection) {
-                    put(element.getUuid(), element);
+                    put(element);
                 }
             }
         }
