@@ -69,9 +69,7 @@ public class BookPublisherDAOImpl extends BaseDAO implements BookComponentDAO<Pu
                 LOGGER.info(listSize);
                 publishers = new ArrayList<>(listSize);
                 while (resultSet.next()) {
-                    Publisher publisher = constructPublisherByResultSet(resultSet);
-                    LOGGER.info(publisher);
-                    publishers.add(publisher);
+                    publishers.add(constructPublisherByResultSet(resultSet));
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {

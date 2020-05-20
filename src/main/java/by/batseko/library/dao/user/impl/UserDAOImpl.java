@@ -184,9 +184,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                 resultSet.beforeFirst();
                 users = new ArrayList<>(listSize);
                 while (resultSet.next()) {
-                    User user = constructUserByResultSet(resultSet);
-                    LOGGER.info(user);
-                    users.add(user);
+                    users.add(constructUserByResultSet(resultSet));
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {

@@ -67,9 +67,7 @@ public class BookGenreDAOImpl extends BaseDAO implements BookComponentDAO<Genre>
                 resultSet.beforeFirst();
                 genres = new ArrayList<>(listSize);
                 while (resultSet.next()) {
-                    Genre genre = constructGenreByResultSet(resultSet);
-                    LOGGER.info(genre);
-                    genres.add(genre);
+                    genres.add(constructGenreByResultSet(resultSet));
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {

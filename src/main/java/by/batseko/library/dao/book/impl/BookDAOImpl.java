@@ -118,11 +118,8 @@ public class BookDAOImpl extends BaseDAO implements BookDAO {
             int listSize = resultSet.getRow();
             resultSet.beforeFirst();
             bookDTOList = new ArrayList<>(listSize);
-            BookDTO bookDTO;
             while (resultSet.next()) {
-                bookDTO = constructBookDTOByResultSet(resultSet);
-                LOGGER.info(bookDTO);
-                bookDTOList.add(bookDTO);
+                bookDTOList.add(constructBookDTOByResultSet(resultSet));
             }
         } catch (SQLException | ConnectionPoolException e) {
             LOGGER.warn("Book list finding error", e);
