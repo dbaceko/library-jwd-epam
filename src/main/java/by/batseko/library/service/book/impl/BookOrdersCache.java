@@ -2,22 +2,22 @@ package by.batseko.library.service.book.impl;
 
 import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.exception.LibraryServiceException;
-import by.batseko.library.service.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOrdersMap> {
+public class BookOrdersCache {
     private static final Logger LOGGER = LogManager.getLogger(BookOrdersCache.class);
 
-    private final Map<String, UserBookOrdersMap> userOrdersCache;
-    private final UserBookOrdersMap userBookOrdersMap;
+    private final Map<String, SortedUserBookOrdersCache> userOrdersCache;
+    private final SortedUserBookOrdersCache sortedUserBookOrdersCache;
 
     private BookOrdersCache(){
         userOrdersCache = new ConcurrentHashMap<>();
-        userBookOrdersMap = new UserBookOrdersMap();
+        sortedUserBookOrdersCache = new SortedUserBookOrdersCache();
     }
 
     private static class BookOrdersCacheSingletonHolder {
@@ -33,32 +33,16 @@ public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOr
             LOGGER.warn("Can't put null value to cache");
             throw new LibraryServiceException("service.commonError");
         }
-        userBookOrdersMap.putAllElements(orders);
-        userOrdersCache.put(login, userBookOrdersMap);
+        sortedUserBookOrdersCache.addAllElements(orders);
+        userOrdersCache.put(login, sortedUserBookOrdersCache);
     }
 
-    @Override
-    public void put(UserBookOrdersMap value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public UserBookOrdersMap get(String key) throws LibraryServiceException {
-        if (key == null) {
+    public SortedUserBookOrdersCache get(String userLogin) throws LibraryServiceException {
+        if (userLogin == null) {
             LOGGER.warn("Can't get null login from cache");
             throw new LibraryServiceException("service.commonError");
         }
-        return userOrdersCache.get(key);
-    }
-
-    @Override
-    public List<UserBookOrdersMap> getAllSortedValues() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<UserBookOrdersMap> getAllValues() {
-        return new ArrayList<>(userOrdersCache.values());
+        return userOrdersCache.get(userLogin);
     }
 
     public void remove(String login) {
@@ -73,60 +57,60 @@ public class BookOrdersCache implements Cache<String, BookOrdersCache.UserBookOr
         userOrdersCache.clear();
     }
 
-    public static class UserBookOrdersMap implements Cache<String, BookOrder>{
-        Map<String, BookOrder> bookOrderMap = new ConcurrentHashMap<>();
+    public static class SortedUserBookOrdersCache {
+        List<BookOrder> userBookOrders = new CopyOnWriteArrayList<>();
 
-        @Override
-        public void put(BookOrder value) throws LibraryServiceException {
-            if (value == null) {
-                LOGGER.warn("Can't put null value to cache");
+        public void put(BookOrder bookOrder) throws LibraryServiceException {
+            if (bookOrder == null) {
+                LOGGER.warn("Can't put null bookOrder to cache");
                 throw new LibraryServiceException("service.commonError");
             }
-            bookOrderMap.put(value.getUuid(), value);
+            userBookOrders.add(bookOrder);
+            Collections.sort(userBookOrders);
         }
 
-        @Override
-        public BookOrder get(String key) throws LibraryServiceException {
-            if (key == null) {
-                LOGGER.warn("Can't get key login from cache");
+        BookOrder getBookOrderByUUID(String uuid) throws LibraryServiceException {
+            if (uuid == null) {
+                LOGGER.warn("Can't get user's book order by null uuid from cache");
                 throw new LibraryServiceException("service.commonError");
             }
-            return bookOrderMap.get(key);
-        }
-
-        @Override
-        public List<BookOrder> getAllSortedValues() {
-            List<BookOrder> list = getAllValues();
-            Collections.sort(list);
-            return list;
-        }
-
-        @Override
-        public List<BookOrder> getAllValues() {
-            return new ArrayList<>(bookOrderMap.values());
-        }
-
-        @Override
-        public void remove(String key) {
-            if (key == null) {
-                LOGGER.warn("Can't remove null login from cache");
-            } else {
-                bookOrderMap.remove(key);
-            }
-        }
-
-        @Override
-        public void removeAll() {
-            bookOrderMap.clear();
-        }
-
-
-        void putAllElements(Collection<BookOrder> collection) throws LibraryServiceException {
-            if (collection != null) {
-                for (BookOrder element: collection) {
-                    put(element);
+            for (BookOrder bookOrder: userBookOrders) {
+                if (bookOrder.getUuid().equals(uuid)) {
+                    return bookOrder;
                 }
             }
+            LOGGER.warn("Can't get user's book order by uuid from cache");
+            throw new LibraryServiceException("service.commonError");
+        }
+
+        public List<BookOrder> getAllValuesList() {
+            return userBookOrders;
+        }
+
+        void removeByUUID(String uuid) throws LibraryServiceException {
+            if (uuid == null) {
+                LOGGER.warn("Can't remove user's book order by uuid from cache");
+                throw new LibraryServiceException("service.commonError");
+            }
+            for (int i = 0; i < userBookOrders.size(); i++) {
+                if (userBookOrders.get(i).getUuid().equals(uuid)) {
+                    userBookOrders.remove(i);
+                    break;
+                }
+            }
+        }
+
+        void removeAll() {
+            userBookOrders.clear();
+        }
+
+        private void addAllElements(Collection<BookOrder> collection) throws LibraryServiceException {
+            if (collection == null) {
+                LOGGER.warn("Can't add null collection to cache");
+                throw new LibraryServiceException("service.commonError");
+            }
+            userBookOrders.addAll(collection);
+            Collections.sort(userBookOrders);
         }
     }
 }

@@ -13,20 +13,20 @@ import org.apache.logging.log4j.Logger;
 public class CommonBookComponentsCache {
     private static final Logger LOGGER = LogManager.getLogger(CommonBookComponentsCache.class);
 
-    private final BookComponentStorage<Author> authors;
-    private final BookComponentStorage<Publisher> publishers;
-    private final BookComponentStorage<Genre> genres;
-    private final BookComponentStorage<BookLanguage> bookLanguages;
+    private final SortedBookComponentStorage<Author> authors;
+    private final SortedBookComponentStorage<Publisher> publishers;
+    private final SortedBookComponentStorage<Genre> genres;
+    private final SortedBookComponentStorage<BookLanguage> bookLanguages;
     private final BookComponentDAO<Author> bookAuthorDAO;
     private final BookComponentDAO<Genre> bookGenreDAO;
     private final BookComponentDAO<Publisher> bookPublisherDAO;
     private final BookComponentDAO<BookLanguage> bookLanguageDAO;
 
     private CommonBookComponentsCache() {
-        authors = new BookComponentStorage<>();
-        publishers = new BookComponentStorage<>();
-        genres = new BookComponentStorage<>();
-        bookLanguages = new BookComponentStorage<>();
+        authors = new SortedBookComponentStorage<>();
+        publishers = new SortedBookComponentStorage<>();
+        genres = new SortedBookComponentStorage<>();
+        bookLanguages = new SortedBookComponentStorage<>();
 
         bookAuthorDAO = DAOFactory.getInstance().getBookAuthorDAO();
         bookGenreDAO = DAOFactory.getInstance().getBookGenreDAO();
@@ -42,19 +42,19 @@ public class CommonBookComponentsCache {
         return CommonBookComponentsCacheHolder.INSTANCE;
     }
 
-    public BookComponentStorage<Author> getAuthors() {
+    public SortedBookComponentStorage<Author> getAuthors() {
         return authors;
     }
 
-    public BookComponentStorage<Publisher> getPublishers() {
+    public SortedBookComponentStorage<Publisher> getPublishers() {
         return publishers;
     }
 
-    public BookComponentStorage<Genre> getGenres() {
+    public SortedBookComponentStorage<Genre> getGenres() {
         return genres;
     }
 
-    public BookComponentStorage<BookLanguage> getBookLanguages() {
+    public SortedBookComponentStorage<BookLanguage> getBookLanguages() {
         return bookLanguages;
     }
 

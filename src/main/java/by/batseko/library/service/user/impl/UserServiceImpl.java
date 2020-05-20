@@ -13,7 +13,6 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.service.Cache;
 import by.batseko.library.service.book.BookOrderService;
 import by.batseko.library.service.user.UserService;
 import by.batseko.library.util.EmailDistributorUtil;
@@ -292,7 +291,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Cache<String, User> getOnlineUsersCache() {
+    public OnlineUsersCache getOnlineUsersCache() {
         return activeUserCache;
     }
 

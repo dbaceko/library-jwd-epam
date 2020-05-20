@@ -161,5 +161,5 @@ public interface UserService {
      *
      * @return {@link OnlineUsersCache} online users cache
      */
-    Cache<String, User> getOnlineUsersCache();
+    OnlineUsersCache getOnlineUsersCache();
 }
