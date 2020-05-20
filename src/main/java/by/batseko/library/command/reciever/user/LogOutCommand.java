@@ -21,7 +21,11 @@ public class LogOutCommand implements Command {
         Router currentRouter = new Router();
         String login = (String) request.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
         int userId = (Integer) request.getSession().getAttribute(JSPAttributeStorage.USER_ID);
-        userService.logOut(login);
+        try {
+            userService.logOut(login);
+        } catch (LibraryServiceException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
