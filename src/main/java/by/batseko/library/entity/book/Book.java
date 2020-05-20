@@ -8,7 +8,6 @@ import by.batseko.library.entity.book.bookcomponent.Publisher;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Book implements Serializable {
     private String uuid;
@@ -105,10 +104,6 @@ public class Book implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void defineUUID() {
-        uuid = UUID.randomUUID().toString();
     }
 
     @Override
