@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum OrderStatus {
-    INVALID(0, "orderStatus.invalid"),
     PENDING(1, "orderStatus.pending"),
     ISSUED_BY(2, "orderStatus.issuedBy"),
     RETURNED(3, "orderStatus.returned"),
@@ -34,7 +33,7 @@ public enum OrderStatus {
                 return orderStatus;
             }
         }
-        LOGGER.warn(String.format("OrderStatus with id: %d is not found, default OrderStatus is %s", id, INVALID));
-        return INVALID;
+        LOGGER.warn(String.format("OrderStatus with id: %d is not found", id));
+        throw new EnumConstantNotPresentException(OrderStatus.class, String.format("OrderStatus with id: %d is not found", id));
     }
 }
