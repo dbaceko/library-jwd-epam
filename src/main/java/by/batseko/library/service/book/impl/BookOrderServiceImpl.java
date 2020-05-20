@@ -34,7 +34,6 @@ public class BookOrderServiceImpl implements BookOrderService {
         bookOrdersCache = BookOrdersCache.getInstance();
         emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
         emailMessageLocalizationDispatcher = UtilFactory.getInstance().getEmailMessageLocalizationDispatcher();
-
     }
 
     @Override
@@ -58,7 +57,7 @@ public class BookOrderServiceImpl implements BookOrderService {
                 bookOrderDAO.addBookOrder(bookOrder);
                 BookOrdersCache.UserBookOrdersMap currentUserCachedOrders = bookOrdersCache.get(bookOrder.getUser().getLogin());
                 if (currentUserCachedOrders != null) {
-                    currentUserCachedOrders.put(bookOrder.getUuid(), bookOrderDAO.findOrderByUUID(bookOrder.getUuid()));
+                    currentUserCachedOrders.put(bookOrderDAO.findOrderByUUID(bookOrder.getUuid()));
                 }
                 return;
             } catch (LibraryDAOException e) {

@@ -14,11 +14,10 @@ public interface Cache<K, V> {
     /**
      * Saves {@link V} value into cache
      *
-     * @param key {@link K} the type of keys maintained by this cache
      * @param value {@link V}  the type of mapped values
      * @throws LibraryServiceException if {@link K} key  or {@link V} value is null
      */
-    void put(K key, V value) throws LibraryServiceException;
+    void put(V value) throws LibraryServiceException;
 
     /**
      * Getting {@link V} {@link V} value from cache

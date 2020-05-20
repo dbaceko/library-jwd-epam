@@ -258,7 +258,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.updateUserProfileData(user);
             if(activeUserCache.get(user.getLogin()) != null) {
-                activeUserCache.put(user.getLogin(), user);
+                activeUserCache.put(user);
             }
         } catch (UtilException e) {
             LOGGER.warn(e.getMessage(), e);
@@ -281,7 +281,7 @@ public class UserServiceImpl implements UserService {
             String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_USER_BAN_STATUS_UPDATED, status);
             emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, user.getEmail());
             if(activeUserCache.get(user.getLogin()) != null) {
-                activeUserCache.put(user.getLogin(), user);
+                activeUserCache.put(user);
             }
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService {
     private void initCacheAfterLogIn(User user){
         BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
         try {
-            activeUserCache.put(user.getLogin(), user);
+            activeUserCache.put(user);
         } catch (LibraryServiceException e) {
             LOGGER.warn(String.format("Can't put user %s in cache", user), e);
         }
