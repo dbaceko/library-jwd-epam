@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookInstanceDAO {
 
     /**
-     * Searches and returns {@link List<String>} of {@link BookInstance}'s uuid if
+     * Searches and returns {@link String} list of {@link BookInstance}'s uuid if
      * {@link BookInstance} isAvailable param is true
      *
      * @param bookUUID the id of the {@link Book} that is looking for

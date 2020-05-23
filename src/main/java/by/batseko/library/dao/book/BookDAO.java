@@ -30,6 +30,7 @@ public interface BookDAO {
      *
      * @param bookUUID the {@link Book}'s uuid
      * @throws LibraryDAOException if an error occurs while adding a <tt>book</tt>
+     * @return {@link Book}
      */
     Book findBookByUUID(String bookUUID) throws LibraryDAOException;
 
@@ -46,7 +47,7 @@ public interface BookDAO {
     int findBookQuantityByFields(Book book) throws LibraryDAOException;
 
     /**
-     * Returns the {@link List<BookDTO>} which contains a {@link Book}
+     * Returns the {@link BookDTO} list which contains a {@link Book}
      * <tt>int</tt> common instance quantity, and <tt>int</tt> available instance quantity
      * If no such book contains into data source returns emptyList
      * LibraryDAOException if an error occurs while getting a <tt>book</tt>
@@ -55,21 +56,21 @@ public interface BookDAO {
      *        which using to construct search query
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return {@link List<BookDTO>} which contains a {@link Book},
+     * @return list of {@link BookDTO} which contains a {@link Book},
      *         <tt>int</tt> common instance quantity, and <tt>int</tt> available instance quantity
      * @throws LibraryDAOException if an error occurs while getting a <tt>book</tt>
      */
     List<BookDTO> findBooksDTOByFields(Book book, int currentPage, int recordsPerPage) throws LibraryDAOException;
 
     /**
-     * Returns the {@link List<BookDTO>} which contains a {@link Book}
+     * Returns the {@link BookDTO} list which contains a {@link Book}
      * <tt>int</tt> common instance quantity, and <tt>int</tt> available instance quantity
      * If no such book contains into data source returns emptyList
      * LibraryDAOException if an error occurs while getting a <tt>book</tt>
      *
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return {@link List<BookDTO>} which contains a {@link Book},
+     * @return {@link BookDTO} which contains a {@link Book},
      *         <tt>int</tt> common instance quantity, and <tt>int</tt> available instance quantity
      * @throws LibraryDAOException if an error occurs while getting a <tt>book</tt>
      */

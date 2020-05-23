@@ -101,7 +101,7 @@ public interface UserDAO {
     User findUserById(int userId) throws LibraryDAOException;
 
     /**
-     * Retrieves and returns {@link List<User>}'s into data source.
+     * Retrieves and returns List of {@link User}'s into data source.
      * If no such users contains into data source returns emptyList collection
      *
      * @return List of {@link User}
