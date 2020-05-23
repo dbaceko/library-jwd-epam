@@ -4,7 +4,7 @@ import by.batseko.library.command.*;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.user.UserService;
+import by.batseko.library.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class LogInCommand implements Command {
 
             if (rememberToken != null) {
                 Cookie rememberTokenCookie = new Cookie(
-                        JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN, userService.generateAndUpdateRememberUserToken(user.getId())
+                        JSPAttributeStorage.COOKIE_REMEMBER_USER_TOKEN, userService.getUpdatedRememberUserToken(user.getId())
                 );
                 rememberTokenCookie.setPath(request.getContextPath());
                 rememberTokenCookie.setMaxAge(COOKIE_MAX_AGE_21_DAY);

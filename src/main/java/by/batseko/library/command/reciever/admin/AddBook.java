@@ -6,7 +6,7 @@ import by.batseko.library.command.reciever.page.AddBookPage;
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.book.BookService;
+import by.batseko.library.service.BookService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

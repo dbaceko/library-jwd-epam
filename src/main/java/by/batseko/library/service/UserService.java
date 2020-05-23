@@ -1,9 +1,8 @@
-package by.batseko.library.service.user;
+package by.batseko.library.service;
 
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
-import by.batseko.library.service.Cache;
-import by.batseko.library.service.user.impl.OnlineUsersCache;
+import by.batseko.library.service.impl.UsersOnlineCache;
 
 import java.util.List;
 /**
@@ -81,6 +80,13 @@ public interface UserService {
     List<User> findAllUsers() throws LibraryServiceException;
 
     /**
+     * Find all online users list {@link List<User>}
+     *
+     * @return all online users list {@link List<User>} from {@link UsersOnlineCache}
+     */
+    List<User> findUsersOnline();
+
+    /**
      * Generate user's access token by <tt>id</tt> which uses for forget password functional
      *
      * @param id {@link User}'s id
@@ -89,7 +95,7 @@ public interface UserService {
      *                          data source or if an error occurs while searching {@link User}
      *                          into the data source
      */
-    String generateAndUpdateRememberUserToken(int id) throws LibraryServiceException;
+    String getUpdatedRememberUserToken(int id) throws LibraryServiceException;
 
     /**
      * Sending access token with link to <tt>email</tt>
@@ -157,9 +163,9 @@ public interface UserService {
     void updateUserBanStatus(User user) throws LibraryServiceException;
 
     /**
-     * Returns {@link OnlineUsersCache} which contains online users
+     * Returns {@link Cache<String,User>} which contains online users
      *
-     * @return {@link OnlineUsersCache} online users cache
+     * @return {@link Cache<String,User>} online users cache
      */
-    OnlineUsersCache getOnlineUsersCache();
+    Cache<String, User> getUsersOnlineCache();
 }

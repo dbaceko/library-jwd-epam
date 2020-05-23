@@ -1,4 +1,4 @@
-package by.batseko.library.service.book.impl;
+package by.batseko.library.service.impl;
 
 import by.batseko.library.dao.book.BookComponentDAO;
 import by.batseko.library.entity.book.bookcomponent.Author;

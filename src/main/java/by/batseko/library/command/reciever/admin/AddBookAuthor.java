@@ -7,7 +7,7 @@ import by.batseko.library.command.Router;
 import by.batseko.library.entity.book.bookcomponent.Author;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.book.BookComponentService;
+import by.batseko.library.service.BookComponentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

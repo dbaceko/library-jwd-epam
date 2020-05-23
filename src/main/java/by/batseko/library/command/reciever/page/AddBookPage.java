@@ -5,8 +5,8 @@ import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.PageStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.book.BookService;
-import by.batseko.library.service.book.impl.CommonBookComponentsCache;
+import by.batseko.library.service.BookService;
+import by.batseko.library.service.impl.CommonBookComponentsCache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

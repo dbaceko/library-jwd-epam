@@ -1,4 +1,4 @@
-package by.batseko.library.service.book.impl;
+package by.batseko.library.service.impl;
 
 import by.batseko.library.dao.book.BookInstanceDAO;
 import by.batseko.library.dao.book.BookOrderDAO;
@@ -9,7 +9,7 @@ import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.UtilException;
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.UtilFactory;
-import by.batseko.library.service.book.BookOrderService;
+import by.batseko.library.service.BookOrderService;
 import by.batseko.library.util.EmailDistributorUtil;
 import by.batseko.library.util.EmailMessageLocalizationDispatcher;
 import by.batseko.library.util.EmailMessageType;

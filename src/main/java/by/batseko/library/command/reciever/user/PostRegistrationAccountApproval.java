@@ -6,7 +6,7 @@ import by.batseko.library.command.PageStorage;
 import by.batseko.library.command.Router;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.user.UserService;
+import by.batseko.library.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

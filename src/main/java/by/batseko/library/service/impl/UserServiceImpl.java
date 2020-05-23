@@ -1,4 +1,4 @@
-package by.batseko.library.service.user.impl;
+package by.batseko.library.service.impl;
 
 import by.batseko.library.builder.UserBuilder;
 import by.batseko.library.command.CommandStorage;
@@ -13,8 +13,8 @@ import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.service.book.BookOrderService;
-import by.batseko.library.service.user.UserService;
+import by.batseko.library.service.BookOrderService;
+import by.batseko.library.service.UserService;
 import by.batseko.library.util.EmailDistributorUtil;
 import by.batseko.library.util.EmailMessageLocalizationDispatcher;
 import by.batseko.library.util.EmailMessageType;
@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,18 +34,20 @@ public class UserServiceImpl implements UserService {
     private static final int TOKEN_VALUE_COOKIE_INDEX = 0;
     private static final int USER_ID_COOKIE_INDEX = 1;
 
+    private final UserDAO userDAO;
+    private final UsersOnlineCache usersOnlineCache;
     private final UserValidator validator;
     private final HashGeneratorUtil hashGeneratorUtil;
-    private final OnlineUsersCache activeUserCache;
-    private final UserDAO userDAO;
+    private final BookOrdersCache bookOrdersCache;
     private final EmailDistributorUtil emailDistributorUtil;
     private final EmailMessageLocalizationDispatcher emailLocalizationDispatcher;
 
     public UserServiceImpl(){
+        userDAO = DAOFactory.getInstance().getUserDAO();
+        usersOnlineCache = UsersOnlineCache.getInstance();
+        bookOrdersCache = BookOrdersCache.getInstance();
         validator = ValidatorFactory.getInstance().getUserValidator();
         hashGeneratorUtil = UtilFactory.getInstance().getHashGeneratorUtil();
-        activeUserCache = OnlineUsersCache.getInstance();
-        userDAO = DAOFactory.getInstance().getUserDAO();
         emailDistributorUtil = UtilFactory.getInstance().getEmailDistributorUtil();
         emailLocalizationDispatcher = UtilFactory.getInstance().getEmailMessageLocalizationDispatcher();
     }
@@ -105,7 +108,8 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("login is null");
             throw new LibraryServiceException("service.commonError");
         }
-        activeUserCache.remove(login);
+        usersOnlineCache.remove(login);
+        bookOrdersCache.remove(login);
     }
 
     @Override
@@ -116,7 +120,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = null;
         try {
-            user = activeUserCache.get(login);
+            user = usersOnlineCache.get(login);
         } catch (LibraryServiceException e) {
             LOGGER.warn(e.getMessage(), e);
         }
@@ -155,7 +159,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String generateAndUpdateRememberUserToken(int id) throws LibraryServiceException {
+    public List<User> findUsersOnline() {
+        List<User> list = usersOnlineCache.getAllValues();
+        Collections.sort(list);
+        return list;
+    }
+
+    @Override
+    public String getUpdatedRememberUserToken(int id) throws LibraryServiceException {
         String token = UUID.randomUUID().toString();
         try {
             userDAO.updateRememberUserToken(id, token);
@@ -172,7 +183,7 @@ public class UserServiceImpl implements UserService {
         }
         try {
             User user = userDAO.findUserByEmail(email);
-            String token = generateAndUpdateRememberUserToken(user.getId());
+            String token = getUpdatedRememberUserToken(user.getId());
             String userLogInLink = constructLogInLink(CommandStorage.FORGET_PASSWORD_LOG_IN.getCommandName(), pageRootUrl, token);
             String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_FORGET_PASSWORD);
             String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_FORGET_PASSWORD, userLogInLink);
@@ -209,7 +220,7 @@ public class UserServiceImpl implements UserService {
             userDAO.registerUser(user);
 
             user = userDAO.findUserByLogin(user.getLogin());
-            String token = generateAndUpdateRememberUserToken(user.getId());
+            String token = getUpdatedRememberUserToken(user.getId());
 
             String userLogInLink = constructLogInLink(CommandStorage.POST_REGISTRATION_ACCOUNT_APPROVAL.getCommandName(), pageRootUrl, token);
             String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_USER_REGISTRATION_LINK);
@@ -256,8 +267,8 @@ public class UserServiceImpl implements UserService {
         try {
             user.setPassword(hashGeneratorUtil.generateHash(user.getPassword()));
             userDAO.updateUserProfileData(user);
-            if(activeUserCache.get(user.getLogin()) != null) {
-                activeUserCache.put(user);
+            if(usersOnlineCache.get(user.getLogin()) != null) {
+                usersOnlineCache.put(user);
             }
         } catch (UtilException e) {
             LOGGER.warn(e.getMessage(), e);
@@ -279,8 +290,8 @@ public class UserServiceImpl implements UserService {
             String messageTitle = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.TITLE_USER_BAN_STATUS_UPDATED);
             String messageText = emailLocalizationDispatcher.getLocalizedMessage(EmailMessageType.MESSAGE_USER_BAN_STATUS_UPDATED, status);
             emailDistributorUtil.addEmailToSendingQueue(messageTitle, messageText, user.getEmail());
-            if(activeUserCache.get(user.getLogin()) != null) {
-                activeUserCache.put(user);
+            if(usersOnlineCache.get(user.getLogin()) != null) {
+                usersOnlineCache.put(user);
             }
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
@@ -291,19 +302,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public OnlineUsersCache getOnlineUsersCache() {
-        return activeUserCache;
+    public UsersOnlineCache getUsersOnlineCache() {
+        return usersOnlineCache;
     }
 
     private void initCacheAfterLogIn(User user){
         BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
         try {
-            activeUserCache.put(user);
+            usersOnlineCache.put(user);
         } catch (LibraryServiceException e) {
             LOGGER.warn(String.format("Can't put user %s in cache", user), e);
         }
         try {
-            bookOrderService.getBookOrdersCache().put(user.getLogin(), bookOrderService.findAllOrdersByUserId(user.getId()));
+            bookOrdersCache.put(user.getLogin(), bookOrderService.findAllOrdersByUserId(user.getId()));
         } catch (LibraryServiceException e) {
             LOGGER.warn(String.format("Can't put user's %s book orders in cache", user), e);
         }

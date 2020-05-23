@@ -1,4 +1,4 @@
-package by.batseko.library.service.book.impl;
+package by.batseko.library.service.impl;
 
 import by.batseko.library.dao.book.BookDAO;
 import by.batseko.library.dto.BookDTO;
@@ -8,7 +8,7 @@ import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.ValidatorException;
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.service.book.BookService;
+import by.batseko.library.service.BookService;
 import by.batseko.library.validatior.BookValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

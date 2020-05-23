@@ -1,10 +1,10 @@
-package by.batseko.library.service.book;
+package by.batseko.library.service;
 
 import by.batseko.library.entity.book.Book;
 import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
-import by.batseko.library.service.book.impl.BookOrdersCache;
+import by.batseko.library.service.impl.BookOrdersCache;
 
 import java.util.List;
 
@@ -88,5 +88,5 @@ public interface BookOrderService {
      *
      * @return {@link BookOrdersCache} which contains {@link BookOrder}'s of online {@link User}'s
      */
-    BookOrdersCache getBookOrdersCache();
+    Cache<String, BookOrdersCache.SortedUserBookOrdersCache> getBookOrdersCache();
 }

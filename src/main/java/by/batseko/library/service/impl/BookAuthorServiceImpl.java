@@ -1,55 +1,54 @@
-package by.batseko.library.service.book.impl;
+package by.batseko.library.service.impl;
 
 import by.batseko.library.dao.book.BookComponentDAO;
-import by.batseko.library.entity.book.bookcomponent.Publisher;
+import by.batseko.library.entity.book.bookcomponent.Author;
 import by.batseko.library.exception.LibraryDAOException;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.exception.ValidatorException;
-
 import by.batseko.library.factory.DAOFactory;
 import by.batseko.library.factory.ValidatorFactory;
-import by.batseko.library.service.book.BookComponentService;
+import by.batseko.library.service.BookComponentService;
 import by.batseko.library.validatior.BookValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BookPublisherServiceImpl implements BookComponentService<Publisher> {
-    private static final Logger LOGGER = LogManager.getLogger(BookLanguageServiceImpl.class);
+public class BookAuthorServiceImpl implements BookComponentService<Author> {
+    private static final Logger LOGGER = LogManager.getLogger(BookAuthorServiceImpl.class);
 
-    private final BookComponentDAO<Publisher> bookPublisherDAO;
+    private final BookComponentDAO<Author> bookAuthorDAO;
     private final BookValidator bookValidator;
     private final CommonBookComponentsCache bookComponentsCache;
 
-    public BookPublisherServiceImpl() {
-        bookPublisherDAO = DAOFactory.getInstance().getBookPublisherDAO();
+    public BookAuthorServiceImpl() {
+        bookAuthorDAO = DAOFactory.getInstance().getBookAuthorDAO();
         bookValidator = ValidatorFactory.getInstance().getBookValidator();
         bookComponentsCache = CommonBookComponentsCache.getInstance();
     }
 
     @Override
-    public void add(Publisher publisher) throws LibraryServiceException {
-        if (publisher == null) {
-            LOGGER.warn("publisher is null");
+    public void add(Author author) throws LibraryServiceException {
+        if (author == null) {
+            LOGGER.warn("author is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
-            bookValidator.validatePublisher(publisher.getPublisherTitle());
-            publisher.defineUUID();
-            bookPublisherDAO.add(publisher);
-            bookComponentsCache.getPublishers().put(publisher);
+            bookValidator.validateAuthor(author.getAuthorName());
+            author.defineUUID();
+            bookAuthorDAO.add(author);
+            bookComponentsCache.getAuthors().put(author);
         } catch (LibraryDAOException | ValidatorException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public Publisher findByUUID(String uuid) throws LibraryServiceException {
+    public Author findByUUID(String uuid) throws LibraryServiceException {
         if (uuid == null) {
             LOGGER.warn("uuid is null");
             throw new LibraryServiceException("service.commonError");
         }
         try {
-            return bookPublisherDAO.findByUUID(uuid);
+            return bookAuthorDAO.findByUUID(uuid);
         } catch (LibraryDAOException e) {
             throw new LibraryServiceException(e.getMessage(), e);
         }

@@ -10,8 +10,8 @@ import by.batseko.library.entity.book.Book;
 import by.batseko.library.entity.order.OrderType;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.book.BookService;
-import by.batseko.library.service.book.impl.CommonBookComponentsCache;
+import by.batseko.library.service.BookService;
+import by.batseko.library.service.impl.CommonBookComponentsCache;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
