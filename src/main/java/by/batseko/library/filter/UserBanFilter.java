@@ -5,7 +5,7 @@ import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
 import by.batseko.library.service.Cache;
-import by.batseko.library.service.user.UserService;
+import by.batseko.library.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class UserBanFilter implements Filter {
         String userLogin = (String) session.getAttribute(JSPAttributeStorage.USER_LOGIN);
         if (userLogin != null) {
             UserService userService = ServiceFactory.getInstance().getUserService();
-            Cache<String , User> onlineUsersCache = userService.getOnlineUsersCache();
+            Cache<String , User> onlineUsersCache = userService.getUsersOnlineCache();
             try {
                 User currentUser = onlineUsersCache.get(userLogin);
                 if (currentUser == null) {

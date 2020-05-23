@@ -12,7 +12,7 @@ import by.batseko.library.entity.order.BookOrder;
 import by.batseko.library.entity.order.OrderStatus;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.book.BookOrderService;
+import by.batseko.library.service.BookOrderService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

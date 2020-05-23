@@ -7,7 +7,7 @@ import by.batseko.library.command.Router;
 import by.batseko.library.exception.ConnectionPoolException;
 import by.batseko.library.factory.UtilFactory;
 import by.batseko.library.pool.ConnectionPool;
-import by.batseko.library.service.book.impl.CommonBookComponentsCache;
+import by.batseko.library.service.impl.CommonBookComponentsCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

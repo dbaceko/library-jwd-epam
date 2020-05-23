@@ -1,4 +1,4 @@
-package by.batseko.library.service.book;
+package by.batseko.library.service;
 
 import by.batseko.library.entity.book.bookcomponent.BaseBookComponent;
 import by.batseko.library.exception.LibraryServiceException;

@@ -4,10 +4,12 @@ import by.batseko.library.entity.book.bookcomponent.Author;
 import by.batseko.library.entity.book.bookcomponent.BookLanguage;
 import by.batseko.library.entity.book.bookcomponent.Genre;
 import by.batseko.library.entity.book.bookcomponent.Publisher;
-import by.batseko.library.service.book.*;
-import by.batseko.library.service.book.impl.*;
-import by.batseko.library.service.user.UserService;
-import by.batseko.library.service.user.impl.UserServiceImpl;
+import by.batseko.library.service.BookComponentService;
+import by.batseko.library.service.BookOrderService;
+import by.batseko.library.service.BookService;
+import by.batseko.library.service.impl.*;
+import by.batseko.library.service.UserService;
+import by.batseko.library.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
     private final UserService userService;
