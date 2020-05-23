@@ -1,11 +1,10 @@
 package by.batseko.library.listener;
 
 import by.batseko.library.command.JSPAttributeStorage;
-import by.batseko.library.entity.user.User;
 import by.batseko.library.entity.user.UserRole;
+import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.factory.ServiceFactory;
-import by.batseko.library.service.Cache;
-import by.batseko.library.service.book.BookOrderService;
+import by.batseko.library.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,21 +16,22 @@ import javax.servlet.http.HttpSessionListener;
 public class SessionListener implements HttpSessionListener  {
     private static final Logger LOGGER = LogManager.getLogger(SessionListener.class);
 
+    private static final UserService userService = ServiceFactory.getInstance().getUserService();
+
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         se.getSession().setAttribute(JSPAttributeStorage.USER_ROLE, UserRole.GUEST.name());
-        LOGGER.debug(String.format("Session is created for %s", se.getSession().getId()));
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         String userLogin = (String) se.getSession().getAttribute(JSPAttributeStorage.USER_LOGIN);
-        LOGGER.info(String.format("Session is destroyed for %s", userLogin));
         if (userLogin != null) {
-            Cache<String , User> usersCache = ServiceFactory.getInstance().getUserService().getOnlineUsersCache();
-            usersCache.remove(userLogin);
-            BookOrderService bookOrderService = ServiceFactory.getInstance().getBookOrderService();
-            bookOrderService.getBookOrdersCache().remove(userLogin);
+            try {
+                userService.logOut(userLogin);
+            } catch (LibraryServiceException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
         }
     }
 }
