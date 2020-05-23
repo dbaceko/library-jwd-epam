@@ -5,6 +5,7 @@ import by.batseko.library.entity.book.Book;
 import by.batseko.library.entity.book.BookInstance;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.service.impl.CommonBookComponentsCache;
+import by.batseko.library.validatior.BookValidator;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface BookService {
      * @param book Book instance
      * @param quantity is <tt>quantity</tt> of {@link BookInstance}s.
      * @throws LibraryServiceException if <tt>book</tt>'s fields not accords to specify pattern
-     *                          {@see by.batseko.library.validator.BookValidator}
+     *                          {@link BookValidator}
      *                          or if Book with this fields has already exist
      *                          or if an error occurs while writing new {@link Book} into
      *                          data source
@@ -38,35 +39,35 @@ public interface BookService {
     Book findByUUID(String uuid) throws LibraryServiceException;
 
     /**
-     * Find book list of {@link List<BookDTO>} which follow the book fields pattern
+     * Find book list of {@link BookDTO} which follow the book fields pattern
      *
      * @param book is the {@link Book} which contains non-empty fields
      *        which using to construct search query into DAO layer
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return book list {@link List<BookDTO>} which follow the book fields pattern
-     * @throws LibraryServiceException if {@link List<BookDTO>} is empty or if book is null
+     * @return book list {@link BookDTO} which follow the book fields pattern
+     * @throws LibraryServiceException if {@link BookDTO} is empty or if book is null
      *                          or occurs after searching {@link Book} into the data source
      */
     List<BookDTO> findByFields(Book book, int currentPage, int recordsPerPage) throws LibraryServiceException;
 
     /**
-     * Find quantity of {@link List<BookDTO>} which follow the book fields pattern
+     * Find quantity of {@link BookDTO}s which follow the book fields pattern
      *
      * @param book is the {@link Book} which contains non-empty fields
      *        which using to construct search query into DAO layer
-     * @return quantity of {@link List<BookDTO>}  which follow the book fields pattern
-     * @throws LibraryServiceException if {@link List<BookDTO>} is empty or if book is null
+     * @return quantity of {@link BookDTO}s which follow the book fields pattern
+     * @throws LibraryServiceException if {@link BookDTO} list is empty or if book is null
      *                          or occurs after searching {@link Book} into the data source
      */
     int findBookQuantityByFields(Book book) throws LibraryServiceException;
 
     /**
-     * Find all book list of {@link List<BookDTO>}
+     * Find all book list of {@link BookDTO}
      *
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return all book list {@link List<BookDTO>}
+     * @return all book list {@link BookDTO}
      * @throws LibraryServiceException occurs after searching {@link Book} into the data source
      */
     List<BookDTO> findAllBookDTO(int currentPage, int recordsPerPage) throws LibraryServiceException;

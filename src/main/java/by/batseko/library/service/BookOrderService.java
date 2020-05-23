@@ -34,59 +34,62 @@ public interface BookOrderService {
     void updateBookOrderStatus(BookOrder bookOrder) throws LibraryServiceException;
 
     /**
-     * Find BookOrder list of {@link List<BookOrder>} which user id is <tt>userId</tt>
+     * Find BookOrder list of {@link BookOrder} which user id is <tt>userId</tt>
      *
      * @param userId is the {@link BookOrder}'s {@link User}'s id
-     * @return BookOrder list {@link List<BookOrder>} which user id is <tt>userId</tt>
-     * @throws LibraryServiceException if {@link List<BookOrder>} is empty
+     * @return BookOrder list {@link BookOrder} which user id is <tt>userId</tt>
+     * @throws LibraryServiceException if {@link BookOrder} is empty
      *                          or occurs after searching {@link BookOrder} into the data source
      */
     List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryServiceException;
 
     /**
-     * Find BookOrder list of {@link List<BookOrder>} which user id is <tt>userId</tt>
+     * Find BookOrder list of {@link BookOrder} which user id is <tt>userId</tt>
      *
      * @param userId is the {@link BookOrder}'s {@link User}'s id
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return BookOrder list {@link List<BookOrder>} which user id is <tt>userId</tt>
-     * @throws LibraryServiceException if {@link List<BookOrder>} is empty
+     * @return BookOrder list {@link BookOrder} which user id is <tt>userId</tt>
+     * @throws LibraryServiceException if {@link BookOrder} list is empty
      *                          or occurs after searching {@link BookOrder} into the data source
      */
     List<BookOrder> findOrdersByUserId(int userId, int currentPage, int recordsPerPage) throws LibraryServiceException;
 
     /**
-     * Find quantity of {@link List<BookOrder>} which follow the book fields pattern
+     * Find quantity of {@link BookOrder}s which follow the book fields pattern
      *
      * @param userId is the {@link BookOrder}'s {@link User}'s id
-     * @return quantity of {@link List<BookOrder>}  which user id is <tt>userId</tt>
+     * @return quantity of {@link BookOrder}s which user id is <tt>userId</tt>
      * @throws LibraryServiceException occurs after searching {@link Book} into the data source
      */
     int findOrdersQuantityByUserId(int userId) throws LibraryServiceException;
 
     /**
-     * Find BookOrder list of {@link List<BookOrder>} which status is pending or return
+     * Find BookOrder list of {@link BookOrder} which status is pending or return
      *
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return BookOrder list {@link List<BookOrder>} which status is pending or return
-     * @throws LibraryServiceException if {@link List<BookOrder>} is empty
+     * @return BookOrder list {@link BookOrder} which status is pending or return
+     * @throws LibraryServiceException if {@link BookOrder} is empty
      *                          or occurs after searching {@link BookOrder} into the data source
      */
     List<BookOrder> findAllOpenOrders(int currentPage, int recordsPerPage) throws LibraryServiceException;
 
     /**
-     * Find quantity of all {@link List<BookOrder>} which status is pending or return
+     * Find quantity of all {@link BookOrder} which status is pending or return
      *
-     * @return quantity of all {@link List<BookOrder>} which status is pending or return
+     * @return quantity of all {@link BookOrder} which status is pending or return
      * @throws LibraryServiceException occurs after searching {@link Book} into the data source
      */
     int findOpenOrdersQuantity() throws LibraryServiceException;
 
+
     /**
-     * Returns {@link BookOrdersCache} which contains {@link BookOrder}'s of online {@link User}'s
+     * Returns {@link Cache} which contains {@link BookOrder}'s of online {@link User}'s
+     *                  map arguments is <tt>BookOrdersCache.SortedUserBookOrdersCache</tt>
      *
-     * @return {@link BookOrdersCache} which contains {@link BookOrder}'s of online {@link User}'s
+     * @return {@link Cache} which contains {@link BookOrder}'s of online {@link User}'s
+     *                  map arguments is <tt>BookOrdersCache.SortedUserBookOrdersCache</tt>
      */
     Cache<String, BookOrdersCache.SortedUserBookOrdersCache> getBookOrdersCache();
 }

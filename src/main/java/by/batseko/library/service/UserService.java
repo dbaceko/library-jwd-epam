@@ -3,6 +3,7 @@ package by.batseko.library.service;
 import by.batseko.library.entity.user.User;
 import by.batseko.library.exception.LibraryServiceException;
 import by.batseko.library.service.impl.UsersOnlineCache;
+import by.batseko.library.validatior.UserValidator;
 
 import java.util.List;
 /**
@@ -18,8 +19,7 @@ public interface UserService {
      * @return {@link User} instance
      * @throws LibraryServiceException if <tt>login</tt> or <tt>password</tt> is null or
      *                          empty or if <tt>login</tt> or <tt>password</tt> do
-     *                          not accords to specify pattern
-     *                          {@see by.batseko.library.validator.UserValidator}
+     *                          not accords to specify pattern {@link UserValidator}
      *                          or if {@link User} with <tt>login</tt> and <tt>password</tt>
      *                          do not present into data source or if an error occurs
      *                          while searching {@link User} into the data source
@@ -42,6 +42,7 @@ public interface UserService {
      * Log out {@link User} remove user from cache
      *
      * @param login {@link User}'s login
+     * @throws LibraryServiceException if login is null
      */
     void logOut(String login) throws LibraryServiceException;
 
@@ -51,8 +52,7 @@ public interface UserService {
      * @param login {@link User}'s login
      * @return {@link User} instance
      * @throws LibraryServiceException if <tt>login</tt> is null or empty or if <tt>login</tt>
-     *                          or not accords to specify pattern
-     *                          {@see by.batseko.library.validator.UserValidator}
+     *                          or not accords to specify pattern {@link UserValidator}
      *                          or if {@link User} with <tt>login</tt> do not present into
      *                          data source or if an error occurs while searching {@link User}
      *                          into the data source
@@ -71,18 +71,18 @@ public interface UserService {
     User findUserById(int id) throws LibraryServiceException;
 
     /**
-     * Find all users list {@link List<User>}
+     * Find all users list {@link User}
      *
-     * @return all users list {@link List<User>}
-     * @throws LibraryServiceException if {@link List<User>} in empty
+     * @return all users list {@link User}
+     * @throws LibraryServiceException if {@link User} in empty
      *                          occurs after searching {@link User} into the data source
      */
     List<User> findAllUsers() throws LibraryServiceException;
 
     /**
-     * Find all online users list {@link List<User>}
+     * Find all online users list {@link User}
      *
-     * @return all online users list {@link List<User>} from {@link UsersOnlineCache}
+     * @return all online users list {@link User} from {@link UsersOnlineCache}
      */
     List<User> findUsersOnline();
 
@@ -126,7 +126,7 @@ public interface UserService {
      * @param pageRootUrl is page url which sends by email with single-use auth-token
      *
      * @throws LibraryServiceException if <tt>user</tt>'s fields not accords to specify pattern
-     *                          {@see by.batseko.library.validator.UserValidator}
+     *                          {@link UserValidator}
      *                          or if user with <tt>email</tt> or <tt>login</tt> has already exist
      *                          or if an error occurs while writing new {@link User} into
      *                          data source
@@ -147,7 +147,7 @@ public interface UserService {
      *
      * @param user {@link User} is filled user instance
      * @throws LibraryServiceException if <tt>user</tt>'s fields not accords to specify pattern
-     *                          {@see by.batseko.library.validator.UserValidator}
+     *                          {@link UserValidator}
      *                          or if user with <tt>email</tt> has already exist
      *                          or if an error occurs while writing new {@link User} into
      *                          data source
@@ -163,9 +163,9 @@ public interface UserService {
     void updateUserBanStatus(User user) throws LibraryServiceException;
 
     /**
-     * Returns {@link Cache<String,User>} which contains online users
+     * Returns {@link Cache} map arguments is <tt>String,User</tt> which contains online users
      *
-     * @return {@link Cache<String,User>} online users cache
+     * @return {@link Cache} map arguments is <tt>String,User</tt> online users cache
      */
     Cache<String, User> getUsersOnlineCache();
 }

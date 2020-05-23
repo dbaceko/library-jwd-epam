@@ -49,6 +49,7 @@ public interface BookOrderDAO {
      *
      * @param uuid the {@link BookOrder}'s uuid
      * @throws LibraryDAOException if an error occurs while adding a <tt>BookOrder</tt>
+     * @return {@link BookOrder} by founded uuid
      */
     BookOrder findOrderByUUID(String uuid) throws LibraryDAOException;
 
@@ -64,25 +65,25 @@ public interface BookOrderDAO {
     int findOrdersQuantityByUserId(int userId) throws LibraryDAOException;
 
     /**
-     * Returns the {@link List<BookOrder>}
+     * Returns the {@link BookOrder} list
      * If no such BookOrder contains into data source returns emptyList
      * LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      *
      * @param userId is the {@link User}'s id, {@link BookOrder} field
      * @param currentPage is the current page parameter for pagination
      * @param recordsPerPage is the records per page parameter for pagination
-     * @return {@link List<BookOrder>}
+     * @return {@link BookOrder}
      * @throws LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      */
     List<BookOrder> findOrdersByUserId(int userId, int currentPage, int recordsPerPage) throws LibraryDAOException;
 
     /**
-     * Returns the {@link List<BookOrder>}
+     * Returns the {@link BookOrder} list
      * If no such BookOrder contains into data source returns emptyList
      * LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      *
      * @param userId is the {@link User}'s id, {@link BookOrder} field
-     * @return {@link List<BookOrder>}
+     * @return {@link BookOrder} list
      * @throws LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      */
     List<BookOrder> findAllOrdersByUserId(int userId) throws LibraryDAOException;
@@ -98,11 +99,13 @@ public interface BookOrderDAO {
     int findOpenOrdersQuantity() throws LibraryDAOException;
 
     /**
-     * Returns the {@link List<BookOrder>} which with open status
+     * Returns the {@link BookOrder} list which with open status
      * If no such BookOrder contains into data source returns emptyList
      * LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      *
-     * @return {@link List<BookOrder>} which with open status
+     * @param currentPage is the current page parameter for pagination
+     * @param recordsPerPage is the records per page parameter for pagination
+     * @return {@link BookOrder} list which with open status
      * @throws LibraryDAOException if an error occurs while getting a <tt>BookOrders</tt>
      */
     List<BookOrder> findAllOpenedOrders(int currentPage, int recordsPerPage) throws LibraryDAOException;

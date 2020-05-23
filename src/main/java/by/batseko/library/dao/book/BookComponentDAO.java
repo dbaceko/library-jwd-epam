@@ -31,7 +31,7 @@ import java.util.List;
     T findByUUID(String bookComponentUUID) throws LibraryDAOException;
 
     /**
-     * Find and returns all {@link List<T>} from the data source <tt>T extends{@link BaseBookComponent}</tt>.
+     * Find and returns all List {@link T} from the data source <tt>T extends{@link BaseBookComponent}</tt>.
      * Throws LibraryDAOException if an error occurs while adding a <tt>T extends{@link BaseBookComponent}</tt>
      *
      * @return all T extends{@link BaseBookComponent}

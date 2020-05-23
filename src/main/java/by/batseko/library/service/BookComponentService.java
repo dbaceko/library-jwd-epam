@@ -2,6 +2,7 @@ package by.batseko.library.service;
 
 import by.batseko.library.entity.book.bookcomponent.BaseBookComponent;
 import by.batseko.library.exception.LibraryServiceException;
+import by.batseko.library.validatior.BookValidator;
 
 /**
  * Interface describes the behavior of Cache
@@ -16,8 +17,7 @@ public interface BookComponentService<T> {
      * @param element is a {@link BaseBookComponent}'s child instance
      * @throws LibraryServiceException if T extends {@link BaseBookComponent} is null or
      *                          if <tt>element</tt>'s fields not accords to specify pattern
-     *                          {@see by.batseko.library.validator.BookValidator}
-     *                          or if element has already into database
+     *                          {@link BookValidator} or if element has already into database
      *                          or if an error occurs while writing new <tt>element</tt> into
      *                          database
      */
