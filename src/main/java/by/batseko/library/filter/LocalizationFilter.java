@@ -2,8 +2,6 @@ package by.batseko.library.filter;
 
 import by.batseko.library.command.JSPAttributeStorage;
 import by.batseko.library.command.SupportedLocaleStorage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -15,8 +13,6 @@ import java.util.Locale;
 
 @WebFilter(filterName = "LocalizationFilter")
 public class LocalizationFilter implements Filter {
-    private static final Logger LOGGER = LogManager.getLogger(LocalizationFilter.class);
-
     private static final String DEFAULT_CHARSET_ENCODING = "UTF-8";
 
     @Override
@@ -33,19 +29,16 @@ public class LocalizationFilter implements Filter {
         if (langAttribute == null) {
             Cookie[] cookies = request.getCookies();
             if (cookies == null) {
-                LOGGER.info("cookies are empty");
                 setLocaleToCookieAndSession(request, response);
             } else {
                 String cookieLang = null;
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE)) {
-                        LOGGER.info(String.format("cookies are contains language %s", cookie.getValue()));
                         cookieLang = cookie.getValue();
                         request.getSession().setAttribute(JSPAttributeStorage.LANGUAGE_CURRENT_PAGE, cookieLang);
                     }
                 }
                 if (cookieLang == null) {
-                    LOGGER.info("cookies are not contains language cookie");
                     setLocaleToCookieAndSession(request, response);
                 }
             }
